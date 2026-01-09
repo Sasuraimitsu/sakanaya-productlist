@@ -57,7 +57,16 @@ nav { text-align: center; padding: 15px; position: sticky; top: 0; background: v
 .info { padding: 15px; }
 .code { font-size: 0.7rem; color: #999; }
 .info h3 { margin: 5px 0; font-size: 1.1rem; color: var(--main-blue); }
-.comment { font-size: 0.85rem; color: #666; height: 3em; overflow: hidden; }
+.comment { 
+    font-size: 0.85rem; 
+    color: #666; 
+    min-height: 4.5em; /* 最低限の高さを作り、カードの大きさを揃える */
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* 最大4行まで表示。それ以上は...にする */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 .price { font-weight: bold; color: var(--accent-red); font-size: 1.3rem; margin-top: 10px; }
 
 .map-section { background: white; padding: 40px 10px; text-align: center; }
