@@ -63,3 +63,35 @@ nav { text-align: center; padding: 15px; position: sticky; top: 0; background: v
 .map-section { background: white; padding: 40px 10px; text-align: center; }
 .map-container { max-width: 900px; margin: auto; border: 1px solid #ddd; }
 footer { background: #0d253f; color: white; text-align: center; padding: 15px; font-size: 0.8rem; }
+.notice-area {
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    padding: 0 20px;
+}
+
+.notice-box {
+    background: #fff;
+    border-left: 5px solid var(--accent-red); /* アクセントの赤で強調 */
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.notice-box h4 {
+    margin: 0 0 10px 0;
+    color: var(--main-blue);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.notice-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+.notice-box strong {
+    color: var(--main-blue);
+    margin-right: 5px;
+}
