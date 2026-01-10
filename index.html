@@ -58,6 +58,8 @@
             download: true,
             header: true,
             skipEmptyLines: true,
+            // ヘッダーの余計な空白を消して読み込む設定
+            transformHeader: function(h) { return h.trim(); },
             complete: function(results) {
                 allProducts = results.data;
                 displayProducts(allProducts);
@@ -69,6 +71,12 @@
             container.innerHTML = '';
             products.forEach(p => {
                 if(!p.name) return;
+                
+                // コメント内の改行（\nなど）を <br> に変換して表示
+                const formattedComment = p.comment ? p.comment.replace(/\n/g, '<br>') : '';
+                // 単位が空またはundefinedの場合の対策
+                const displayUnit = p.unit ? p.unit : 'PC';
+
                 const card = `
                     <div class="card">
                         <div class="img-wrapper">
@@ -78,10 +86,10 @@
                         <div class="info">
                             <span class="code">Code: ${p.code}</span>
                             <h3>${p.name}</h3>
-                            <p class="comment">${p.comment}</p>
+                            <p class="comment">${formattedComment}</p>
                             <p class="price">
                                 $${Number(p.price).toLocaleString()} 
-                                <span class="unit-text">/ ${p.unit}</span>
+                                <span class="unit-text">/ ${displayUnit}</span>
                             </p>
                         </div>
                     </div>
