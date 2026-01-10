@@ -60,12 +60,11 @@ nav { text-align: center; padding: 15px; position: sticky; top: 0; background: v
 .comment { 
     font-size: 0.85rem; 
     color: #666; 
-    min-height: 4.5em; /* 最低限の高さを作り、カードの大きさを揃える */
+    line-height: 1.4;
+    min-height: 5em; /* 高さを少し確保 */
     margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* 最大4行まで表示。それ以上は...にする */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    /* 3〜4行表示して、それ以上はスクロールまたは隠す設定 */
+    overflow-y: auto; 
 }
 .price { font-weight: bold; color: var(--accent-red); font-size: 1.3rem; margin-top: 10px; }
 
