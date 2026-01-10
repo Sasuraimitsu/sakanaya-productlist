@@ -104,3 +104,9 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     color: var(--main-blue);
     margin-right: 5px;
 }
+.unit-text {
+    font-size: 0.9rem; /* 価格より少し小さく */
+    color: #666;      /* 少しグレーにする */
+    font-weight: normal;
+    margin-left: 2px;
+}
