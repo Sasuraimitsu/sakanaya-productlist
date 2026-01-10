@@ -67,36 +67,39 @@
         });
 
         function displayProducts(products) {
-            const container = document.getElementById('product-container');
-            container.innerHTML = '';
-            products.forEach(p => {
-                if(!p.name) return;
-                
-                // コメント内の改行（\nなど）を <br> に変換して表示
-                const formattedComment = p.comment ? p.comment.replace(/\n/g, '<br>') : '';
-                // 単位が空またはundefinedの場合の対策
-                const displayUnit = p.unit ? p.unit : 'PC';
+    const container = document.getElementById('product-container');
+    container.innerHTML = '';
+    products.forEach(p => {
+        if(!p.name) return;
 
-                const card = `
-                    <div class="card">
-                        <div class="img-wrapper">
-                            <img src="${p.image}" alt="${p.name}">
-                            <span class="category-tag ${p.category}">${p.category}</span>
-                        </div>
-                        <div class="info">
-                            <span class="code">Code: ${p.code}</span>
-                            <h3>${p.name}</h3>
-                            <p class="comment">${formattedComment}</p>
-                            <p class="price">
-                                $${Number(p.price).toLocaleString()} 
-                                <span class="unit-text">/ ${displayUnit}</span>
-                            </p>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += card;
-            });
+        // コメントを日本語と英語に分割して段落を作る処理
+        let formattedComment = p.comment || '';
+        if (formattedComment.includes('。')) {
+            // 「。」の後に改行を入れる
+            formattedComment = formattedComment.replace(/。/g, '。<br><span class="en-comment">');
+            formattedComment += '</span>';
         }
+
+        const card = `
+            <div class="card">
+                <div class="img-wrapper">
+                    <img src="${p.image}" alt="${p.name}">
+                    <span class="category-tag ${p.category}">${p.category}</span>
+                </div>
+                <div class="info">
+                    <span class="code">Code: ${p.code}</span>
+                    <h3>${p.name}</h3>
+                    <div class="comment-box">${formattedComment}</div>
+                    <p class="price">
+                        $${Number(p.price).toLocaleString()} 
+                        <span class="unit-text">/ ${p.unit || 'pc'}</span>
+                    </p>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
 
         function filterCategory(cat, btn) {
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
