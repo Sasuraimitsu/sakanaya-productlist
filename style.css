@@ -109,3 +109,41 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     font-weight: normal;
     margin-left: 2px;
 }
+/* コメント全体のボックス */
+.comment-box { 
+    font-size: 0.85rem; 
+    color: #333; 
+    line-height: 1.5;
+    margin: 10px 0;
+    /* 制限を解除してすべて表示 */
+    height: auto; 
+    overflow: visible; 
+}
+
+/* 英語コメントの部分だけ色を少し薄くして区別する */
+.en-comment {
+    display: block; /* 段落を分ける */
+    margin-top: 8px;
+    color: #666;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* カード自体の高さも内容に合わせて伸びるように調整 */
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* すべてのカードの長さを揃えたい場合 */
+}
+
+.info {
+    flex-grow: 1; /* 中身に合わせて伸びる */
+    display: flex;
+    flex-direction: column;
+}
+
+.price {
+    margin-top: auto; /* 価格を常に一番下に配置 */
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
+}
