@@ -164,3 +164,40 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     background: #e60012; /* 日本の赤 */
     color: white;
 }
+/* 価格とサイズをまとめるエリア */
+.price-size-area {
+    margin-top: auto; /* カード内の最下部に固定 */
+    padding-top: 12px;
+    border-top: 1px dashed #ddd; /* 区切り線 */
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.unit-text {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: normal;
+}
+
+/* 単価の下に表示されるサイズ感のスタイル */
+.size-detail {
+    display: block;
+    font-size: 0.85rem;
+    color: #0030a0; /* カンボジア国旗の青に近い色で強調 */
+    font-weight: bold;
+    margin-top: 4px; /* 価格との隙間 */
+}
+
+/* 英語コメントのスタイル（前回分も含む） */
+.en-comment {
+    display: block;
+    margin-top: 5px;
+    color: #777;
+    font-size: 0.8rem;
+    font-style: italic;
+}
