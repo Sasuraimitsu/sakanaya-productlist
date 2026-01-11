@@ -4,7 +4,13 @@
     --bg-light: #f4f7f9;
 }
 
-body { font-family: "Helvetica Neue", Arial, sans-serif; margin: 0; background: var(--bg-light); color: #333; line-height: 1.6; }
+body { 
+    font-family: "Helvetica Neue", Arial, sans-serif; 
+    margin: 0; 
+    background: var(--bg-light); 
+    color: #333; 
+    line-height: 1.6; 
+}
 
 header { 
     background: linear-gradient(to bottom, #0d253f, #1a3c5a); 
@@ -13,13 +19,14 @@ header {
     text-align: center; 
 }
 
-/* ロゴのサイズ調整：PCでは180px、スマホでは120pxに自動縮小 */
+/* ロゴのサイズ調整 */
 .logo { 
     width: 100%;
     max-width: 180px; 
     height: auto; 
     margin-bottom: 10px; 
 }
+
 @media (max-width: 480px) {
     .logo { max-width: 120px; }
     .tel-link { font-size: 1.2rem !important; }
@@ -37,168 +44,120 @@ header {
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: bold;
+    transition: opacity 0.2s;
 }
+.telegram-btn:hover { opacity: 0.8; }
 
 .title-main { margin: 15px 0 5px; letter-spacing: 2px; font-size: 1.5rem; border-top: 1px solid rgba(255,255,255,0.2); display: inline-block; padding-top: 10px; }
 .update-date { font-size: 0.75rem; opacity: 0.7; }
 
+/* ナビゲーション */
 nav { text-align: center; padding: 15px; position: sticky; top: 0; background: var(--bg-light); z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.nav-btn { padding: 8px 18px; margin: 3px; cursor: pointer; border: 1px solid var(--main-blue); background: white; color: var(--main-blue); border-radius: 4px; font-weight: bold; }
+.nav-btn { padding: 8px 18px; margin: 3px; cursor: pointer; border: 1px solid var(--main-blue); background: white; color: var(--main-blue); border-radius: 4px; font-weight: bold; transition: all 0.2s; }
 .nav-btn.active { background: var(--main-blue); color: white; }
+.nav-btn:hover { background: #eef2f6; }
 
+/* コンテナ・カード */
 .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-.card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+
+.card { 
+    background: white; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* ホバー効果用 */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
 .img-wrapper { position: relative; height: 200px; }
 .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-.category-tag { position: absolute; top: 10px; left: 10px; padding: 3px 10px; border-radius: 3px; color: white; font-size: 0.7rem; font-weight: bold; }
-.FRESH { background: var(--accent-red); }
-.FROZEN { background: #4a90e2; }
 
-.info { padding: 15px; }
+.category-tag { position: absolute; top: 10px; left: 10px; padding: 3px 10px; border-radius: 3px; color: white; font-size: 0.7rem; font-weight: bold; }
+.category-tag.FRESH, .category-tag.FROZEN { background: #0030a0; }
+.category-tag.JAPAN { background: #e60012; }
+
+.info { 
+    padding: 15px; 
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
 .code { font-size: 0.7rem; color: #999; }
 .info h3 { margin: 5px 0; font-size: 1.1rem; color: var(--main-blue); }
-.comment { 
-    font-size: 0.85rem; 
-    color: #666; 
-    line-height: 1.4;
-    min-height: 5em; /* 高さを少し確保 */
-    margin-bottom: 10px;
-    /* 3〜4行表示して、それ以上はスクロールまたは隠す設定 */
-    overflow-y: auto; 
-}
-.price { font-weight: bold; color: var(--accent-red); font-size: 1.3rem; margin-top: 10px; }
 
-.map-section { background: white; padding: 40px 10px; text-align: center; }
-.map-container { max-width: 900px; margin: auto; border: 1px solid #ddd; }
-footer { background: #0d253f; color: white; text-align: center; padding: 15px; font-size: 0.8rem; }
-.notice-area {
-    max-width: 1200px;
-    margin: 0 auto 20px auto;
-    padding: 0 20px;
-}
-
-.notice-box {
-    background: #fff;
-    border-left: 5px solid var(--accent-red); /* アクセントの赤で強調 */
-    padding: 15px 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.notice-box h4 {
-    margin: 0 0 10px 0;
-    color: var(--main-blue);
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-.notice-box p {
-    margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: #444;
-}
-
-.notice-box strong {
-    color: var(--main-blue);
-    margin-right: 5px;
-}
-.unit-text {
-    font-size: 0.9rem; /* 価格より少し小さく */
-    color: #666;      /* 少しグレーにする */
-    font-weight: normal;
-    margin-left: 2px;
-}
-/* コメント全体のボックス */
+/* 説明文エリア（スクロール対策） */
 .comment-box { 
     font-size: 0.85rem; 
     color: #333; 
     line-height: 1.5;
     margin: 10px 0;
-    /* 制限を解除してすべて表示 */
-    height: auto; 
-    overflow: visible; 
+    flex-grow: 1; 
+    max-height: 250px; /* 長すぎる場合に制限 */
+    overflow-y: auto; 
+    padding-right: 5px;
 }
 
-/* 英語コメントの部分だけ色を少し薄くして区別する */
+/* スクロールバーのデザイン */
+.comment-box::-webkit-scrollbar { width: 4px; }
+.comment-box::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+
 .en-comment {
-    display: block; /* 段落を分ける */
-    margin-top: 8px;
-    color: #666;
-    font-size: 0.8rem;
-    font-style: italic;
-}
-
-/* カード自体の高さも内容に合わせて伸びるように調整 */
-.card {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* すべてのカードの長さを揃えたい場合 */
-}
-
-.info {
-    flex-grow: 1; /* 中身に合わせて伸びる */
-    display: flex;
-    flex-direction: column;
-}
-
-.price {
-    margin-top: auto; /* 価格を常に一番下に配置 */
-    padding-top: 10px;
-    border-top: 1px dashed #eee;
-}
-/* JAPANカテゴリー専用のタグ色 */
-.category-tag.JAPAN {
-    background: #e60012; /* 日本の赤 */
-    color: white;
-}
-/* カンボジア産（FRESH / FROZEN）は青や濃い紺など */
-.category-tag.FRESH, 
-.category-tag.FROZEN {
-    background: #0030a0; /* カンボジア国旗の青 */
-    color: white;
-}
-
-/* 日本産（JAPAN）は赤 */
-.category-tag.JAPAN {
-    background: #e60012; /* 日本の赤 */
-    color: white;
-}
-/* 価格とサイズをまとめるエリア */
-/* 価格とサイズをまとめるエリア（カードの下側に固定する設定） */
-.price-size-area {
-    margin-top: auto; 
-    padding-top: 10px;
-    border-top: 1px dashed #eee; /* 単価の上に薄い点線を入れるとプロっぽくなります */
-}
-
-/* 単価の文字を少し大きくして見やすく */
-.price {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 2px;
-}
-
-.unit-text {
-    font-size: 0.9rem;
-    color: #666;
-    font-weight: normal;
-}
-
-/* 単価の下に表示されるサイズ感のスタイル */
-.size-detail {
-    display: block;
-    font-size: 0.85rem;
-    color: #0030a0; /* カンボジア国旗の青に近い色で強調 */
-    font-weight: bold;
-    margin-top: 4px; /* 価格との隙間 */
-}
-
-/* 英語コメントのスタイル（前回分も含む） */
-.en-comment {
-    display: block;
+    display: block; 
     margin-top: 5px;
     color: #777;
     font-size: 0.8rem;
     font-style: italic;
 }
+
+/* 価格とサイズをまとめるエリア */
+.price-size-area {
+    margin-top: auto; 
+    padding-top: 10px;
+    border-top: 1px dashed #eee;
+    min-height: 55px; /* 高さを揃えるための最小値 */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.price { 
+    font-weight: bold; 
+    color: var(--accent-red); 
+    font-size: 1.2rem; 
+    margin: 0;
+}
+
+.unit-text {
+    font-size: 0.9rem;
+    color: #666; 
+    font-weight: normal;
+    margin-left: 2px;
+}
+
+.size-detail {
+    display: block;
+    font-size: 0.82rem;
+    color: #0030a0; 
+    font-weight: bold;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+/* その他パーツ */
+.map-section { background: white; padding: 40px 10px; text-align: center; }
+.map-container { max-width: 900px; margin: auto; border: 1px solid #ddd; }
+footer { background: #0d253f; color: white; text-align: center; padding: 15px; font-size: 0.8rem; }
+
+.notice-area { max-width: 1200px; margin: 0 auto 20px auto; padding: 0 20px; }
+.notice-box { background: #fff; border-left: 5px solid var(--accent-red); padding: 15px 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.notice-box h4 { margin: 0 0 10px 0; color: var(--main-blue); font-size: 0.9rem; letter-spacing: 1px; }
+.notice-box p { margin: 0; font-size: 0.85rem; line-height: 1.6; color: #444; }
+.notice-box strong { color: var(--main-blue); margin-right: 5px; }
