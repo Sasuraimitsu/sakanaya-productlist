@@ -152,3 +152,15 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     background: #e60012; /* 日本の赤 */
     color: white;
 }
+/* カンボジア産（FRESH / FROZEN）は青や濃い紺など */
+.category-tag.FRESH, 
+.category-tag.FROZEN {
+    background: #0030a0; /* カンボジア国旗の青 */
+    color: white;
+}
+
+/* 日本産（JAPAN）は赤 */
+.category-tag.JAPAN {
+    background: #e60012; /* 日本の赤 */
+    color: white;
+}
