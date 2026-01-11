@@ -35,7 +35,7 @@ FRESH,ACK405,SAWARA,3kg以上の大型サワラ。お刺身用として、しっ
 FRESH,ACS525,KUROHATA,"高級魚クロハタ。白身の締まった食感と、噛むほどに溢れる濃厚な旨味が特徴です。Blacktip grouper with a signature firm texture and rich, deep umami. Served as premium sashimi.",28,kg,images/KUROHATA.jpg
 FRESH,ACS511,HATA,カンボジアでも最高級とされるハタ。蒸し料理やポワレにすると、身の弾力と旨味が際立ちます。A highly prized luxury fish; its firm texture and rich umami make it exceptional for steaming or searing.,28,kg,images/HATA.jpg
 FRESH,ACO630,KAMASU,皮目に旨味が凝縮されたカマス。炙り刺身や塩焼きで、香ばしさと共にお楽しみください。Barracuda with elegant fat under the skin. Perfect for seared sashimi or pan-searing.,3.5,pic,images/KAMASU.jpg
-FRESH,ACS739,HIMECHI,"フランス料理で「ルジェ」と呼ばれる高級魚。芳醇な磯の香りと繊細な身質がポワレに最適です。Known as ""Rouget"" in French cuisine. Features fragrant skin and delicate umami, ideal for searing.",2,pic,images/HIMECHI.jpg
+FRESH,ACS739,HIMECHI 3pic ,"フランス料理で「ルジェ」と呼ばれる高級魚。芳醇な磯の香りと繊細な身質がポワレに最適です。Known as ""Rouget"" in French cuisine. Features fragrant skin and delicate umami, ideal for searing.",2,pack,images/HIMECHI.jpg
 FRESH,ACO759,BORA,"驚くほど脂が乗ったボラ。臭みがなく、甘みの強い脂は一度食べたら概念が変わる美味しさです。Clean, sweet fat makes it a hidden gem. Best enjoyed raw to experience its full potential.",32,kg,images/BORA.jpg
 FRESH,ACO758,HAGI,"カワハギ。フグにも匹敵する弾力のある白身は、薄造りやカルパッチョで真価を発揮します。Sashimi-grade Filefish. Offers a firm, springy texture similar to pufferfish. Ideal for Usuzukuri.",38,kg,images/HAGI.jpg
 FRESH,ACO406,OKIZAYORI,"鮮度抜群のオキザヨリ。透明感のある美しい身は、カルパッチョや塩焼きなど幅広く楽しめます。Sashimi-grade Houndfish with clean, translucent flesh and a distinct umami. Ideal for sashimi.",28,kg,images/OKIZAYORI.jpg
