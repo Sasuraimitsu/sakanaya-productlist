@@ -73,32 +73,33 @@
     products.forEach(p => {
         if(!p.name) return;
 
-        // コメントを日本語と英語に分割して段落を作る処理
+        // 改行処理（日本語。の後に改行を入れる）
         let formattedComment = p.comment || '';
         if (formattedComment.includes('。')) {
-            // 「。」の後に改行を入れる
             formattedComment = formattedComment.replace(/。/g, '。<br><span class="en-comment">');
             formattedComment += '</span>';
         }
 
-        // displayProducts 関数内の 140行目付近を修正
-const card = `
-    <div class="card">
-        <div class="img-wrapper">
-            <img src="${p.image}" alt="${p.name}">
-            <span class="category-tag ${p.category}">
-                ${p.category === 'JAPAN' ? '🇯🇵 ' : '🇰🇭 '}${p.category}
-            </span>
-        </div>
-        <div class="info">
-            ...
+        const card = `
+            <div class="card">
+                <div class="img-wrapper">
+                    <img src="${p.image}" alt="${p.name}">
+                    <span class="category-tag ${p.category}">
+                        ${p.category === 'JAPAN' ? '🇯🇵 ' : '🇰🇭 '}${p.category}
+                    </span>
+                </div>
+                <div class="info">
                     <span class="code">Code: ${p.code}</span>
                     <h3>${p.name}</h3>
                     <div class="comment-box">${formattedComment}</div>
-                    <p class="price">
-                        $${Number(p.price).toLocaleString()} 
-                        <span class="unit-text">/ ${p.unit || 'pc'}</span>
-                    </p>
+                    
+                    <div class="price-size-area">
+                        <p class="price">
+                            $${Number(p.price).toLocaleString()} 
+                            <span class="unit-text">/ ${p.unit || 'pc'}</span>
+                        </p>
+                        ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                    </div>
                 </div>
             </div>
         `;
