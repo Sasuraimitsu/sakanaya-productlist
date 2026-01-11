@@ -79,21 +79,36 @@ nav { text-align: center; padding: 15px; position: sticky; top: 0; background: v
 .img-wrapper { position: relative; height: 200px; }
 .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
+/* カテゴリータグの共通設定 */
 .category-tag {
     position: absolute;
     top: 10px;
     left: 10px;
     padding: 4px 10px;
-    border-radius: 3px;
-    color: white;
+    border-radius: 4px;
     font-size: 0.75rem;
     font-weight: bold;
-    display: flex; /* 追加：画像と文字を横並びにする */
-    align-items: center; /* 追加：上下中央揃え */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* 影をつけて浮きだたせる */
+    background: white; /* ベースを白にする */
+    color: #333; /* 文字は濃いグレー */
 }
-.category-tag.FRESH, .category-tag.FROZEN { background: #0030a0; }
-.category-tag.JAPAN { background: #e60012; }
+
+/* FRESH（生鮮）: 緑のアクセント */
+.category-tag.FRESH {
+    border-left: 4px solid #2ecc71; /* 鮮やかな緑のライン */
+}
+
+/* FROZEN（冷凍）: 水色のアクセント */
+.category-tag.FROZEN {
+    border-left: 4px solid #3498db; /* 清潔感のある水色のライン */
+}
+
+/* JAPAN（日本産）: 赤のアクセント */
+.category-tag.JAPAN {
+    border-left: 4px solid #e60012; /* 日本の赤 */
+}
 
 .info { 
     padding: 15px; 
