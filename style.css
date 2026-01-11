@@ -165,17 +165,18 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     color: white;
 }
 /* 価格とサイズをまとめるエリア */
+/* 価格とサイズをまとめるエリア（カードの下側に固定する設定） */
 .price-size-area {
-    margin-top: auto; /* カード内の最下部に固定 */
-    padding-top: 12px;
-    border-top: 1px dashed #ddd; /* 区切り線 */
+    margin-top: auto; 
+    padding-top: 10px;
+    border-top: 1px dashed #eee; /* 単価の上に薄い点線を入れるとプロっぽくなります */
 }
 
+/* 単価の文字を少し大きくして見やすく */
 .price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
-    color: #333;
-    margin: 0;
+    margin-bottom: 2px;
 }
 
 .unit-text {
