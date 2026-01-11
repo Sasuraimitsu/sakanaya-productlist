@@ -147,3 +147,8 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     padding-top: 10px;
     border-top: 1px dashed #eee;
 }
+/* JAPANカテゴリー専用のタグ色 */
+.category-tag.JAPAN {
+    background: #e60012; /* 日本の赤 */
+    color: white;
+}
