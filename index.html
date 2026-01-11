@@ -83,7 +83,7 @@
         const card = `
             <div class="card">
                 <div class="img-wrapper">
-                    <img src="${p.image}" alt="${p.name}">
+                    <img src="${p.image ? p.image.trim() : ''}" alt="${p.name}">
                     <span class="category-tag ${p.category}">
                         ${p.category === 'JAPAN' ? '🇯🇵 ' : '🇰🇭 '}${p.category}
                     </span>
