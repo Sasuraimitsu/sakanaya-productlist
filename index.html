@@ -11,25 +11,23 @@
     <header>
         <div class="header-container">
             <img src="images/logo.jpg" alt="SAKANAYA JAPON" class="logo">
-            
             <div class="contact-area">
-                <a href="tel:000-000-0000" class="tel-link">📞 016-881-370</a>
+                <a href="tel:016881370" class="tel-link">📞 016-881-370</a>
                 <div class="btns">
-    <a href="https://t.me/SAKANAYAJAPON_SUPPORT" target="_blank" class="telegram-btn">Telegram</a>
-</div>
+                    <a href="https://t.me/SAKANAYAJAPON_SUPPORT" target="_blank" class="telegram-btn">Telegram</a>
+                </div>
             </div>
-
             <h2 class="title-main">PRODUCT LIST</h2>
-            <p class="update-date">UPDATE: 2026/01/08</p>
+            <p class="update-date">UPDATE: 2026/01/15</p>
         </div>
     </header>
 
    <nav>
-    <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
-    <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
-    <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
-    <button class="nav-btn" onclick="filterCategory('JAPAN', this)">JAPAN Farmed</button> 
-</nav>
+        <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
+        <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
+        <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
+        <button class="nav-btn" onclick="filterCategory('JAPAN', this)">JAPAN Farmed</button> 
+    </nav>
 
     <div class="notice-area">
         <div class="notice-box">
@@ -40,18 +38,27 @@
             </p>
         </div>
     </div>
+
     <div id="product-container" class="container"></div>
 
     <section class="map-section">
         <h3>STORE LOCATION</h3>
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d32021054.573746197!2d71.17280509999998!3d11.564748199999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951653c292489%3A0x20508e114c68ae7c!2z4Z6g4Z624Z6E4Z6P4Z-S4Z6a4Z644Z6H4Z6U4Z-J4Z674Z6T4oCLIFNha2FuYXlh4oCLIOKAi0phcG9u!5e0!3m2!1sja!2skh!4v1767958543339!5m2!1sja!2skh" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3908.770617305943!2d104.9213!3d11.5644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sja!2skh!4v1700000000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
     <footer>
         <p>© 2026 SAKANAYA JAPON</p>
     </footer>
+
+    <div id="total-bar" class="total-bar">
+        <div class="total-content">
+            <span class="total-label">Estimated Total:</span>
+            <span class="total-price">$ <span id="total-amount">0.00</span></span>
+        </div>
+        <p class="total-note">*Excluding Delivery Fee</p>
+    </div>
 
     <script>
     let allProducts = [];
@@ -66,80 +73,98 @@
         }
     });
 
-    // displayProducts 関数内の修正（価格の下に数量入力を追加）
-function displayProducts(products) {
-    const container = document.getElementById('product-container');
-    container.innerHTML = '';
-    products.forEach((p, index) => {
-        if(!p.name) return;
+    function displayProducts(products) {
+        const container = document.getElementById('product-container');
+        container.innerHTML = '';
+        products.forEach((p) => {
+            if(!p.name) return;
 
-        let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
+            // < > 記号の安全な表示
+            let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-        const card = `
-            <div class="card">
-                <div class="img-wrapper">
-                    <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
-                    <span class="category-tag ${p.category}">
-                        <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" alt="flag" style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
-                        ${p.category}
-                    </span>
-                </div>
-                <div class="info">
-                    <span class="code">Code: ${p.code}</span>
-                    <h3>${safeName}</h3>
-                    <div class="comment-box">${formattedComment}</div>
-                    
-                    <div class="price-size-area">
-                        <p class="price">$${Number(p.price).toLocaleString()} <span class="unit-text">/ ${p.unit || 'pc'}</span></p>
-                        ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+            // 部位の選択肢をCSVのw_数値から動的に生成
+            let unitOptions = '';
+            if (p.is_fixed === "0") {
+                if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pc (${p.w_pc}kg)</option>`;
+                if(parseFloat(p.w_fillet) > 0) unitOptions += `<option value="${p.w_fillet}">1 fillet (${p.w_fillet}kg)</option>`;
+                if(parseFloat(p.w_back) > 0) unitOptions += `<option value="${p.w_back}">Back side (${p.w_back}kg)</option>`;
+                if(parseFloat(p.w_stomach) > 0) unitOptions += `<option value="${p.w_stomach}">Stomach side (${p.w_stomach}kg)</option>`;
+            } else {
+                unitOptions = `<option value="1">1 ${p.unit || 'pc'}</option>`;
+            }
+
+            const card = `
+                <div class="card">
+                    <div class="img-wrapper">
+                        <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
+                        <span class="category-tag ${p.category}">
+                            <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" alt="flag" style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
+                            ${p.category}
+                        </span>
+                    </div>
+                    <div class="info">
+                        <span class="code">Code: ${p.code}</span>
+                        <h3>${safeName}</h3>
+                        <div class="comment-box">${formattedComment}</div>
                         
-                        <div class="calc-area">
-                            <label>Qty:</label>
-                            <input type="number" class="qty-input" min="0" value="0" 
-                                   data-price="${p.price}" 
-                                   onchange="updateTotal()" oninput="updateTotal()">
+                        <div class="price-size-area">
+                            <p class="price" style="text-decoration: none !important;">
+                                $${Number(p.price).toLocaleString()} <span class="unit-text">/ ${p.unit || 'kg'}</span>
+                            </p>
+                            ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                            
+                            <div class="calc-container">
+                                <div class="calc-row">
+                                    <select class="unit-select" onchange="updateTotal()">
+                                        ${unitOptions}
+                                    </select>
+                                    <span class="times">×</span>
+                                    <input type="number" class="qty-input" min="0" value="0" 
+                                           data-price="${p.price}" 
+                                           onchange="updateTotal()" oninput="updateTotal()">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
-}
-
-// 合計金額を計算して表示する関数
-function updateTotal() {
-    let total = 0;
-    const inputs = document.querySelectorAll('.qty-input');
-    inputs.forEach(input => {
-        const price = parseFloat(input.getAttribute('data-price')) || 0;
-        const qty = parseFloat(input.value) || 0;
-        total += price * qty;
-    });
-    
-    document.getElementById('total-amount').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    
-    // 合計が0より大きい時だけバーを表示
-    const bar = document.getElementById('total-bar');
-    if (total > 0) {
-        bar.classList.add('show');
-    } else {
-        bar.classList.remove('show');
+            `;
+            container.innerHTML += card;
+        });
     }
-}
+
+    function updateTotal() {
+        let total = 0;
+        const cards = document.querySelectorAll('.card');
+        
+        cards.forEach(card => {
+            const select = card.querySelector('.unit-select');
+            const input = card.querySelector('.qty-input');
+            
+            if (select && input) {
+                const unitWeight = parseFloat(select.value) || 0;
+                const pricePerKg = parseFloat(input.getAttribute('data-price')) || 0;
+                const qty = parseFloat(input.value) || 0;
+                
+                total += pricePerKg * unitWeight * qty;
+            }
+        });
+        
+        document.getElementById('total-amount').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        
+        const bar = document.getElementById('total-bar');
+        if (total > 0) {
+            bar.classList.add('show');
+        } else {
+            bar.classList.remove('show');
+        }
+    }
+
     function filterCategory(cat, btn) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         cat === 'ALL' ? displayProducts(allProducts) : displayProducts(allProducts.filter(p => p.category === cat));
     }
-</script>
+    </script>
 </body>
-    <div id="total-bar" class="total-bar">
-    <div class="total-content">
-        <span class="total-label">Estimated Total:</span>
-        <span class="total-price">$ <span id="total-amount">0.00</span></span>
-    </div>
-    <p class="total-note">*Excluding Delivery Fee</p>
-</div>
 </html>
