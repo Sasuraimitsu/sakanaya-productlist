@@ -54,69 +54,69 @@
     </footer>
 
     <script>
-        let allProducts = [];
-        Papa.parse("products.csv", {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            // ヘッダーの余計な空白を消して読み込む設定
-            transformHeader: function(h) { return h.trim(); },
-            complete: function(results) {
-                allProducts = results.data;
-                displayProducts(allProducts);
-            }
-        });
-
-        function displayProducts(products) {
-    const container = document.getElementById('product-container');
-    container.innerHTML = '';
-    products.forEach(p => {
-        if(!p.name) return;
-
-        // 改行処理（日本語。の後に改行を入れる）
-        let formattedComment = p.comment || '';
-        if (formattedComment.includes('。')) {
-            formattedComment = formattedComment.replace(/。/g, '。<br><span class="en-comment">');
-            formattedComment += '</span>';
+    let allProducts = [];
+    Papa.parse("products.csv", {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: function(h) { return h.trim(); },
+        complete: function(results) {
+            allProducts = results.data;
+            displayProducts(allProducts);
         }
+    });
 
-        // displayProducts 関数内の修正
-const card = `
-    <div class="card">
-        <div class="img-wrapper">
-            <img src="${p.image ? p.image.trim() : ''}" alt="${p.name}">
-            
-            <span class="category-tag ${p.category}">
-                <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" 
-     alt="flag" 
-     style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
-                ${p.category}
-            </span>
-        </div>
-                <div class="info">
-                    <span class="code">Code: ${p.code}</span>
-                    <h3>${p.name}</h3>
-                    <div class="comment-box">${formattedComment}</div>
-                    
-                    <div class="price-size-area">
-                        <p class="price">
-                            $${Number(p.price).toLocaleString()} 
-                            <span class="unit-text">/ ${p.unit || 'pc'}</span>
-                        </p>
-                        ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+    function displayProducts(products) {
+        const container = document.getElementById('product-container');
+        container.innerHTML = '';
+        products.forEach(p => {
+            if(!p.name) return;
+
+            // 1. 商品名の < > 記号を安全な文字に変換（横線対策）
+            let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+            // 2. 改行処理
+            let formattedComment = p.comment || '';
+            if (formattedComment.includes('。')) {
+                formattedComment = formattedComment.replace(/。/g, '。<br><span class="en-comment">');
+                formattedComment += '</span>';
+            }
+
+            const card = `
+                <div class="card">
+                    <div class="img-wrapper">
+                        <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
+                        <span class="category-tag ${p.category}">
+                            <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" 
+                                 alt="flag" 
+                                 style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
+                            ${p.category}
+                        </span>
+                    </div>
+                    <div class="info">
+                        <span class="code">Code: ${p.code}</span>
+                        <h3>${safeName}</h3>
+                        <div class="comment-box">${formattedComment}</div>
+                        
+                        <div class="price-size-area">
+                            <p class="price" style="text-decoration: none !important;">
+                                $${Number(p.price).toLocaleString()} 
+                                <span class="unit-text">/ ${p.unit || 'pc'}</span>
+                            </p>
+                            ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
-}
+            `;
+            container.innerHTML += card;
+        });
+    }
 
-        function filterCategory(cat, btn) {
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            cat === 'ALL' ? displayProducts(allProducts) : displayProducts(allProducts.filter(p => p.category === cat));
-        }
-    </script>
+    function filterCategory(cat, btn) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cat === 'ALL' ? displayProducts(allProducts) : displayProducts(allProducts.filter(p => p.category === cat));
+    }
+</script>
 </body>
 </html>
