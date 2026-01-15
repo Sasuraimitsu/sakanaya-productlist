@@ -46,7 +46,7 @@
     <section class="map-section">
         <h3>STORE LOCATION</h3>
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.770622119253!2d104.918!3d11.569!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDM0JzA4LjQiTiAxMDTCsDU1JzA0LjgiRQ!5e0!3m2!1sja!2skh!4v1642234000000!5m2!1sja!2skh" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3908.770617305943!2d104.9213!3d11.5644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sja!2skh!4v1700000000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -80,12 +80,13 @@
         const container = document.getElementById('product-container');
         container.innerHTML = '';
         products.forEach((p) => {
-            if(!p.name) return;
+            if(!p.name || p.name === "") return;
 
+            // 商品名の記号処理
             let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            // 日本国旗条件を JAPAN_FARMED を含む形に更新
+            // 【重要】日本国旗の判定（JAPAN_FARMED, JAPAN_FROZEN, SAKE 全てに対応）
             const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE');
 
             let unitOptions = '';
@@ -156,7 +157,8 @@
         let message = "【New Order / 注文依頼】\n";
         let hasOrder = false;
         document.querySelectorAll('.card').forEach(card => {
-            const qty = parseInt(card.querySelector('.qty-input').value) || 0;
+            const qtyInput = card.querySelector('.qty-input');
+            const qty = parseInt(qtyInput.value) || 0;
             if (qty > 0) {
                 hasOrder = true;
                 const name = card.querySelector('h3').innerText;
