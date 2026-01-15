@@ -66,52 +66,68 @@
         }
     });
 
-    function displayProducts(products) {
-        const container = document.getElementById('product-container');
-        container.innerHTML = '';
-        products.forEach(p => {
-            if(!p.name) return;
+    // displayProducts 関数内の修正（価格の下に数量入力を追加）
+function displayProducts(products) {
+    const container = document.getElementById('product-container');
+    container.innerHTML = '';
+    products.forEach((p, index) => {
+        if(!p.name) return;
 
-            // 1. 商品名の < > 記号を安全な文字に変換（横線対策）
-            let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            // 2. 改行処理
-            let formattedComment = p.comment || '';
-            if (formattedComment.includes('。')) {
-                formattedComment = formattedComment.replace(/。/g, '。<br><span class="en-comment">');
-                formattedComment += '</span>';
-            }
-
-            const card = `
-                <div class="card">
-                    <div class="img-wrapper">
-                        <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
-                        <span class="category-tag ${p.category}">
-                            <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" 
-                                 alt="flag" 
-                                 style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
-                            ${p.category}
-                        </span>
-                    </div>
-                    <div class="info">
-                        <span class="code">Code: ${p.code}</span>
-                        <h3>${safeName}</h3>
-                        <div class="comment-box">${formattedComment}</div>
+        const card = `
+            <div class="card">
+                <div class="img-wrapper">
+                    <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
+                    <span class="category-tag ${p.category}">
+                        <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" alt="flag" style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
+                        ${p.category}
+                    </span>
+                </div>
+                <div class="info">
+                    <span class="code">Code: ${p.code}</span>
+                    <h3>${safeName}</h3>
+                    <div class="comment-box">${formattedComment}</div>
+                    
+                    <div class="price-size-area">
+                        <p class="price">$${Number(p.price).toLocaleString()} <span class="unit-text">/ ${p.unit || 'pc'}</span></p>
+                        ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
                         
-                        <div class="price-size-area">
-                            <p class="price" style="text-decoration: none !important;">
-                                $${Number(p.price).toLocaleString()} 
-                                <span class="unit-text">/ ${p.unit || 'pc'}</span>
-                            </p>
-                            ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                        <div class="calc-area">
+                            <label>Qty:</label>
+                            <input type="number" class="qty-input" min="0" value="0" 
+                                   data-price="${p.price}" 
+                                   onchange="updateTotal()" oninput="updateTotal()">
                         </div>
                     </div>
                 </div>
-            `;
-            container.innerHTML += card;
-        });
-    }
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
 
+// 合計金額を計算して表示する関数
+function updateTotal() {
+    let total = 0;
+    const inputs = document.querySelectorAll('.qty-input');
+    inputs.forEach(input => {
+        const price = parseFloat(input.getAttribute('data-price')) || 0;
+        const qty = parseFloat(input.value) || 0;
+        total += price * qty;
+    });
+    
+    document.getElementById('total-amount').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    
+    // 合計が0より大きい時だけバーを表示
+    const bar = document.getElementById('total-bar');
+    if (total > 0) {
+        bar.classList.add('show');
+    } else {
+        bar.classList.remove('show');
+    }
+}
     function filterCategory(cat, btn) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
