@@ -273,3 +273,25 @@ footer { background: #0d253f; color: white; text-align: center; padding: 15px; f
     text-align: center;
     font-weight: bold;
 }
+.order-send-btn {
+    margin-top: 10px;
+    background: #0088cc; /* Telegramカラー */
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+}
+
+.order-send-btn:hover {
+    background: #0077b5;
+}
+
+/* 合計バーの高さをボタンに合わせて調整 */
+.total-bar {
+    padding-bottom: 25px; /* 下に余裕を持たせる */
+}
