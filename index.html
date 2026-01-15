@@ -22,19 +22,21 @@
         </div>
     </header>
 
-   <nav>
+   <nav class="category-nav">
         <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
         <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
         <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
-        <button class="nav-btn" onclick="filterCategory('JAPAN', this)">JAPAN Farmed</button> 
+        <button class="nav-btn" onclick="filterCategory('JAPAN_FARMED', this)">JAPAN Farmed</button>
+        <button class="nav-btn" onclick="filterCategory('JAPAN_FROZEN', this)">JAPAN Frozen</button>
+        <button class="nav-btn" onclick="filterCategory('SAKE', this)">JAPAN Sake</button> 
     </nav>
 
     <div class="notice-area">
         <div class="notice-box">
-            <h4>【 FRESH PRODUCTS NOTICE 】</h4>
+            <h4>【 NOTICE 】</h4>
             <p>
-                <strong>JP:</strong> FRESHに関しては、フィレからご注文頂けます。また、ホールに関しては下処理（内臓処理、血抜き）をしてお届けしております。<br>
-                <strong>EN:</strong> Fresh fish can be ordered as fillets. For whole fish, we deliver them pre-processed (gutted and bled).
+                <strong>JP:</strong> 商品はカテゴリーごとに絞り込みが可能です。合計金額をシミュレーションしてTelegramでご注文いただけます。<br>
+                <strong>EN:</strong> You can filter products by category. Simulate the total amount and order via Telegram.
             </p>
         </div>
     </div>
@@ -44,7 +46,7 @@
     <section class="map-section">
         <h3>STORE LOCATION</h3>
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3908.770617305943!2d104.9213!3d11.5644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sja!2skh!4v1700000000000" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.770622119253!2d104.918!3d11.569!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDM0JzA4LjQiTiAxMDTCsDU1JzA0LjgiRQ!5e0!3m2!1sja!2skh!4v1642234000000!5m2!1sja!2skh" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -80,11 +82,12 @@
         products.forEach((p) => {
             if(!p.name) return;
 
-            // < > 記号の安全な表示（横線対策）
             let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            // 部位の選択肢をCSVのw_数値から動的に生成
+            // 日本国旗条件を JAPAN_FARMED を含む形に更新
+            const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE');
+
             let unitOptions = '';
             if (p.is_fixed === "0") {
                 if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pc (${p.w_pc}kg)</option>`;
@@ -100,21 +103,19 @@
                     <div class="img-wrapper">
                         <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
                         <span class="category-tag ${p.category}">
-                            <img src="images/${p.category === 'JAPAN' ? 'jp-flag.png' : 'kh-flag.png'}" alt="flag" style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
-                            ${p.category}
+                            <img src="images/${isJapanese ? 'jp-flag.png' : 'kh-flag.png'}" alt="flag" style="width: 20px; border: 1px solid #fff; border-radius: 2px; margin-right: 6px;">
+                            ${p.category.replace(/_/g, ' ')}
                         </span>
                     </div>
                     <div class="info">
                         <span class="code">Code: ${p.code}</span>
                         <h3>${safeName}</h3>
                         <div class="comment-box">${formattedComment}</div>
-                        
                         <div class="price-size-area">
                             <p class="price" style="text-decoration: none !important;">
                                 $${Number(p.price).toLocaleString()} <span class="unit-text">/ ${p.unit || 'kg'}</span>
                             </p>
                             ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
-                            
                             <div class="calc-container">
                                 <div class="calc-row">
                                     <select class="unit-select" onchange="updateTotal()">
@@ -136,39 +137,26 @@
 
     function updateTotal() {
         let total = 0;
-        const cards = document.querySelectorAll('.card');
-        
-        cards.forEach(card => {
+        document.querySelectorAll('.card').forEach(card => {
             const select = card.querySelector('.unit-select');
             const input = card.querySelector('.qty-input');
-            
             if (select && input) {
-                const unitWeight = parseFloat(select.value) || 0;
-                const pricePerKg = parseFloat(input.getAttribute('data-price')) || 0;
+                const weight = parseFloat(select.value) || 0;
+                const price = parseFloat(input.getAttribute('data-price')) || 0;
                 const qty = parseFloat(input.value) || 0;
-                
-                total += pricePerKg * unitWeight * qty;
+                total += price * weight * qty;
             }
         });
-        
         document.getElementById('total-amount').innerText = total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        
         const bar = document.getElementById('total-bar');
-        if (total > 0) {
-            bar.classList.add('show');
-        } else {
-            bar.classList.remove('show');
-        }
+        total > 0 ? bar.classList.add('show') : bar.classList.remove('show');
     }
 
     function sendOrderTelegram() {
         let message = "【New Order / 注文依頼】\n";
         let hasOrder = false;
-        const cards = document.querySelectorAll('.card');
-
-        cards.forEach(card => {
-            const qtyInput = card.querySelector('.qty-input');
-            const qty = parseInt(qtyInput.value) || 0;
+        document.querySelectorAll('.card').forEach(card => {
+            const qty = parseInt(card.querySelector('.qty-input').value) || 0;
             if (qty > 0) {
                 hasOrder = true;
                 const name = card.querySelector('h3').innerText;
@@ -178,20 +166,9 @@
             }
         });
 
-        if (!hasOrder) {
-            alert("Please select items first! / 商品を選択してください。");
-            return;
-        }
-
-        const total = document.getElementById('total-amount').innerText;
-        message += `\nEstimated Total: $${total}`;
-        message += "\n\nPlease confirm availability and delivery fee.";
-
-        const telegramBotId = "SAKANAYAJAPON_SUPPORT"; 
-        const encodedMessage = encodeURIComponent(message);
-        const telegramUrl = `https://t.me/${telegramBotId}?text=${encodedMessage}`;
-
-        window.open(telegramUrl, '_blank');
+        if (!hasOrder) { alert("Please select items! / 商品を選択してください。"); return; }
+        message += `\nEstimated Total: $${document.getElementById('total-amount').innerText}\n\nPlease confirm availability.`;
+        window.open(`https://t.me/SAKANAYAJAPON_SUPPORT?text=${encodeURIComponent(message)}`, '_blank');
     }
 
     function filterCategory(cat, btn) {
