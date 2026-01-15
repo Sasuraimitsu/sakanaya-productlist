@@ -1,5 +1,4 @@
-category,code,name,size,comment,price,unit,image
-category,code,name,size,comment,price,unit,image
+category,code,name,size,comment,price,unit,w_pc,w_fillet,w_back,w_stomach,is_fixed,image
 FROZEN,BCO210L3,KUMAEBI<LLL>,Over 86g,"カンボジア産の天然クマエビ。抜群の鮮度を誇る最高級品を、サイズごとに選別して急速冷凍しました。Wild-caught Cambodian flower prawns. Carefully graded by size and flash-frozen at peak freshness to preserve their premium quality.",25.5,kg,images/KUMAEBI<LLL>.jpg
 FROZEN,BCO210L2,KUMAEBI<LL>,75g-85g,"カンボジア産の天然クマエビ。抜群の鮮度を誇る最高級品を、サイズごとに選別して急速冷凍しました。Wild-caught Cambodian flower prawns. Carefully graded by size and flash-frozen at peak freshness to preserve their premium quality.",24,kg,images/KUMAEBI<LL>.jpg
 FROZEN,BCO210L1,KUMAEBI<L>,61g-75g,"カンボジア産の天然クマエビ。抜群の鮮度を誇る最高級品を、サイズごとに選別して急速冷凍しました。Wild-caught Cambodian flower prawns. Carefully graded by size and flash-frozen at peak freshness to preserve their premium quality.",22.5,kg,images/KUMAEBI<L>.jpg
