@@ -57,6 +57,7 @@
             <span class="total-label">Estimated Total:</span>
             <span class="total-price">$ <span id="total-amount">0.00</span></span>
         </div>
+        <button onclick="sendOrderTelegram()" class="order-send-btn">Order via Telegram</button>
         <p class="total-note">*Excluding Delivery Fee</p>
     </div>
 
@@ -79,7 +80,7 @@
         products.forEach((p) => {
             if(!p.name) return;
 
-            // < > 記号の安全な表示
+            // < > 記号の安全な表示（横線対策）
             let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
@@ -158,6 +159,39 @@
         } else {
             bar.classList.remove('show');
         }
+    }
+
+    function sendOrderTelegram() {
+        let message = "【New Order / 注文依頼】\n";
+        let hasOrder = false;
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const qtyInput = card.querySelector('.qty-input');
+            const qty = parseInt(qtyInput.value) || 0;
+            if (qty > 0) {
+                hasOrder = true;
+                const name = card.querySelector('h3').innerText;
+                const select = card.querySelector('.unit-select');
+                const unitText = select.options[select.selectedIndex].text;
+                message += `- ${name} / ${unitText} × ${qty}\n`;
+            }
+        });
+
+        if (!hasOrder) {
+            alert("Please select items first! / 商品を選択してください。");
+            return;
+        }
+
+        const total = document.getElementById('total-amount').innerText;
+        message += `\nEstimated Total: $${total}`;
+        message += "\n\nPlease confirm availability and delivery fee.";
+
+        const telegramBotId = "SAKANAYAJAPON_SUPPORT"; 
+        const encodedMessage = encodeURIComponent(message);
+        const telegramUrl = `https://t.me/${telegramBotId}?text=${encodedMessage}`;
+
+        window.open(telegramUrl, '_blank');
     }
 
     function filterCategory(cat, btn) {
