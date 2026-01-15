@@ -106,8 +106,11 @@ nav { text-align: center; padding: 15px; position: sticky; top: 0; background: v
 }
 
 /* JAPAN（日本産）: 赤のアクセント */
-.category-tag.JAPAN {
-    border-left: 4px solid #e60012; /* 日本の赤 */
+/* style.css の修正案 */
+.category-tag.JAPAN_FARMED, 
+.category-tag.JAPAN_FROZEN, 
+.category-tag.SAKE {
+    border-left: 4px solid #e60012; /* 日本の赤ライン */
 }
 
 .info { 
