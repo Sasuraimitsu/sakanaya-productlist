@@ -49,10 +49,28 @@ JAPAN_FARMED,AJJ301UB,TUNA Upper back,,"長崎県産の希少な「背上」部�
 JAPAN_FARMED,AJJ301MB,TUNA Middle back,,"鮮度抜群の長崎産生本マグロ。赤身と脂のバランスが最も良く、飽きのこない上品な味わいが特徴です。Ultra-fresh Bluefin Tuna from Nagasaki. Features the ideal balance of lean meat and fat, offering a sophisticated taste that never tires the palate.",80.65,kg,,,,,0,images/TUNA Middle back.jpg
 JAPAN_FARMED,AJJ301BB,TUNA Bottom back,,"脂がしっかりのった背下部位。なめらかな舌触りと生マグロ特有 of 芳醇な香りが、食卓を彩ります。The fatty ""Se-shimo"" (lower back) cut. Its smooth texture and the rich aroma unique to fresh tuna will elegantly grace your dining table.",57.8,kg,,,,,0,images/TUNA Bottom back.jpg
 JAPAN_FARMED,BJJ313,TENMI,,"地中海の恵みを受けた天身（芯の部分）。筋が少なく、マグロ本来の濃密な赤身の旨味を堪能できます。The premium ""Tenmi"" (inner core) cut from the Mediterranean. With minimal sinew, you can fully enjoy the dense, original umami of lean tuna.",68.5,kg,,,,,0,images/TENMI.jpg
-SAKE,F006,,720ml,,,bottle,,0,0,0,1,images/F006.jpg
-SAKE,,,720ml,,,,,,,,,
-SAKE,,,720ml,,,,,,,,,
-SAKE,,,720ml,,,,,,,,,
-SAKE,,,720ml,,,,,,,,,
-SAKE,,,720ml,,,,,,,,,
-SAKE,,,720ml,,,,,,,,,
+SAKE,F001,,720ml,,,bottle,1,0,0,0,1,images/F001.jpg
+SAKE,F002,,720ml,,,bottle,1,0,0,0,1,images/F002.jpg
+SAKE,F003,,720ml,,,bottle,1,0,0,0,1,images/F003.jpg
+SAKE,F004,,720ml,,,bottle,1,0,0,0,1,images/F004.jpg
+SAKE,F005,,720ml,,,bottle,1,0,0,0,1,images/F005.jpg
+SAKE,F006,,720ml,,,bottle,1,0,0,0,1,images/F006.jpg
+SAKE,F007,,720ml,,,bottle,1,0,0,0,1,images/F007.jpg
+SAKE,F008,,720ml,,,bottle,1,0,0,0,1,images/F008.jpg
+SAKE,F009,,720ml,,,bottle,1,0,0,0,1,images/F009.jpg
+SAKE,F010,,720ml,,,bottle,1,0,0,0,1,images/F010.jpg
+SAKE,F011,,720ml,,,bottle,1,0,0,0,1,images/F011.jpg
+SAKE,F012,,720ml,,,bottle,1,0,0,0,1,images/F012.jpg
+SAKE,F013,,720ml,,,bottle,1,0,0,0,1,images/F013.jpg
+SAKE,F014,,720ml,,,bottle,1,0,0,0,1,images/F014.jpg
+SAKE,F015,,720ml,,,bottle,1,0,0,0,1,images/F015.jpg
+SAKE,F016,,720ml,,,bottle,1,0,0,0,1,images/F016.jpg
+SAKE,F017,,720ml,,,bottle,1,0,0,0,1,images/F017.jpg
+SAKE,F018,,720ml,,,bottle,1,0,0,0,1,images/F018.jpg
+SAKE,F019,,720ml,,,bottle,1,0,0,0,1,images/F019.jpg
+SAKE,F020,,720ml,,,bottle,1,0,0,0,1,images/F020.jpg
+SAKE,F021,,720ml,,,bottle,1,0,0,0,1,images/F021.jpg
+SAKE,F022,,720ml,,,bottle,1,0,0,0,1,images/F022.jpg
+SAKE,F023,,720ml,,,bottle,1,0,0,0,1,images/F023.jpg
+SAKE,F024,,720ml,,,bottle,1,0,0,0,1,images/F024.jpg
+SAKE,F025,,720ml,,,bottle,1,0,0,0,1,images/F025.jpg
