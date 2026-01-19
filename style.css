@@ -215,3 +215,8 @@ nav {
     .tel-link { font-size: 1.3rem; }
     .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
 }
+/* カテゴリータグの色設定（例） */
+.category-tag.CONDIMENT {
+    background-color: #795548; /* 茶色系 */
+    color: white;
+}
