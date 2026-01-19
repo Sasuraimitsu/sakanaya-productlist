@@ -220,3 +220,23 @@ nav {
     background-color: #795548; /* 茶色系 */
     color: white;
 }
+.search-container {
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 0 15px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 25px; /* 丸みをつけてモダンな印象に */
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+#search-input:focus {
+    border-color: #00448e; /* フォーカス時にブランドカラーに変更 */
+}
