@@ -22,22 +22,26 @@
         </div>
     </header>
 
-   <nav class="category-nav">
-    <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
-    <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
-    <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
-    <button class="nav-btn" onclick="filterCategory('JAPAN_FARMED', this)">JAPAN Farmed</button>
-    <button class="nav-btn" onclick="filterCategory('JAPAN_FROZEN', this)">JAPAN Frozen</button>
-    <button class="nav-btn" onclick="filterCategory('SAKE', this)">JAPAN Sake</button> 
-    <button class="nav-btn" onclick="filterCategory('CONDIMENT', this)">CONDIMENT</button>
-</nav>
+    <nav class="category-nav">
+        <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
+        <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
+        <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
+        <button class="nav-btn" onclick="filterCategory('JAPAN_FARMED', this)">JAPAN Farmed</button>
+        <button class="nav-btn" onclick="filterCategory('JAPAN_FROZEN', this)">JAPAN Frozen</button>
+        <button class="nav-btn" onclick="filterCategory('SAKE', this)">JAPAN Sake</button> 
+        <button class="nav-btn" onclick="filterCategory('CONDIMENT', this)">CONDIMENT</button>
+    </nav>
+
+    <div class="search-area" style="max-width: 800px; margin: 10px auto; padding: 0 15px;">
+        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 25px; outline: none; font-size: 16px;">
+    </div>
 
     <div class="notice-area">
         <div class="notice-box">
             <h4>【 NOTICE 】</h4>
             <p>
-                <strong>JP:</strong> 商品はカテゴリーごとに絞り込みが可能です。合計金額をシミュレーションしてTelegramでご注文いただけます。<br>
-                <strong>EN:</strong> You can filter products by category. Simulate the total amount and order via Telegram.
+                <strong>JP:</strong> 商品はカテゴリーごとに絞り込みや検索が可能です。合計金額をシミュレーションしてTelegramでご注文いただけます。<br>
+                <strong>EN:</strong> You can filter by category or search products. Simulate the total amount and order via Telegram.
             </p>
         </div>
     </div>
@@ -66,6 +70,8 @@
 
     <script>
     let allProducts = [];
+    let currentCategory = 'ALL'; // 現在のカテゴリーを保持
+
     Papa.parse("products.csv", {
         download: true,
         header: true,
@@ -77,18 +83,38 @@
         }
     });
 
+    // カテゴリーボタンをクリックした時
+    function filterCategory(cat, btn) {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = cat; // カテゴリーを更新
+        applyFilters(); // フィルター実行
+    }
+
+    // 検索とカテゴリーを掛け合わせて表示する核となる関数
+    function applyFilters() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        
+        const filtered = allProducts.filter(p => {
+            const matchesCategory = (currentCategory === 'ALL' || p.category === currentCategory);
+            const matchesSearch = (p.name && p.name.toLowerCase().includes(searchTerm));
+            return matchesCategory && matchesSearch;
+        });
+
+        displayProducts(filtered);
+    }
+
     function displayProducts(products) {
         const container = document.getElementById('product-container');
         container.innerHTML = '';
         products.forEach((p) => {
             if(!p.name || p.name === "") return;
 
-            // 商品名の記号処理
             let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            // 【重要】日本国旗の判定（JAPAN_FARMED, JAPAN_FROZEN, SAKE 全てに対応）
-            const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE');
+            // 日本国旗の判定（CONDIMENTも追加）
+            const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE' || p.category === 'CONDIMENT');
 
             let unitOptions = '';
             if (p.is_fixed === "0") {
@@ -106,13 +132,8 @@
                         <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
                         <span class="category-tag ${p.category}">
                             <img src="images/${isJapanese ? 'jp-flag.png' : 'kh-flag.png'}" 
-     alt="flag" 
-     style="width: 20px; 
-            border: 1px solid #ddd; /* 白と同化しないよう、薄いグレーの枠線 */
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.1); /* 軽い影で浮かせる */
-            border-radius: 1px; 
-            margin-right: 6px; 
-            vertical-align: middle;">
+                                 alt="flag" 
+                                 style="width: 20px; border: 1px solid #ddd; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); border-radius: 1px; margin-right: 6px; vertical-align: middle;">
                             ${p.category.replace(/_/g, ' ')}
                         </span>
                     </div>
@@ -179,12 +200,6 @@
         if (!hasOrder) { alert("Please select items! / 商品を選択してください。"); return; }
         message += `\nEstimated Total: $${document.getElementById('total-amount').innerText}\n\nPlease confirm availability.`;
         window.open(`https://t.me/SAKANAYAJAPON_SUPPORT?text=${encodeURIComponent(message)}`, '_blank');
-    }
-
-    function filterCategory(cat, btn) {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        cat === 'ALL' ? displayProducts(allProducts) : displayProducts(allProducts.filter(p => p.category === cat));
     }
     </script>
 </body>
