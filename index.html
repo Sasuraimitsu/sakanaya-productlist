@@ -33,15 +33,15 @@
     </nav>
 
     <div class="search-area" style="max-width: 800px; margin: 10px auto; padding: 0 15px;">
-        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 25px; outline: none; font-size: 16px;">
+        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 25px; outline: none; font-size: 16px; box-sizing: border-box;">
     </div>
 
     <div class="notice-area">
         <div class="notice-box">
             <h4>【 NOTICE 】</h4>
             <p>
-                <strong>JP:</strong> 商品はカテゴリーごとに絞り込みや検索が可能です。合計金額をシミュレーションしてTelegramでご注文いただけます。<br>
-                <strong>EN:</strong> You can filter by category or search products. Simulate the total amount and order via Telegram.
+                <strong>JP:</strong> 商品はカテゴリーや名前で絞り込みが可能です。合計金額を計算してTelegramでご注文いただけます。<br>
+                <strong>EN:</strong> You can filter by category or name. Simulate the total amount and order via Telegram.
             </p>
         </div>
     </div>
@@ -70,8 +70,9 @@
 
     <script>
     let allProducts = [];
-    let currentCategory = 'ALL'; // 現在のカテゴリーを保持
+    let currentCategory = 'ALL';
 
+    // CSVの読み込み
     Papa.parse("products.csv", {
         download: true,
         header: true,
@@ -83,15 +84,15 @@
         }
     });
 
-    // カテゴリーボタンをクリックした時
+    // カテゴリー切り替え
     function filterCategory(cat, btn) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        currentCategory = cat; // カテゴリーを更新
-        applyFilters(); // フィルター実行
+        currentCategory = cat;
+        applyFilters();
     }
 
-    // 検索とカテゴリーを掛け合わせて表示する核となる関数
+    // 検索とカテゴリーの掛け合わせフィルター
     function applyFilters() {
         const searchTerm = document.getElementById('search-input').value.toLowerCase();
         
@@ -107,23 +108,34 @@
     function displayProducts(products) {
         const container = document.getElementById('product-container');
         container.innerHTML = '';
+        
+        if (products.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding: 20px;">No products found / 該当商品なし</p>';
+            return;
+        }
+
         products.forEach((p) => {
             if(!p.name || p.name === "") return;
 
-            let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let safeName = p.name.replace(/</g, "<").replace(/>/g, ">");
             let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            // 日本国旗の判定（CONDIMENTも追加）
+            // 日本国旗判定
             const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE' || p.category === 'CONDIMENT');
 
+            // --- 修正点: pc を pic に変換 ---
+            const displayUnit = (p.unit || 'pic').replace('pc', 'pic');
+
+            // --- 修正点: 単位選択肢のロジック ---
             let unitOptions = '';
             if (p.is_fixed === "0") {
-                if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pc (${p.w_pc}kg)</option>`;
+                if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pic (${p.w_pc}kg)</option>`;
                 if(parseFloat(p.w_fillet) > 0) unitOptions += `<option value="${p.w_fillet}">1 fillet (${p.w_fillet}kg)</option>`;
                 if(parseFloat(p.w_back) > 0) unitOptions += `<option value="${p.w_back}">Back side (${p.w_back}kg)</option>`;
                 if(parseFloat(p.w_stomach) > 0) unitOptions += `<option value="${p.w_stomach}">Stomach side (${p.w_stomach}kg)</option>`;
             } else {
-                unitOptions = `<option value="1">1 ${p.unit || 'pc'}</option>`;
+                // 固定商品の場合はCSVのunit（pic/bottle/pack等）をそのまま使う
+                unitOptions = `<option value="1">1 ${displayUnit}</option>`;
             }
 
             const card = `
@@ -132,8 +144,7 @@
                         <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
                         <span class="category-tag ${p.category}">
                             <img src="images/${isJapanese ? 'jp-flag.png' : 'kh-flag.png'}" 
-                                 alt="flag" 
-                                 style="width: 20px; border: 1px solid #ddd; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); border-radius: 1px; margin-right: 6px; vertical-align: middle;">
+                                 style="width: 20px; border: 1px solid #ddd; margin-right: 6px; vertical-align: middle;">
                             ${p.category.replace(/_/g, ' ')}
                         </span>
                     </div>
@@ -142,10 +153,10 @@
                         <h3>${safeName}</h3>
                         <div class="comment-box">${formattedComment}</div>
                         <div class="price-size-area">
-                            <p class="price" style="text-decoration: none !important;">
-                                $${Number(p.price).toLocaleString()} <span class="unit-text">/ ${p.unit || 'kg'}</span>
-                            </p>
-                            ${(p.size && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                            <p class="price">$${Number(p.price).toLocaleString()} <span class="unit-text">/ ${displayUnit}</span></p>
+                            
+                            ${(p.size && p.size.trim() !== '' && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                            
                             <div class="calc-container">
                                 <div class="calc-row">
                                     <select class="unit-select" onchange="updateTotal()">
