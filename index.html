@@ -72,11 +72,10 @@
     let allProducts = [];
     let currentCategory = 'ALL';
 
-    // CSVの読み込み
     Papa.parse("products.csv", {
         download: true,
         header: true,
-        skipEmptyLines: true,
+        skipEmptyLines: 'greedy', // 空白行をより強力に無視する設定
         transformHeader: function(h) { return h.trim(); },
         complete: function(results) {
             allProducts = results.data;
@@ -84,7 +83,6 @@
         }
     });
 
-    // カテゴリー切り替え
     function filterCategory(cat, btn) {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -92,9 +90,8 @@
         applyFilters();
     }
 
-    // 検索とカテゴリーの掛け合わせフィルター
     function applyFilters() {
-        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
         
         const filtered = allProducts.filter(p => {
             const matchesCategory = (currentCategory === 'ALL' || p.category === currentCategory);
@@ -109,24 +106,25 @@
         const container = document.getElementById('product-container');
         container.innerHTML = '';
         
-        if (products.length === 0) {
+        // 有効なデータのみに絞り込む（空白対策）
+        const validProducts = products.filter(p => p.name && p.name.trim() !== "" && p.code);
+
+        if (validProducts.length === 0) {
             container.innerHTML = '<p style="text-align:center; padding: 20px;">No products found / 該当商品なし</p>';
             return;
         }
 
-        products.forEach((p) => {
-            if(!p.name || p.name === "") return;
+        validProducts.forEach((p) => {
+            // HTMLエスケープ処理
+            let safeName = p.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            
+            // コメントのフォーマット（。で改行）
+            let rawComment = p.comment || '';
+            let formattedComment = rawComment.replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
-            let safeName = p.name.replace(/</g, "<").replace(/>/g, ">");
-            let formattedComment = (p.comment || '').replace(/。/g, '。<br><span class="en-comment">') + '</span>';
-
-            // 日本国旗判定
             const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE' || p.category === 'CONDIMENT');
-
-            // --- 修正点: pc を pic に変換 ---
             const displayUnit = (p.unit || 'pic').replace('pc', 'pic');
 
-            // --- 修正点: 単位選択肢のロジック ---
             let unitOptions = '';
             if (p.is_fixed === "0") {
                 if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pic (${p.w_pc}kg)</option>`;
@@ -134,7 +132,6 @@
                 if(parseFloat(p.w_back) > 0) unitOptions += `<option value="${p.w_back}">Back side (${p.w_back}kg)</option>`;
                 if(parseFloat(p.w_stomach) > 0) unitOptions += `<option value="${p.w_stomach}">Stomach side (${p.w_stomach}kg)</option>`;
             } else {
-                // 固定商品の場合はCSVのunit（pic/bottle/pack等）をそのまま使う
                 unitOptions = `<option value="1">1 ${displayUnit}</option>`;
             }
 
@@ -145,7 +142,7 @@
                         <span class="category-tag ${p.category}">
                             <img src="images/${isJapanese ? 'jp-flag.png' : 'kh-flag.png'}" 
                                  style="width: 20px; border: 1px solid #ddd; margin-right: 6px; vertical-align: middle;">
-                            ${p.category.replace(/_/g, ' ')}
+                            ${p.category ? p.category.replace(/_/g, ' ') : ''}
                         </span>
                     </div>
                     <div class="info">
@@ -153,9 +150,9 @@
                         <h3>${safeName}</h3>
                         <div class="comment-box">${formattedComment}</div>
                         <div class="price-size-area">
-                            <p class="price">$${Number(p.price).toLocaleString()} <span class="unit-text">/ ${displayUnit}</span></p>
+                            <p class="price" style="text-decoration: none !important;">$${Number(p.price).toLocaleString()} <span class="unit-text">/ ${displayUnit}</span></p>
                             
-                            ${(p.size && p.size.trim() !== '' && p.size !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
+                            ${(p.size && p.size.trim() !== '' && p.size.toLowerCase() !== 'size') ? `<p class="size-detail">Size: ${p.size}</p>` : ''}
                             
                             <div class="calc-container">
                                 <div class="calc-row">
