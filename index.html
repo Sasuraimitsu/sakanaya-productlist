@@ -137,7 +137,7 @@
             let unitOptions = '';
             if (p.is_fixed === "0") {
                 if(parseFloat(p.w_pc) > 0) unitOptions += `<option value="${p.w_pc}">1 pic (${p.w_pc}kg)</option>`;
-                if(parseFloat(p.w_fillet) > 0) unitOptions += `<option value="${p.w_fillet}">1 fillet (${p.w_fillet}kg)</option>`;
+                if(parseFloat(p.w_fillet) > 0) unitOptions += `<option value="${p.w_fillet}">1 fillet:pack (${p.w_fillet}kg)</option>`;
                 if(parseFloat(p.w_back) > 0) unitOptions += `<option value="${p.w_back}">Back side (${p.w_back}kg)</option>`;
                 if(parseFloat(p.w_stomach) > 0) unitOptions += `<option value="${p.w_stomach}">Stomach side (${p.w_stomach}kg)</option>`;
             } else {
