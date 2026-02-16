@@ -290,3 +290,54 @@ nav {
     font-weight: bold;
     cursor: pointer;
 }
+/* モーダル背景：少し透明度を下げて背後が見えるようにします */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7); /* 背景を少し薄く */
+    cursor: zoom-out;
+}
+
+/* ポップアップ画像：大きさを制限 */
+.modal-content {
+    margin: auto;
+    display: block;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); /* 垂直中央寄せ */
+    
+    max-width: 80%;   /* 画面の80%幅までに制限 */
+    max-height: 70vh; /* 画面の70%高さまでに制限 */
+    width: auto;      /* アスペクト比維持 */
+    height: auto;
+    
+    /* あまりに大きくなりすぎないように最大値を設定 */
+    max-width: 500px; 
+    
+    border: 5px solid white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: zoom 0.2s;
+}
+
+/* 閉じるボタン */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2001;
+}
+
+@keyframes zoom {
+    from {transform: translateY(-50%) scale(0.95); opacity: 0;}
+    to {transform: translateY(-50%) scale(1); opacity: 1;}
+}
