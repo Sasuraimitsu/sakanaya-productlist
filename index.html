@@ -152,7 +152,7 @@
             const card = `
                 <div class="card">
                     <div class="img-wrapper">
-                        <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}">
+                        <img src="${p.image ? p.image.trim() : ''}" alt="${safeName}" onclick="openModal(this.src)" style="cursor: pointer;">
                         <span class="category-tag ${p.category}">
                             <img src="images/${isJapanese ? 'jp-flag.png' : 'kh-flag.png'}" 
                                  style="width: 20px; border: 1px solid #ddd; margin-right: 6px; vertical-align: middle;">
