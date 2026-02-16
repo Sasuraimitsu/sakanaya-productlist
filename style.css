@@ -21,76 +21,92 @@ header {
     padding: 15px 20px;
 }
 
-/* 横に並べるためのコンテナ */
-.header-top-row {
+/* ヘッダー全体の横並び設定 */
+.header-flex-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between; /* 両端に広げる */
-    gap: 20px;
+    align-items: center; /* 垂直方向の中央揃え */
+    justify-content: space-between; /* 要素を左右に分散 */
+    gap: 15px;
     max-width: 1200px;
     margin: 0 auto;
-    flex-wrap: wrap; /* スマホでは折り返す */
+    padding: 10px 0;
 }
 
-/* ロゴのサイズを少し小さく調整 */
-.logo {
-    max-width: 120px !important;
-    margin-bottom: 0 !important;
+/* 1. ロゴ：横並び用にサイズを抑える */
+.logo-mini {
+    height: 50px; /* 高さを固定して揃える */
+    width: auto;
+    object-fit: contain;
 }
-/* 中央のタイトルグループ */
-.title-group {
-    flex-grow: 1;
+
+/* 2. タイトルエリア */
+.title-section {
+    flex-grow: 1; /* 余白を埋めて中央に寄せる */
     text-align: left;
 }
 
-.title-main-new {
-    margin: 0;
-    letter-spacing: 2px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    border: none !important; /* 古い線の削除 */
-    padding: 0 !important;
+.title-with-footer {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
 }
 
-.update-date {
+.title-main-inline {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.mini-footer-inline {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    white-space: nowrap;
+}
+
+.update-date-inline {
+    margin: 0;
+    font-size: 11px;
     opacity: 0.8;
 }
 
-/* 右側の連絡先エリア */
-.contact-area-new {
-    text-align: right;
+/* 3. 連絡先エリア */
+.contact-section-inline {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: 15px;
 }
 
-.tel-link-new {
+.tel-inline-text {
     color: white;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
+    white-space: nowrap;
 }
 
-.telegram-btn-small {
+.telegram-btn-mini {
     background: #0088cc;
     color: white;
     text-decoration: none;
-    padding: 5px 15px;
-    border-radius: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
     font-size: 0.8rem;
-    display: inline-block;
+    font-weight: bold;
+    transition: 0.2s;
+    white-space: nowrap;
 }
 
-/* スマホ用のレスポンシブ調整 */
+/* スマホ対応：画面が狭すぎる場合はスクロールするか、2行にするか */
 @media (max-width: 768px) {
-    .header-top-row {
-        flex-direction: column; /* スマホでは縦に並べる（崩れ防止） */
-        text-align: center;
+    .header-flex-row {
+        flex-wrap: wrap; /* スマホでは流石に2行に折り返す */
+        justify-content: center;
     }
-    .title-group, .contact-area-new {
+    .title-section {
         text-align: center;
+        width: 100%;
+        order: -1; /* タイトルを一番上に持ってくるなど調整可能 */
     }
 }
 
