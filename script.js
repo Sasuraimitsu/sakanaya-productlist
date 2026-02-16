@@ -146,7 +146,7 @@ function sendOrderTelegram() {
 
     if (!hasOrder) { alert("Please select items! / 商品を選択してください。"); return; }
     message += `\nEstimated Total: $${document.getElementById('total-amount').innerText}\n\nPlease confirm availability.`;
-    window.open(`https://t.me/SAKANAYAJAPON_SUPPORT?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://t.me/SAKANAYAJAPON?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // 画像拡大モーダル
