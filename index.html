@@ -223,6 +223,18 @@
         message += `\nEstimated Total: $${document.getElementById('total-amount').innerText}\n\nPlease confirm availability.`;
         window.open(`https://t.me/SAKANAYAJAPON_SUPPORT?text=${encodeURIComponent(message)}`, '_blank');
     }
+
+        function openModal(src) {
+    if(!src || src.includes('undefined')) return; // 画像がない場合は開かない
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("modal-img");
+    modal.style.display = "block";
+    modalImg.src = src;
+}
+
+function closeModal() {
+    document.getElementById("image-modal").style.display = "none";
+}
     </script>
 </body>
 </html>
