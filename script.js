@@ -59,7 +59,9 @@ function displayProducts(products) {
         let formattedComment = rawComment.replace(/。/g, '。<br><span class="en-comment">') + '</span>';
 
         // 日本フラグ判定 (JAPAN_FROZENも追加)
-        const isJapanese = (p.category === 'JAPAN_FARMED' || p.category === 'JAPAN_FROZEN' || p.category === 'SAKE' || p.category === 'SEASONING');
+        // displayProducts 関数内
+const cat = (p.category || "").toUpperCase(); // 全て大文字に変換して比較
+const isJapanese = (cat === 'JAPAN_FARMED' || cat === 'JAPAN_FROZEN' || cat === 'SAKE' || cat === 'SEASONING');
         const displayUnit = (p.unit || 'pic').replace('pc', 'pic');
 
         let unitOptions = '';
