@@ -341,3 +341,56 @@ nav {
     from {transform: translateY(-50%) scale(0.95); opacity: 0;}
     to {transform: translateY(-50%) scale(1); opacity: 1;}
 }
+<style>
+    /* タイトルとフッターを横並びにする */
+    .title-flex {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 5px;
+    }
+    .mini-footer {
+        font-size: 11px;
+        color: #888;
+        white-space: nowrap;
+    }
+
+    /* ポップアップ画像のサイズを適切に制限する */
+    .modal-content {
+        margin: auto;
+        display: block;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 85%;   /* 画面の85%まで */
+        max-height: 75vh; /* 画面の高さ75%まで */
+        width: auto;
+        max-width: 500px; /* PCでも大きくなりすぎないように制限 */
+        border: 4px solid white;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    /* モーダル背景 */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 3000; /* 最前面に */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+    }
+
+    /* 閉じるボタン */
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        color: white;
+        font-size: 35px;
+        cursor: pointer;
+    }
+</style>
