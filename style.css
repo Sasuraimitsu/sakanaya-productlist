@@ -240,3 +240,53 @@ nav {
 #search-input:focus {
     border-color: #00448e; /* フォーカス時にブランドカラーに変更 */
 }
+
+/* 画像を拡大可能に見せる */
+.img-wrapper img {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.img-wrapper img:hover {
+    opacity: 0.8;
+}
+
+/* モーダルの背景 */
+.modal {
+    display: none; /* 初期状態は非表示 */
+    position: fixed;
+    z-index: 2000; /* total-barより上に表示 */
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    cursor: zoom-out;
+}
+
+/* 拡大される画像本体 */
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 8px;
+    animation: zoom 0.3s;
+}
+
+@keyframes zoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* 閉じるボタン */
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
