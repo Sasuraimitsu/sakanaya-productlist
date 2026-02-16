@@ -31,52 +31,73 @@ FRESH,ACS403Z,AJI_150g,Around 140g-160g,"お刺身用の真アジ。身の締ま
 FRESH,ACS403Z,AJI_180g,Around 170g-190g,"お刺身用の真アジ。身の締まりが良く、アジ特有の濃厚な旨味と香りが広がります。Ultra-fresh horse mackerel. Succulent flavor and firm texture, best enjoyed as sashimi.",2,pic,0.18,0,0,0,1,images/AJI_180g.jpg
 FRESH,ACS403,AJI_200g,Around 200g-220g,"お刺身用の真アジ。身の締まりが良く、アジ特有の濃厚な旨味と香りが広がります。Ultra-fresh horse mackerel. Succulent flavor and firm texture, best enjoyed as sashimi.",2.5,pic,0.25,0,0,0,1,images/AJI_200g.jpg
 FRESH,ACO622,MARUKOBAN,Over 0.6kg,"「白身のトロ」とも呼ばれるマルコバン。濃厚な脂の甘みと、とろけるような食感をお刺身で。Snubnose pompano, often called ""white fish fatty tuna."" Enjoy its elegant fat and melting sweetness.",32,kg,0,0.14,0,0,0,images/MARUKOBAN.jpg
+FRESH,,GOLDEN SHIMAAJI,,,,,,,,,,
 FRESH,ACO631,KOCHI,Around 0.5-0.8kg,"透き通った身が美しいコチ。淡白ながらも噛むほどに広がる深い旨味は、お刺身の逸品です。Flathead with translucent flesh. Offers a firm texture and a deep, subtle umami for fresh sashimi.",38,kg,0,0.15,0,0,0,images/KOCHI.jpg
 FRESH,ACK405,SAWARA,Around 3-4kg,3kg以上の大型サワラ。お刺身用として、しっとりとした脂の乗りと濃厚な味わいを楽しめます。Premium 3kg+ Spanish mackerel. Features a moist texture and elegant fat for sashimi preparations.,25,kg,0,0.9,0.495,0.405,0,images/SAWARA.jpg
 FRESH,ACS525,KUROHATA,Around 2㎏,"高級魚クロハタ。白身の締まった食感と、噛むほどに溢れる濃厚な旨味が特徴です。Blacktip grouper with a signature firm texture and rich, deep umami. Served as premium sashimi.",38,kg,0,0.4,0,0,0,images/KUROHATA.jpg
 FRESH,ACS511,HATA,Around 3㎏,カンボジアでも最高級とされるハタ。蒸し料理やポワレにすると、身の弾力と旨味が際立ちます。A highly prized luxury fish; its firm texture and rich umami make it exceptional for steaming or searing.,32,kg,0,0.5,0,0,0,images/HATA.jpg
+FRESH,,AKAHATA,Around 2kg,,,,,,,,,
 FRESH,ACO630,KAMASU,Around 0.3kg,皮目に旨味が凝縮されたカマス。炙り刺身や塩焼きで、香ばしさと共にお楽しみください。Barracuda with elegant fat under the skin. Perfect for seared sashimi or pan-searing.,22,kg,0.3,0,0,0,1,images/KAMASU.jpg
 FRESH,ACS739,HIMECHI BIG,Around 0.4kg,"フランス料理で「ルジェ」と呼ばれる高級魚。芳醇な磯の香りと繊細な身質がポワレに最適です。Known as ""Rouget"" in French cuisine. Features fragrant skin and delicate umami, ideal for searing.",19,kg,0.4,0,0,0,1,images/HIMECHI.jpg
 FRESH,ACO759,BORA,Around 0.3kg,"驚くほど脂が乗ったボラ。臭みがなく、甘みの強い脂は一度食べたら概念が変わる美味しさです。Clean, sweet fat makes it a hidden gem. Best enjoyed raw to experience its full potential.",19,kg,0.3,0,0,0,0,images/BORA.jpg
-FRESH,ACO758,HAGI,Around 0.4kg,"カワハギ。フグにも匹敵する弾力のある白身は、薄造りやカルパッチョで真価を発揮します。Sashimi-grade Filefish. Offers a firm, springy texture similar to pufferfish. Ideal for Usuzukuri.",38,kg,,0.3,0,0,0,images/HAGI.jpg
+FRESH,ACO758,HAGI,Around 0.4kg,"カワハギ。フグにも匹敵する弾力のある白身は、薄造りやカルパッチョで真価を発揮します。Sashimi-grade Filefish. Offers a firm, springy texture similar to pufferfish. Ideal for Usuzukuri.",38,kg,0,0.3,0,0,0,images/HAGI.jpg
 FRESH,ACO406,OKIZAYORI,Around 0.6kg,"鮮度抜群のオキザヨリ。透明感のある美しい身は、カルパッチョや塩焼きなど幅広く楽しめます。Sashimi-grade Houndfish with clean, translucent flesh and a distinct umami. Ideal for sashimi.",15,kg,0.6,0,0,0,0,images/OKIZAYORI.jpg
+FRESH,,MINAMI KONOSHIRO,,,,,,,,,,
 FRESH,ACO513,SUZUKI,Around ３−5kg,"クセのない上品な甘みと、肉厚でしっとりした白身が特徴です。適度な脂のりがあり、加熱すると身が大きくほぐれ、ジューシーな食感を楽しめます。a mild, sweet flavor with succulent white flesh. Its moderate oil content ensures a moist, flaky texture that remains juicy when cooked",32,kg,0,0.9,0.5,0.4,0,images/SUZUKI.jpg
 JAPAN_FARMED,AJJ500W,TAI,Around 2.0kg,"産地直送の鮮度を誇る愛媛県産。朝〆ならではの弾力ある歯ごたえと、上品な甘みが際立つ一品です。Fresh from Ehime Prefecture. Features the signature firm texture of ""Asajime"" (morning-harvested) fish, highlighting a sophisticated natural sweetness.",34.82,kg,1.7,0,0,0,0,images/TAI.jpg
 JAPAN_FARMED,AJJ500D,TAI - Dress,Around 1.4kg,"産地直送の鮮度を誇る愛媛県産。朝〆ならではの弾力ある歯ごたえと、上品な甘みが際立つ一品です。Fresh from Ehime Prefecture. Features the signature firm texture of ""Asajime"" (morning-harvested) fish, highlighting a sophisticated natural sweetness.",41.86,kg,1.3,0,0,0,0,
 JAPAN_FARMED,AJJ620W,KANPACHI,Around 4.0kg,"鹿児島より届く朝〆の逸品。引き締まった身質と、しつこくない良質な脂の乗りが絶妙なバランスです。A premium morning-harvested selection from Kagoshima. Offers a perfect balance of firm flesh and clean, high-quality fat.",43.17,kg,3.4,0,0,0,0,images/KANPACHI.jpg
-JAPAN_FARMED,AJJ620D,KANPACHI - Dress,Around 3.0kg,"鹿児島より届く朝〆の逸品。引き締まった身質と、しつこくない良質な脂の乗りが絶妙なバランスです。A premium morning-harvested selection from Kagoshima. Offers a perfect balance of firm flesh and clean, high-quality fat.",51.54,kg,2.8,0,0,0,0,images/KANPACHI - Dress.jpg
+JAPAN_FARMED,AJJ620D,KANPACHI - Dress,Around 3.0kg,"鹿児島より届く朝〆の逸品。引き締まった身質と、しつこくない良質な脂の乗りが絶妙なバランスです。A premium morning-harvested selection from Kagoshima. Offers a perfect balance of firm flesh and clean, high-quality fat.",51.54,kg,2.8,0,0,0,0,images/KANPACHI - Dress .jpg
 JAPAN_FARMED,AJJ620F,KANPACHI - Fillet,Around 1.3kg,"鹿児島より届く朝〆の逸品。引き締まった身質と、しつこくない良質な脂の乗りが絶妙なバランスです。A premium morning-harvested selection from Kagoshima. Offers a perfect balance of firm flesh and clean, high-quality fat.",55.94,kg,1.3,0,0,0,0,images/KANPACHI - Fillet .jpg
 JAPAN_FARMED,AJJ623W,BURI,Around 5.0kg,"鹿児島県産の瑞々しい「新物」ブリ。初物ならではのフレッシュな味わいと、とろける脂を楽しめます。Succulent ""Shinmono"" (new season) Amberjack from Kagoshima. Enjoy the fresh flavor unique to the season's first catch with melt-in-your-mouth fat.",40.53,kg,3.54,0,0,0,0,images/BURI.jpg
-JAPAN_FARMED,AJJ623D,BURI - Dress,Around 3.7kg,"鹿児島県産の瑞々しい「新物」ブリ。初物ならではのフレッシュな味わいと、とろける脂を楽しめます。Succulent ""Shinmono"" (new season) Amberjack from Kagoshima. Enjoy the fresh flavor unique to the season's first catch with melt-in-your-mouth fat.",48.02,kg,2.94,0,0,0,0,images/BURI - Dress.jpg
-JAPAN_FARMED,AJJ623F,BURI - Fillet,Around 1.6kg,"鹿児島県産の瑞々しい「新物」ブリ。初物ならではのフレッシュな味わいと、とろける脂を楽しめます。Succulent ""Shinmono"" (new season) Amberjack from Kagoshima. Enjoy the fresh flavor unique to the season's first catch with melt-in-your-mouth fat.",52.42,kg,1.6,0,0,0,0,images/BURI - Fillet.jpg
-JAPAN_FARMED,AJJ621SD,SHIMAAJI - Semi Dress,Around 1.0kg,"愛媛から届く「魚の王様」。朝〆の鮮烈な食感に加え、シマアジ特有の深いコクと旨味が広がります。The ""King of Fish"" from Ehime. In addition to its vivid morning-fresh texture, it delivers the deep richness and umami characteristic of Striped Jack.",56.43,kg,1,0,0,0,0,imagesSHIMAAJI - Semi Dress - Fillet.jpg
+JAPAN_FARMED,AJJ623D,BURI - Dress,Around 3.7kg,"鹿児島県産の瑞々しい「新物」ブリ。初物ならではのフレッシュな味わいと、とろける脂を楽しめます。Succulent ""Shinmono"" (new season) Amberjack from Kagoshima. Enjoy the fresh flavor unique to the season's first catch with melt-in-your-mouth fat.",48.02,kg,2.94,0,0,0,0,images/BURI - Dress .jpg
+JAPAN_FARMED,AJJ623F,BURI - Fillet,Around 1.6kg,"鹿児島県産の瑞々しい「新物」ブリ。初物ならではのフレッシュな味わいと、とろける脂を楽しめます。Succulent ""Shinmono"" (new season) Amberjack from Kagoshima. Enjoy the fresh flavor unique to the season's first catch with melt-in-your-mouth fat.",52.42,kg,1.6,0,0,0,0,images/BURI - Fillet .jpg
+JAPAN_FARMED,AJJ621SD,SHIMAAJI - Semi Dress,Around 1.0kg,"愛媛から届く「魚の王様」。朝〆の鮮烈な食感に加え、シマアジ特有の深いコクと旨味が広がります。The ""King of Fish"" from Ehime. In addition to its vivid morning-fresh texture, it delivers the deep richness and umami characteristic of Striped Jack.",56.43,kg,1,0,0,0,0,imagesSHIMAAJI - Semi Dress - Fillet .jpg
 JAPAN_FARMED,AJJ512,HIRAME,Around 1.0kg,徹底した管理で育った韓国産。朝〆の透明感ある白身は、噛むほどに繊細な甘みが口いっぱいに響きます。Carefully farm-raised in Korea under strict quality control. The translucent white flesh of this morning-harvested fish releases a delicate sweetness with every bite.,51.53,kg,1,0,0,0,0,images/HIRAME.jpg
 JAPAN_FARMED,AJJ301UB,TUNA Upper Back,2㎏～,"長崎県産の希少な「背上」部位。赤身の濃厚な旨味と、中トロの甘みが一度に味わえる贅沢な部位です。A rare ""Se-kami"" (upper back) cut of Bluefin Tuna from Nagasaki. A luxurious part where you can enjoy both the intense umami of lean meat and the sweetness of medium-fatty tuna.",62.96,kg,2,0,0,0,0,images/TUNA Upper back.jpg
 JAPAN_FARMED,AJJ301MB,TUNA Middle Back,2㎏～,"鮮度抜群の長崎産生本マグロ。赤身と脂のバランスが最も良く、飽きのこない上品な味わいが特徴です。Ultra-fresh Bluefin Tuna from Nagasaki. Features the ideal balance of lean meat and fat, offering a sophisticated taste that never tires the palate.",86.71,kg,2,0,0,0,0,images/TUNA Middle back.jpg
 JAPAN_FARMED,AJJ301BB,TUNA Bottom Back,2㎏～,"脂がしっかりのった背下部位。なめらかな舌触りと生マグロ特有 of 芳醇な香りが、食卓を彩ります。The fatty ""Se-shimo"" (lower back) cut. Its smooth texture and the rich aroma unique to fresh tuna will elegantly grace your dining table.",62.08,kg,2,0,0,0,0,images/TUNA Bottom back.jpg
-JAPAN_FARMED,AJJ301UA,TUNA Upper Abdomen,2㎏～,"最も脂が乗った最高級部位。「大トロ」を多く含み、口の中でとろける濃厚な甘みが特徴です。The premium cut with the highest fat content. Famous for its Otoro, it features a rich, buttery sweetness that melts instantly on the tongue.",103.42,kg,2,0,0,0,0,images/
-JAPAN_FARMED,AJJ301MA,TUNA Middle Abdomen,2㎏～,"脂の甘みと赤身の旨味が絶妙なバランス。「中トロ」が中心で、しつこすぎない上品な味わいです。A perfect balance of fat and lean meat. Primarily Chutoro, it offers a refined flavor that is rich yet clean and well-balanced.",86.71,kg,2,0,0,0,0,images/
-JAPAN_FARMED,AJJ301BA,TUNA Bottom Abdomen,2㎏～,"筋が少なく、赤身の濃厚なコクをしっかり感じられます。程よい脂の甘みが後を引く美味しさです。This section has minimal sinew and delivers a deep, umami-rich flavor. It provides a pleasant, lingering sweetness with a smooth texture.",62.96,kg,2,0,0,0,0,images/
+JAPAN_FARMED,AJJ301UA,TUNA Upper Abdomen,2㎏～,"最も脂が乗った最高級部位。「大トロ」を多く含み、口の中でとろける濃厚な甘みが特徴です。The premium cut with the highest fat content. Famous for its Otoro, it features a rich, buttery sweetness that melts instantly on the tongue.",103.42,kg,2,0,0,0,0,images/TUNA Upper Abdomen .jpg
+JAPAN_FARMED,AJJ301MA,TUNA Middle Abdomen,2㎏～,"脂の甘みと赤身の旨味が絶妙なバランス。「中トロ」が中心で、しつこすぎない上品な味わいです。A perfect balance of fat and lean meat. Primarily Chutoro, it offers a refined flavor that is rich yet clean and well-balanced.",86.71,kg,2,0,0,0,0,images/TUNA Middle Abdomen .jpg
+JAPAN_FARMED,AJJ301BA,TUNA Bottom Abdomen,2㎏～,"筋が少なく、赤身の濃厚なコクをしっかり感じられます。程よい脂の甘みが後を引く美味しさです。This section has minimal sinew and delivers a deep, umami-rich flavor. It provides a pleasant, lingering sweetness with a smooth texture.",62.96,kg,2,0,0,0,0,images/TUNA Bottom Abdomen .jpg
 JAPAN_FARMED,BJJ313,TENMI,1㎏～,"地中海の恵みを受けた天身（芯の部分）。筋が少なく、マグロ本来の濃密な赤身の旨味を堪能できます。The premium ""Tenmi"" (inner core) cut from the Mediterranean. With minimal sinew, you can fully enjoy the dense, original umami of lean tuna.",68.5,kg,1,0,0,0,0,images/TENMI.jpg
 SAKE,F004,Bakuya,720ml,伝説の剣「莫耶」の名を冠した限定酒。黒と金のラベルが高級感を演出。華やかで力強い香りと、ジューシーな旨味が見事に調和した、インパクトのある一本です。,35,bottle,1,0,0,0,1,images/F004.jpg
-SAKE,F018,"Hyakujuro Sea, Crab and Scallop Junmai Daiginjo",720ml,フレッシュな香味と酸味が特徴的。後キレもよくスイスイと次なる杯を誘ってくれる１本です。お料理の美味しさを引き立ててくれます。,35,bottle,1,0,0,0,1,images/F018.jpg
-SAKE,F019,EIKUN Green EIKUN,720ml,白ブドウのような穏やかで爽やかな香りと、微発泡感を含むフレッシュな口当たり。甘みと酸味のバランスが完璧に整っており、非常に洗練されたモダンな味わいです。,35,bottle,1,0,0,0,1,images/F019.jpg
-SAKE,F021,Shiraki Hisashi Ginshari (GINSHARI),720ml,原料米の特長を活かし丁寧に醸した純米酒。蔵でしか味わえない原酒無調整の力強さと生原酒らしいフレッシュな味わいをそのまま瓶詰め致しました。しぼりたてならではの爽快な果実のような香りと呑み心地のよい甘味、スッキリとした軽やかな後味が特徴。,35,bottle,1,0,0,0,1,images/F021.jpg
-SAKE,F023,HIJIRI LEGEND,720ml,その名の通り、魚介類（特に海老、蟹、帆立）とのペアリングを追求したユニークな一本。甲殻類の甘みや旨味に負けないボディと、脂を切る酸味のバランスが絶妙で、食卓を楽しく彩ります。,36.4,bottle,1,0,0,0,1,images/F023.jpg
-SAKE,F024,Inari Kumo / Squeezed as is,720ml,五百万石を55%精米で醸した純米吟醸を無濾過で詰めた生原酒です。穏やかな果実香、お米の旨味がほどよく感じられる、濃醇辛口系の味わいです。食中酒として、幅広い料理にフィットします。,32.2,bottle,1,0,0,0,1,images/F024.jpg
-SAKE,F025,Sanrensei R7BY Extra Edition Kimoto,720ml,注ぐグラスに気泡がつくピチピチのフレッシュなガス感、芳醇な熟れた果実様のトロピカルな香りで、味わいはキリッとドライさとギュンッとキレる後口が魅力です。,35.1,bottle,1,0,0,0,1,images/F025.jpg
-SAKE,F026,Shinomine Hattan Junmai Daiginjo Nakadori,720ml,「LEGEND」の名を冠した聖酒造の限定シリーズ。黄金色のラベルが輝くラグジュアリーな一本で、洋梨やリンゴを思わせる華やかな吟醸香と、透明感のある甘みが特徴です。,38.6,bottle,1,0,0,0,1,images/F026.jpg
-SAKE,F027,CHIKUHA Junmai Ginjo Unfiltered Raw Sake,720ml,「搾ったまんま」をそのまま瓶詰めした、稲里シリーズで最もインパクトのある辛口酒。アルコール19度のガツンとした飲みごたえと、無濾過生原酒ならではの濃厚で野性味あふれる旨味が特徴。オンザロックでも楽しめる力強い一本です。,36.5,bottle,1,0,0,0,1,images/F027.jpg
-SAKE,F028,AMEFURI Daisen Junmai Sake (Unpasteurized),720ml,「三連星」シリーズの令和7酒造年度（R7BY）番外編。伝統的な「生酛（きもと）」造りで醸され、山田錦のふくよかさに乳酸由来の複雑味と酸味が加わった、飲みごたえのあるモダンな生酒です。,34.4,bottle,1,0,0,0,1,images/F028.jpg
-SAKE,F029,Chuai (CHUAI) Dry Junmai New Sake Arabashiri,720ml,希少米「八反35号」を使用し、篠峯らしい鮮烈な酸とガス感を封じ込めた一本です。中取りならではの雑味のないクリアな旨味と、アルコール15度の軽快なタッチが魅力の食中酒です。,34,bottle,1,0,0,0,1,images/F029.jpg
-SAKE,F031,WATARIBUNE Freshly squeezed raw gin,720ml,能登の契約栽培「五百万石」を100％使用。新酒ならではの芳醇な香りとフレッシュさを閉じ込めた冬季限定酒です。華やかで爽やかな香り、果実味のあるすっきりとした酸味と甘みが楽しめます。,34.2,bottle,1,0,0,0,1,images/F031.jpg
-SAKE,F032,Ryoko Junmai Ginjo Unfiltered Raw Sake,720ml,「菊勇」吟仕込みの雨降大山の生酒バージョン！爽やかな香りにまろやかな旨み、淡い酸とフレッシュな程よい苦みですっきりとしたキレのある後口,35.1,bottle,1,0,0,0,1,images/F032.jpg
-SAKE,F033,Shiraoi (HAKUROU) Wakasui raw sake drawn directly from the tank,720ml,辛口にしても忠愛の水で柔らかく飲みやすい純米酒に仕上がりました。「あらばしり」ならではの荒々しくフレッシュな香味と、忠愛らしいスカッと切れる辛口の味わいが特徴。飲み飽きしないキレ抜群の食中酒です。,33.9,bottle,1,0,0,0,1,images/F033.jpg
-SAKE,F034,Sawanohana Sarasuki Junmai Daiginjo,720ml,酒米のルーツ「渡船」を復活させた蔵のしぼりたて新酒。青リンゴのような瑞々しい香りと、渡船特有の野性味あふれる複雑な旨味が特徴。フレッシュで生命力あふれる味わいです。,37.9,bottle,1,0,0,0,1,images/F034.jpg
-SAKE,F035,Echinotaka Junmai freshly squeezed sake,720ml,出羽燦々本来のふくよかでふくらみのある味わいと、後半の香りの余韻は厚みがありながらも軽めの後味です。無濾過生のフレッシュで爽やかな香りと、丸みのある味わいをお楽しみ下さい。,32.8,bottle,1,0,0,0,1,images/F035.jpg
-SAKE,F036,shirakiku (Shirakiku) Winter Limited (Clear Moon Morning),720ml,地元の酒米「若水」を100％使用し、搾ったその場で瓶詰めした直汲み生原酒です。若水特有のふくよかな旨味と、直汲みなではのピチピチとしたガス感が楽しめ、濃醇ながらもフレッシュな味わいです。,35.1,bottle,1,0,0,0,1,images/F036.jpg
-SAKE,F037,SHINOMINE Rokumaru Hattan Junmai Ginjo,720ml,冬季限定のうすにごり生酒。新雪のようなきめ細やかなオリが絡み、シルキーで柔らかな口当たりを楽しめます。上品な香りと、雪解け水のような綺麗な後味が特徴です。,35.1,bottle,1,0,0,0,1,images/F037.jpg
-SAKE,F038,Garyuume (Yamada Nishiki Jungin raw unprocessed sake),720ml,搾ったばかりのフレッシュさをそのまま瓶詰めした、おりがらみ（霞）の純米酒です。70%精米ならではの米のふくよかな旨味と、新酒特有の荒々しさが調和した、冬に飲みたくなる味わいです。,34.2,bottle,1,0,0,0,1,images/F038.jpg
-SAKE,F039,Zuikan Kowappa (Jungin dry sake with bag),720ml,全量食用米で醸す蔵の冬季限定酒（通称：月冴ゆる朝）。コシヒカリの甘みと旨味を十分に引き出しつつ、新酒ならではのフレッシュなガス感と爽やかな酸味が調和しています。冬の澄んだ朝をイメージさせる、透明感のある綺麗な味わいです。,36,bottle,1,0,0,0,1,images/F039.jpg
-SAKE,F040,Soutenden (FLYING BIRD),720ml,篠峯の人気シリーズ「ろくまる（精米60%）」の八反バージョン。八反米由来の豊かな香りと上品な甘み、そして篠峯特有の酸味が調和したジューシーな一本。アルコール15度で軽快に杯が進みます。,33.1,bottle,1,0,0,0,1,images/F040.jpg
-SAKE,F041,Machida Sake Brewery (Gohyakumangoku Directly Drawn Special Pure Sake),720ml,,33.4,bottle,1,0,0,0,1,images/F041.jpg
+SAKE,F018,"Hyakujuro Sea, Crab and Scallop Junmai Daiginjo",720ml,その名の通り、魚介類（特に海老、蟹、帆立）とのペアリングを追求したユニークな一本。甲殻類の甘みや旨味に負けないボディと、脂を切る酸味のバランスが絶妙で、食卓を楽しく彩ります。,35,bottle,1,0,0,0,1,images/F018.jpg
+SAKE,F019,EIKUN Green EIKUN,720ml,五百万石を55%精米で醸した純米吟醸を無濾過で詰めた生原酒です。穏やかな果実香、お米の旨味がほどよく感じられる、濃醇辛口系の味わいです。食中酒として、幅広い料理にフィットします。,35,bottle,1,0,0,0,1,images/F019.jpg
+SAKE,F021,Shiraki Hisashi Ginshari (GINSHARI),720ml,"注ぐグラスに気泡がつくピチピチのフレッシュなガス感
+芳醇な熟れた果実様のトロピカルな香り
+味わいはキリッとドライ
+ギュンッとキレる後口",35,bottle,1,0,0,0,1,images/F021.jpg
+SAKE,F023,HIJIRI LEGEND,720ml,「LEGEND」の名を冠した聖酒造の限定シリーズ。黄金色のラベルが輝くラグジュアリーな一本で、洋梨やリンゴを思わせる華やかな吟醸香と、透明感のある甘みが特徴です。,36.4,bottle,1,0,0,0,1,images/F023.jpg
+SAKE,F024,Inari Kumo / Squeezed as is,720ml,「搾ったまんま」をそのまま瓶詰めした、稲里シリーズで最もインパクトのある辛口酒。アルコール19度のガツンとした飲みごたえと、無濾過生原酒ならではの濃厚で野性味あふれる旨味が特徴。オンザロックでも楽しめる力強い一本です。,32.2,bottle,1,0,0,0,1,images/F024.jpg
+SAKE,F025,Sanrensei R7BY Extra Edition Kimoto,720ml,「三連星」シリーズの令和7酒造年度（R7BY）番外編。伝統的な「生酛（きもと）」造りで醸され、山田錦のふくよかさに乳酸由来の複雑味と酸味が加わった、飲みごたえのあるモダンな生酒です。,35.1,bottle,1,0,0,0,1,images/F025.jpg
+SAKE,F026,Shinomine Hattan Junmai Daiginjo Nakadori,720ml,希少米「八反35号」を使用し、篠峯らしい鮮烈な酸とガス感を封じ込めた一本です。中取りならではの雑味のないクリアな旨味と、アルコール15度の軽快なタッチが魅力の食中酒です。,38.6,bottle,1,0,0,0,1,images/F026.jpg
+SAKE,F027,CHIKUHA Junmai Ginjo Unfiltered Raw Sake,720ml,"能登の契約栽培「五百万石」を100％使用。新酒ならではの芳醇な香りとフレッシュさを閉じ込めた冬季限定酒です。
+華やかで爽やかな香り、果実味のあるすっきりとした酸味と甘みが楽しめます。",36.5,bottle,1,0,0,0,1,images/F027.jpg
+SAKE,F028,AMEFURI Daisen Junmai Sake (Unpasteurized),720ml,"「菊勇」吟仕込みの雨降大山の生酒バージョン！
+
+爽やかな香りにまろやかな旨み、淡い酸とフレッシュな程よい苦みですっきりとしたキレのある後口",34.4,bottle,1,0,0,0,1,images/F028.jpg
+SAKE,F029,Chuai (CHUAI) Dry Junmai New Sake Arabashiri,720ml,辛口にしても忠愛の水で柔らかく飲みやすい純米酒に仕上がりました。「あらばしり」ならではの荒々しくフレッシュな香味と、忠愛らしいスカッと切れる辛口の味わいが特徴。飲み飽きしないキレ抜群の食中酒です。,34,bottle,1,0,0,0,1,images/F029.jpg
+SAKE,F031,WATARIBUNE Freshly squeezed raw gin,720ml,酒米のルーツ「渡船」を復活させた蔵のしぼりたて新酒。青リンゴのような瑞々しい香りと、渡船特有の野性味あふれる複雑な旨味が特徴。フレッシュで生命力あふれる味わいです。,34.2,bottle,1,0,0,0,1,images/F031.jpg
+SAKE,F032,Ryoko Junmai Ginjo Unfiltered Raw Sake,720ml,"出羽燦々本来のふくよかでふくらみのある味わいと、後半の香りの余韻は厚みがありながらも軽めの後味です。
+
+無濾過生のフレッシュで爽やかな香りと、丸みのある味わいをお楽しみ下さい。
+",35.1,bottle,1,0,0,0,1,images/F032.jpg
+SAKE,F033,Shiraoi (HAKUROU) Wakasui raw sake drawn directly from the tank,720ml,地元の酒米「若水」を100％使用し、搾ったその場で瓶詰めした直汲み生原酒です。若水特有のふくよかな旨味と、直汲みなではのピチピチとしたガス感が楽しめ、濃醇ながらもフレッシュな味わいです。,33.9,bottle,1,0,0,0,1,images/F033.jpg
+SAKE,F034,Sawanohana Sarasuki Junmai Daiginjo,720ml,冬季限定のうすにごり生酒。新雪のようなきめ細やかなオリが絡み、シルキーで柔らかな口当たりを楽しめます。上品な香りと、雪解け水のような綺麗な後味が特徴です。,37.9,bottle,1,0,0,0,1,images/F034.jpg
+SAKE,F035,Echinotaka Junmai freshly squeezed sake,720ml,搾ったばかりのフレッシュさをそのまま瓶詰めした、おりがらみ（霞）の純米酒です。70%精米ならではの米のふくよかな旨味と、新酒特有の荒々しさが調和した、冬に飲みたくなる味わいです。,32.8,bottle,1,0,0,0,1,images/F035.jpg
+SAKE,F036,shirakiku (Shirakiku) Winter Limited (Clear Moon Morning),720ml,全量食用米で醸す蔵の冬季限定酒（通称：月冴ゆる朝）。コシヒカリの甘みと旨味を十分に引き出しつつ、新酒ならではのフレッシュなガス感と爽やかな酸味が調和しています。冬の澄んだ朝をイメージさせる、透明感のある綺麗な味わいです。,35.1,bottle,1,0,0,0,1,images/F036.jpg
+SAKE,F037,SHINOMINE Rokumaru Hattan Junmai Ginjo,720ml,篠峯の人気シリーズ「ろくまる（精米60%）」の八反バージョン。八反米由来の豊かな香りと上品な甘み、そして篠峯特有の酸味が調和したジューシーな一本。アルコール15度で軽快に杯が進みます。,35.1,bottle,1,0,0,0,1,images/F037.jpg
+SAKE,F038,Garyuume (Yamada Nishiki Jungin raw unprocessed sake),720ml,"フレッシュで円やかな口あたり。
+桃や程よくパインの様な香り。
+エレガントで艶のある甘みが特徴です。",34.2,bottle,1,0,0,0,1,images/F038.jpg
+SAKE,F039,Zuikan Kowappa (Jungin dry sake with bag),720ml,自社栽培した亀の尾で醸したお酒を袋吊りで搾った贅沢なしぼりたて。心地よい果実香に、やわらかな口当たり。口の中で旨みがじんわりと広がります。後キレの良さも秀逸。全体を通して袋吊りらしい透明感を感じるお酒です。,36,bottle,1,0,0,0,1,images/F039.jpg
+SAKE,F040,Soutenden (FLYING BIRD),720ml,フレッシュで爽快感のある柑橘系のような香り。柔らかな甘味から、後半は辛口の味わいへ。シャープな酸味の辛口の余韻。,33.1,bottle,1,0,0,0,1,images/F040.jpg
+SAKE,F041,Machida Sake Brewery (Gohyakumangoku Directly Drawn Special Pure Sake),720ml,"果実感たっぷりの香り。
+ピチピチのガスを感じるフレッシュで澄んだ口当たりから、ジューシー＆フルーティなお米の甘旨みが広がります。
+
+甘さと爽やかな酸、ほんのりとした苦みのバランスが良くクリアで瑞々しい酒質。
+人気なのも大納得の酒です。",33.4,bottle,1,0,0,0,1,images/F041.jpg
+SEASONING,AOO1000,SALADA OIL,18L,油の王様” 上品でまろやかな食感と、素材の旨味を引き立てる綿実油100％のプレミアム油,88,can,1,0,0,0,1,images/SALADA OIL.jpg
+SEASONING,AOO1002,CLASSIC OIL,18L, 味わい深い綿実油30％と、甘い香ばしさのコーン油70％をブレンドした高級プレミアムオイル,68,can,1,0,0,0,1,images/CLASSIC OIL.jpg
+SEASONING,AOO1001,DIAMOND G BLEND,18L, 旨みの綿実油50％と軽さのコーン油50％をブレンドしたバランス型プレミアムサラダ油。,78,can,1,0,0,0,1,images/DIAMOND G BLEND.jpg
