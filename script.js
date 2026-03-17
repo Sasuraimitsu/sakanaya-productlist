@@ -64,8 +64,8 @@ const UI_TEXT = {
 const CAT_UNIT_FIELDS = {
     // スプレッドシート列名: wo/sd_pic, dr_pic, back_pic, stomach_pic
     'FROZEN':         [{ key: 'wo/sd_pic', label: 'wo' }],
-    'FRESH-WHOLE/SD': [{ key: 'wo/sd_pic', label: 'wo' },
-                       { key: 'dr_pic',    label: 'dr' }],
+    'FRESH-WHOLE/SD': [{ key: 'wo/sd_pic', label: 'wo' }],
+    'FRESH-DR': [{ key: 'dr_pic',    label: 'dr' }],
     'FRESH-FILLET':   [{ key: 'back_pic',    label: 'back-pic' },
                        { key: 'stomach_pic', label: 'stomach-pic' }],
     'OIL&SEASONING':  [{ key: 'wo/sd_pic', label: 'pic' }],
