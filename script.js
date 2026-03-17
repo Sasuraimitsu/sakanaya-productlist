@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzRSqZYubM7bfS3ylxnSwYssYIiS9cV7iipxDlF9jEK8p7ehG07iYVaagseq1y0lG77/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwpHTrnOgUWMHb8cZ7sQlGXNKSz0Pvz5nu9zVP2Eh3Nju1t1T9g5xZrheQZAjTX6qOE/exec';
 const TELEGRAM_BOT = 'sakanaya_bot';
 
 // ═══════════════════════════════════════════════════════════
