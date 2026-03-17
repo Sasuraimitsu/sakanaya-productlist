@@ -117,7 +117,6 @@ function buildCard(p, idx) {
     const cat = (p.category || '').toUpperCase();
     const isSake = cat === 'SAKE';
     const isWeightUnit = (p.unit || '').toLowerCase() === 'kg';
-    const isFixed = (p.is_fixed === 'TRUE' || p.is_fixed === true || p.is_fixed === '1');
 
     const safeName = esc(p.name || '');
     const safeCode = esc(p.code || '');
@@ -156,13 +155,11 @@ function buildCard(p, idx) {
         const unitTypeBadge = isWeightUnit
             ? `<span class="unit-type-badge weight">WEIGHT</span>`
             : `<span class="unit-type-badge qty">QTY</span>`;
-        const fixedBadge = isFixed ? `<span class="fixed-badge">FIXED</span>` : '';
         priceHTML = `
             <p class="price">
                 $${Number(p.price || 0).toFixed(2)}
                 <span class="unit-text">/ ${unitLabel}</span>
                 ${unitTypeBadge}
-                ${fixedBadge}
             </p>`;
     }
 
