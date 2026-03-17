@@ -62,16 +62,17 @@ const UI_TEXT = {
 // CATEGORY → UNIT FIELDS
 // ═══════════════════════════════════════════════════════════
 const CAT_UNIT_FIELDS = {
-    'FROZEN':       [{ key: 'pic',         label: 'pic' }],
-    'FRESH-WHOLE/SD':  [{ key: 'wo/sd_pic',         label: 'wo/sd-pic' }],
-    'FRESH-SD':     [{ key: 'sd_pic',      label: 'dr-pic' }],
-    'FRESH-FILLET': [{ key: 'back_pic',    label: 'back-pic' },
-                     { key: 'stomach_pic', label: 'stomach-pic' }],
-    'SEASONING':    [{ key: 'pic',         label: 'pic' }],
-    'KITCHEN':      [{ key: 'case',        label: 'case' },
-                     { key: 'pic',         label: 'pic' }],
-    'SAKE':         [{ key: 'case',        label: 'case' },
-                     { key: 'bottle',      label: 'bottle' }],
+    // スプレッドシート列名: wo/sd_pic, dr_pic, back_pic, stomach_pic
+    'FROZEN':         [{ key: 'wo/sd_pic', label: 'wo' }],
+    'FRESH-WHOLE/SD': [{ key: 'wo/sd_pic', label: 'wo' },
+                       { key: 'dr_pic',    label: 'dr' }],
+    'FRESH-FILLET':   [{ key: 'back_pic',    label: 'back-pic' },
+                       { key: 'stomach_pic', label: 'stomach-pic' }],
+    'OIL&SEASONING':  [{ key: 'wo/sd_pic', label: 'pic' }],
+    'KITCHEN':        [{ key: 'case',      label: 'case' },
+                       { key: 'wo/sd_pic', label: 'pic' }],
+    'SAKE':           [{ key: 'case',      label: 'case' },
+                       { key: 'bottle',    label: 'bottle' }],
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -222,7 +223,8 @@ function buildCard(p, idx) {
     const country = (p.country || '').toUpperCase();
     const flagSrc = country === 'JAPAN' ? 'images/jp-flag.png' : country === 'CAMBODIA' ? 'images/kh-flag.png' : '';
     const countryBadge = flagSrc ? `<img class="country-flag" src="${flagSrc}" alt="${country}">` : '';
-    const catTag = `<span class="category-tag ${cat}">${esc(p.category || '')}${countryBadge}</span>`;
+    const catClass = cat.replace(/[^A-Z0-9\-]/g, '_');
+    const catTag = `<span class="category-tag ${catClass}">${esc(p.category || '')}${countryBadge}</span>`;
 
     // ── ストックバッジ ──
     const stockBadge = (!isSake && p.stock)
