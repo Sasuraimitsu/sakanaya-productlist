@@ -80,11 +80,13 @@
 
     <div id="total-bar" class="total-bar">
         <div class="total-content">
-            <span class="total-label">Estimated Total:</span>
-            <span class="total-price">$ <span id="total-amount">0.00</span></span>
+            <span class="total-label">📋 注文内容はこちら / Your Order</span>
+            <span class="total-price"><span id="total-amount">0</span> 点</span>
         </div>
-        <button onclick="sendOrderTelegram()" class="order-send-btn">Order via Telegram</button>
-        <p class="total-note">*Excluding Delivery Fee</p>
+        <button onclick="sendOrderTelegram()" class="order-send-btn">
+            Telegramで注文する / Order via Telegram
+        </button>
+        <p class="total-note">※ 最終金額は納品時に確定いたします / Final price confirmed upon delivery</p>
     </div>
 
     <script src="script.js"></script>
