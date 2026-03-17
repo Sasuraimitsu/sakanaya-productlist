@@ -2,7 +2,7 @@
 // CONFIG
 // ═══════════════════════════════════════════════════════════
 const GAS_URL = 'YOUR_GAS_ENDPOINT_URL_HERE';
-const TELEGRAM_ID = 'sakanaya_bot';
+const TELEGRAM_BOT = 'sakanaya_bot'; // 注文送信先Bot
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -184,7 +184,7 @@ function buildCard(p, idx) {
     // ない場合 → unit=kg なら kg入力、unit=pc なら個数入力
     let orderHTML = '';
     if (isSake) {
-        orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_ID}" target="_blank">💬 お問い合わせ / ASK FOR PRICE</a>`;
+        orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_BOT}" target="_blank">💬 お問い合わせ / ASK FOR PRICE</a>`;
 
     } else if (activeUnitFields.length > 0) {
         const rows = activeUnitFields.map((f, fi) => `
@@ -269,19 +269,17 @@ function changeQty(id, delta) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TOTAL CALCULATION
+// ITEM COUNT（合計金額は非表示、選択数だけ表示）
 // ═══════════════════════════════════════════════════════════
 function updateTotal() {
-    let total = 0;
+    let itemCount = 0;
     document.querySelectorAll('.card [data-price]').forEach(inp => {
-        const price = parseFloat(inp.getAttribute('data-price')) || 0;
         const qty = parseFloat(inp.value) || 0;
-        total += price * qty;
+        if (qty > 0) itemCount++;
     });
-    document.getElementById('total-amount').textContent =
-        total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('total-amount').textContent = itemCount;
     const bar = document.getElementById('total-bar');
-    total > 0 ? bar.classList.add('show') : bar.classList.remove('show');
+    itemCount > 0 ? bar.classList.add('show') : bar.classList.remove('show');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -290,14 +288,15 @@ function updateTotal() {
 function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
     let hasOrder = false;
+    let itemCount = 0;
 
     document.querySelectorAll('.card').forEach(card => {
         const name = card.querySelector('h3') ? card.querySelector('h3').innerText : '';
-        // 複数inputがある場合（back_pic + stomach_pic など）をすべて収集
         card.querySelectorAll('[data-price]').forEach(inp => {
             const qty = parseFloat(inp.value) || 0;
             if (qty <= 0) return;
             hasOrder = true;
+            itemCount++;
             const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
             const price = parseFloat(inp.getAttribute('data-price')) || 0;
             const sub = (price * qty).toFixed(2);
@@ -306,11 +305,11 @@ function sendOrderTelegram() {
     });
 
     if (!hasOrder) {
-        alert('Please select items! / 商品を選択してください。');
+        alert('商品を選択してください。/ Please select items.');
         return;
     }
-    message += `\nEstimated Total: $${document.getElementById('total-amount').innerText}\n\nPlease confirm availability.`;
-    window.open(`https://t.me/${TELEGRAM_ID}?text=${encodeURIComponent(message)}`, '_blank');
+    message += `\n---\n注文商品数: ${itemCount}点\n\n※ 最終金額は納品時の重量・数量により確定いたします。`;
+    window.open(`https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // ═══════════════════════════════════════════════════════════
