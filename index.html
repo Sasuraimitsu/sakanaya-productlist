@@ -24,6 +24,12 @@
         </div>
     </header>
 
+    <!-- 言語切り替えボタン -->
+    <div class="lang-bar">
+        <button id="lang-jp" class="lang-btn" onclick="setLang('jp')">🇯🇵 日本語</button>
+        <button id="lang-en" class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+    </div>
+
     <nav class="category-nav">
         <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
         <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
@@ -36,26 +42,14 @@
     </nav>
 
     <div class="search-area">
-        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()">
+        <input type="text" id="search-input" placeholder="Search product name..." onkeyup="applyFilters()">
     </div>
 
     <div class="notice-area">
         <details class="notice-box">
-            <summary>【 NOTICE 】 クリックして詳細を表示 / Click to view details</summary>
+            <summary id="notice-summary-text">【 NOTICE 】 Click to view details</summary>
             <div class="notice-content">
-                <p>
-                    <strong>JP:</strong><br>
-                    ・商品はカテゴリーや名前で絞り込みが可能です。<br>
-                    ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
-                    ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。
-                </p>
-                <hr class="notice-divider">
-                <p>
-                    <strong>EN:</strong><br>
-                    - You can filter products by category or name.<br>
-                    - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
-                    - After ordering via Telegram, you will receive an order sheet. Please sign or reply **"Confirmed"** to complete your order.
-                </p>
+                <div id="notice-body-content"></div>
             </div>
         </details>
     </div>
@@ -76,13 +70,13 @@
 
     <div id="total-bar" class="total-bar">
         <div class="total-content">
-            <span class="total-label">📋 注文内容はこちら / Your Order</span>
-            <span class="total-price"><span id="total-amount">0</span> 点</span>
+            <span class="total-label" id="order-bar-label">📋 Your Order</span>
+            <span class="total-price"><span id="total-amount">0</span></span>
         </div>
         <button onclick="sendOrderTelegram()" class="order-send-btn">
-            Telegramで注文する / Order via Telegram
+            <span id="order-btn-text">📲 Order via Telegram</span>
         </button>
-        <p class="total-note">※ 最終金額は納品時に確定いたします / Final price confirmed upon delivery</p>
+        <p class="total-note" id="order-bar-note">* Final price confirmed upon delivery</p>
     </div>
 
     <script src="script.js"></script>
