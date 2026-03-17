@@ -266,7 +266,7 @@ header {
     height: 220px;
 }
 
-.img-wrapper img {
+.img-wrapper > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -274,7 +274,7 @@ header {
     transition: opacity 0.3s;
 }
 
-.img-wrapper img:hover {
+.img-wrapper > img:hover {
     opacity: 0.85;
 }
 
@@ -308,12 +308,15 @@ header {
 
 /* country表示（JAPAN / CAMBODIA） */
 .country-flag {
-    width: 20px;
-    height: auto;
-    border: 1px solid #ddd;
+    width: 18px;
+    height: 12px;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.15);
     border-radius: 2px;
     vertical-align: middle;
     margin-left: 4px;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 /* ─── STOCK BADGE ─── */
