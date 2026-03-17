@@ -307,23 +307,13 @@ header {
 .category-tag.SAKE         { border-left: 5px solid var(--sake-gold); }
 
 /* country表示（JAPAN / CAMBODIA） */
-.country-badge {
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 3px;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-}
-
-.country-badge.JAPAN {
-    background: #e60012;
-    color: white;
-}
-
-.country-badge.CAMBODIA {
-    background: #032ea1;
-    color: white;
+.country-flag {
+    width: 20px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    vertical-align: middle;
+    margin-left: 4px;
 }
 
 /* ─── STOCK BADGE ─── */
