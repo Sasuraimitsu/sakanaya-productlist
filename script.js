@@ -2,26 +2,64 @@
 // CONFIG
 // ═══════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzRSqZYubM7bfS3ylxnSwYssYIiS9cV7iipxDlF9jEK8p7ehG07iYVaagseq1y0lG77/exec';
-const TELEGRAM_BOT = 'sakanaya_bot'; // 注文送信先Bot
+const TELEGRAM_BOT = 'sakanaya_bot';
 
 // ═══════════════════════════════════════════════════════════
-// STATE
+// LANGUAGE STATE
+// ブラウザ言語が日本語なら'jp'、それ以外は'en'をデフォルトに
 // ═══════════════════════════════════════════════════════════
-let allProducts = [];
-let currentCategory = 'ALL';
+let currentLang = (navigator.language || navigator.userLanguage || 'en').startsWith('ja') ? 'jp' : 'en';
+
+// UI テキスト定義
+const UI_TEXT = {
+    jp: {
+        searchPlaceholder: '商品名で検索...',
+        noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
+        noticeBody: `
+            <strong>JP:</strong><br>
+            ・重量単価商品（PRICE/kg）はご注文時にkg数を入力してください。<br>
+            ・数量単価商品（PRICE/pc）はご注文数量を入力してください。<br>
+            ・商品はカテゴリーや名前で絞り込みが可能です。<br>
+            ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
+            ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。`,
+        orderBtn: '📲 Telegramで注文する',
+        orderBarLabel: '📋 注文内容はこちら',
+        orderBarUnit: '点',
+        orderNote: '※ 最終金額は納品時に確定いたします',
+        noProducts: '該当商品なし',
+        selectItems: '商品を選択してください。',
+        askBtn: '💬 お問い合わせ',
+        weight: '重量',
+        qty: '数量',
+        stock: 'STOCK',
+        size: 'サイズ',
+    },
+    en: {
+        searchPlaceholder: 'Search product name...',
+        noticeTitle: '【 NOTICE 】 Click to view details',
+        noticeBody: `
+            <strong>EN:</strong><br>
+            - For weight-priced items (PRICE/kg), enter the quantity in kg when ordering.<br>
+            - For unit-priced items (PRICE/pc), enter the number of pieces.<br>
+            - You can filter products by category or name.<br>
+            - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
+            - After ordering via Telegram, you will receive an order sheet. Please sign or reply <strong>"Confirmed"</strong> to complete your order.`,
+        orderBtn: '📲 Order via Telegram',
+        orderBarLabel: '📋 Your Order',
+        orderBarUnit: ' item(s)',
+        orderNote: '* Final price confirmed upon delivery',
+        noProducts: 'No products found',
+        selectItems: 'Please select items.',
+        askBtn: '💬 ASK FOR PRICE',
+        weight: 'WEIGHT',
+        qty: 'QTY',
+        stock: 'STOCK',
+        size: 'Size',
+    }
+};
 
 // ═══════════════════════════════════════════════════════════
 // CATEGORY → UNIT FIELDS
-//
-// スプレッドシートの列名（使用するもの）:
-//   pic        : FROZEN / FRESH-WHOLE / SEASONING → 1尾/1個あたり
-//   sd_pic     : FRESH-SD → セミドレス1尾
-//   back_pic   : FRESH-FILLET → 背身1枚
-//   stomach_pic: FRESH-FILLET → 腹身1枚
-//   case       : KITCHEN / SAKE → ケース
-//   bottle     : SAKE → 1本
-//
-// 表示ラベル例: "1 pic (1.2kg)" のようにカードに表示
 // ═══════════════════════════════════════════════════════════
 const CAT_UNIT_FIELDS = {
     'FROZEN':       [{ key: 'pic',         label: 'pic' }],
@@ -37,6 +75,40 @@ const CAT_UNIT_FIELDS = {
 };
 
 // ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let allProducts = [];
+let currentCategory = 'ALL';
+
+// ═══════════════════════════════════════════════════════════
+// LANGUAGE SWITCH
+// ═══════════════════════════════════════════════════════════
+function setLang(lang) {
+    currentLang = lang;
+    const t = UI_TEXT[lang];
+
+    // ボタンのactive切り替え
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('lang-' + lang).classList.add('active');
+
+    // 検索プレースホルダー
+    document.getElementById('search-input').placeholder = t.searchPlaceholder;
+
+    // NOTICEタイトルとボディ
+    document.getElementById('notice-summary-text').textContent = t.noticeTitle;
+    document.getElementById('notice-body-content').innerHTML = t.noticeBody;
+
+    // カートバー
+    document.getElementById('order-bar-label').textContent = t.orderBarLabel;
+    document.getElementById('order-btn-text').textContent = t.orderBtn;
+    document.getElementById('order-bar-note').textContent = t.orderNote;
+    updateTotal();
+
+    // 商品カードを再描画
+    applyFilters();
+}
+
+// ═══════════════════════════════════════════════════════════
 // FETCH from GAS
 // ═══════════════════════════════════════════════════════════
 async function fetchProducts() {
@@ -44,14 +116,14 @@ async function fetchProducts() {
         const res = await fetch(GAS_URL);
         const data = await res.json();
 
-        // UPDATE DATE
         if (data.updateDate) {
             document.getElementById('update-date').textContent = 'UPDATE: ' + data.updateDate;
         }
 
-        // stock = 0 を除外
+        // stock=0 を除外、name_jp か name_en どちらかがあればOK
         allProducts = (data.products || []).filter(p => {
-            if (!p.name || p.name.trim() === '') return false;
+            const hasName = (p.name_jp || p.name_en || p.name || '').trim() !== '';
+            if (!hasName) return false;
             const s = Number(p.stock);
             return isNaN(s) || s > 0;
         });
@@ -63,6 +135,18 @@ async function fetchProducts() {
                 ⚠️ Failed to load products.<br><small>${e.message}</small>
             </p>`;
     }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 言語に応じた商品名・コメントを取得
+// ═══════════════════════════════════════════════════════════
+function getName(p) {
+    if (currentLang === 'jp') return p.name_jp || p.name_en || p.name || '';
+    return p.name_en || p.name_jp || p.name || '';
+}
+function getComment(p) {
+    if (currentLang === 'jp') return p.comment_jp || p.comment_en || p.comment || '';
+    return p.comment_en || p.comment_jp || p.comment || '';
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -83,10 +167,12 @@ function applyFilters() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
     const filtered = allProducts.filter(p => {
         const matchesCat = (currentCategory === 'ALL' || p.category === currentCategory);
+        const name = getName(p).toLowerCase();
+        const comment = getComment(p).toLowerCase();
         const matchesSearch = !searchTerm ||
-            (p.name && p.name.toLowerCase().includes(searchTerm)) ||
+            name.includes(searchTerm) ||
             (p.code && p.code.toLowerCase().includes(searchTerm)) ||
-            (p.comment && p.comment.toLowerCase().includes(searchTerm));
+            comment.includes(searchTerm);
         return matchesCat && matchesSearch;
     });
     displayProducts(filtered);
@@ -98,13 +184,13 @@ function applyFilters() {
 function displayProducts(products) {
     const container = document.getElementById('product-container');
     container.innerHTML = '';
+    const t = UI_TEXT[currentLang];
 
-    const valid = products.filter(p => p.name && p.name.trim() !== '');
+    const valid = products.filter(p => (p.name_jp || p.name_en || p.name || '').trim() !== '');
     if (valid.length === 0) {
-        container.innerHTML = '<p style="text-align:center;padding:30px;color:#999;">No products found / 該当商品なし</p>';
+        container.innerHTML = `<p style="text-align:center;padding:30px;color:#999;">${t.noProducts}</p>`;
         return;
     }
-
     valid.forEach((p, idx) => {
         container.innerHTML += buildCard(p, idx);
     });
@@ -114,15 +200,20 @@ function displayProducts(products) {
 // BUILD CARD HTML
 // ═══════════════════════════════════════════════════════════
 function buildCard(p, idx) {
+    const t = UI_TEXT[currentLang];
     const cat = (p.category || '').toUpperCase();
     const isSake = cat === 'SAKE';
     const isWeightUnit = (p.unit || '').toLowerCase() === 'kg';
 
-    const safeName = esc(p.name || '');
+    const displayName = getName(p);
+    const displayComment = getComment(p);
+    const safeName = esc(displayName);
+    const safeNameJp = esc(p.name_jp || p.name || '');
+    const safeNameEn = esc(p.name_en || p.name || '');
     const safeCode = esc(p.code || '');
     const imgSrc = (p.image || '').trim();
 
-    // ── 画像エリア ──
+    // ── 画像 ──
     const imgHTML = imgSrc
         ? `<img src="${imgSrc}" alt="${safeName}" onclick="openModal('${imgSrc}')">`
         : `<div style="width:100%;height:100%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#aaa;">🐟</div>`;
@@ -130,32 +221,23 @@ function buildCard(p, idx) {
     // ── カテゴリータグ ──
     const country = (p.country || '').toUpperCase();
     const flagSrc = country === 'JAPAN' ? 'images/jp-flag.png' : country === 'CAMBODIA' ? 'images/kh-flag.png' : '';
-    const countryBadge = flagSrc
-        ? `<img class="country-flag" src="${flagSrc}" alt="${country}">`
-        : '';
-    const catTag = `
-        <span class="category-tag ${cat}">
-            ${esc(p.category || '')}
-            ${countryBadge}
-        </span>`;
+    const countryBadge = flagSrc ? `<img class="country-flag" src="${flagSrc}" alt="${country}">` : '';
+    const catTag = `<span class="category-tag ${cat}">${esc(p.category || '')}${countryBadge}</span>`;
 
     // ── ストックバッジ ──
     const stockBadge = (!isSake && p.stock)
-        ? `<span class="stock-badge">STOCK: ${esc(String(p.stock))} ${isWeightUnit ? 'kg' : 'pc'}</span>`
+        ? `<span class="stock-badge">${t.stock}: ${esc(String(p.stock))} ${isWeightUnit ? 'kg' : 'pc'}</span>`
         : '';
 
-    // ── 価格エリア ──
+    // ── 価格 ──
     let priceHTML = '';
     if (isSake) {
-        priceHTML = `
-            <p class="price-ask">ASK
-                <span class="sake-special-label">⚡ 衝撃の大特価</span>
-            </p>`;
+        priceHTML = `<p class="price-ask">ASK <span class="sake-special-label">⚡ 衝撃の大特価</span></p>`;
     } else {
         const unitLabel = isWeightUnit ? 'kg' : 'pc';
         const unitTypeBadge = isWeightUnit
-            ? `<span class="unit-type-badge weight">WEIGHT</span>`
-            : `<span class="unit-type-badge qty">QTY</span>`;
+            ? `<span class="unit-type-badge weight">${t.weight}</span>`
+            : `<span class="unit-type-badge qty">${t.qty}</span>`;
         priceHTML = `
             <p class="price">
                 $${Number(p.price || 0).toFixed(2)}
@@ -164,7 +246,7 @@ function buildCard(p, idx) {
             </p>`;
     }
 
-    // ── 注文単位ラベル（値が入っているフィールドのラベルのみ・数値は非表示） ──
+    // ── 単位フィールド ──
     const unitFields = CAT_UNIT_FIELDS[cat] || [];
     const activeUnitFields = unitFields.filter(
         f => p[f.key] && String(p[f.key]).trim() !== '' && String(p[f.key]).trim() !== '0'
@@ -172,21 +254,18 @@ function buildCard(p, idx) {
 
     // ── サイズ ──
     const sizeHTML = (p.size && p.size.trim() !== '' && p.size.toLowerCase() !== 'size')
-        ? `<p class="size-detail">Size: ${esc(p.size)}</p>`
+        ? `<p class="size-detail">${t.size}: ${esc(p.size)}</p>`
         : '';
 
     // ── コメント ──
-    const commentHTML = p.comment
-        ? `<div class="comment-box">${esc(p.comment).replace(/\n/g, '<br>')}</div>`
+    const commentHTML = displayComment
+        ? `<div class="comment-box">${esc(displayComment).replace(/\n/g, '<br>')}</div>`
         : '';
 
     // ── 注文エリア ──
-    // activeUnitFields がある場合 → フィールド別に個数入力行（単位ラベルのみ表示、数値なし）
-    // ない場合 → unit=kg なら kg入力、unit=pc なら個数入力
     let orderHTML = '';
     if (isSake) {
-        orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_BOT}" target="_blank">💬 お問い合わせ / ASK FOR PRICE</a>`;
-
+        orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_BOT}" target="_blank">${t.askBtn}</a>`;
     } else if (activeUnitFields.length > 0) {
         const rows = activeUnitFields.map((f, fi) => `
             <div class="calc-row" style="margin-bottom:${fi < activeUnitFields.length - 1 ? '6px' : '0'}">
@@ -196,14 +275,14 @@ function buildCard(p, idx) {
                         id="input_${idx}_${fi}" min="0" value="0"
                         data-price="${p.price}"
                         data-unit-label="${f.label}"
-                        data-product-name="${safeName}"
+                        data-name-jp="${safeNameJp}"
+                        data-name-en="${safeNameEn}"
                         oninput="updateTotal()" onchange="updateTotal()">
                     <button class="qty-btn" onclick="changeQty('input_${idx}_${fi}', 1)">＋</button>
                 </div>
                 <span class="order-unit-label">${f.label.toUpperCase()}</span>
             </div>`).join('');
         orderHTML = `<div class="calc-container">${rows}</div>`;
-
     } else if (isWeightUnit) {
         orderHTML = `
             <div class="calc-container">
@@ -213,7 +292,8 @@ function buildCard(p, idx) {
                             id="input_${idx}" min="0.1" step="0.1" value="0"
                             data-price="${p.price}"
                             data-unit-label="kg"
-                            data-product-name="${safeName}"
+                            data-name-jp="${safeNameJp}"
+                            data-name-en="${safeNameEn}"
                             oninput="updateTotal()" onchange="updateTotal()">
                         <span class="weight-unit-label">kg</span>
                     </div>
@@ -229,7 +309,8 @@ function buildCard(p, idx) {
                             id="input_${idx}" min="0" value="0"
                             data-price="${p.price}"
                             data-unit-label="pc"
-                            data-product-name="${safeName}"
+                            data-name-jp="${safeNameJp}"
+                            data-name-en="${safeNameEn}"
                             oninput="updateTotal()" onchange="updateTotal()">
                         <button class="qty-btn" onclick="changeQty('input_${idx}', 1)">＋</button>
                     </div>
@@ -239,7 +320,7 @@ function buildCard(p, idx) {
     }
 
     return `
-    <div class="card" data-category="${cat}" data-name="${safeName}">
+    <div class="card" data-category="${cat}">
         <div class="img-wrapper">
             ${imgHTML}
             ${catTag}
@@ -264,27 +345,26 @@ function buildCard(p, idx) {
 function changeQty(id, delta) {
     const inp = document.getElementById(id);
     if (!inp) return;
-    const newVal = Math.max(0, (parseInt(inp.value) || 0) + delta);
-    inp.value = newVal;
+    inp.value = Math.max(0, (parseInt(inp.value) || 0) + delta);
     updateTotal();
 }
 
 // ═══════════════════════════════════════════════════════════
-// ITEM COUNT（合計金額は非表示、選択数だけ表示）
+// ITEM COUNT
 // ═══════════════════════════════════════════════════════════
 function updateTotal() {
+    const t = UI_TEXT[currentLang];
     let itemCount = 0;
     document.querySelectorAll('.card [data-price]').forEach(inp => {
-        const qty = parseFloat(inp.value) || 0;
-        if (qty > 0) itemCount++;
+        if ((parseFloat(inp.value) || 0) > 0) itemCount++;
     });
-    document.getElementById('total-amount').textContent = itemCount;
+    document.getElementById('total-amount').textContent = itemCount + t.orderBarUnit;
     const bar = document.getElementById('total-bar');
     itemCount > 0 ? bar.classList.add('show') : bar.classList.remove('show');
 }
 
 // ═══════════════════════════════════════════════════════════
-// TELEGRAM ORDER
+// TELEGRAM ORDER（注文メッセージは日英両方）
 // ═══════════════════════════════════════════════════════════
 function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
@@ -292,24 +372,29 @@ function sendOrderTelegram() {
     let itemCount = 0;
 
     document.querySelectorAll('.card').forEach(card => {
-        const name = card.querySelector('h3') ? card.querySelector('h3').innerText : '';
         card.querySelectorAll('[data-price]').forEach(inp => {
             const qty = parseFloat(inp.value) || 0;
             if (qty <= 0) return;
             hasOrder = true;
             itemCount++;
+            const nameJp = inp.getAttribute('data-name-jp') || '';
+            const nameEn = inp.getAttribute('data-name-en') || '';
+            // 日英両方を併記
+            const nameLine = nameJp && nameEn && nameJp !== nameEn
+                ? `${nameJp} / ${nameEn}`
+                : nameJp || nameEn;
             const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
             const price = parseFloat(inp.getAttribute('data-price')) || 0;
             const sub = (price * qty).toFixed(2);
-            message += `- ${name} / × ${qty} ${unitLabel.toUpperCase()} = $${sub}\n`;
+            message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()} = $${sub}\n`;
         });
     });
 
     if (!hasOrder) {
-        alert('商品を選択してください。/ Please select items.');
+        alert(UI_TEXT[currentLang].selectItems);
         return;
     }
-    message += `\n---\n注文商品数: ${itemCount}点\n\n※ 最終金額は納品時の重量・数量により確定いたします。`;
+    message += `\n---\n注文商品数 / Items: ${itemCount}\n\n※ 最終金額は納品時の重量・数量により確定いたします。\n* Final price confirmed upon delivery.`;
     window.open(`https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
@@ -321,7 +406,6 @@ function openModal(src) {
     document.getElementById('modal-img').src = src;
     document.getElementById('image-modal').style.display = 'block';
 }
-
 function closeModal() {
     document.getElementById('image-modal').style.display = 'none';
 }
@@ -341,3 +425,8 @@ function esc(str) {
 // INIT
 // ═══════════════════════════════════════════════════════════
 fetchProducts();
+// 初期言語を適用（ボタンのactive状態のみ、テキストはfetchProducts後に設定）
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('lang-' + currentLang).classList.add('active');
+    setLang(currentLang);
+});
