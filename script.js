@@ -166,19 +166,11 @@ function buildCard(p, idx) {
             </p>`;
     }
 
-    // ── 単位情報タグ（カテゴリー別） ──
+    // ── 注文単位ラベル（値が入っているフィールドのラベルのみ・数値は非表示） ──
     const unitFields = CAT_UNIT_FIELDS[cat] || [];
-    const unitTags = unitFields
-        .filter(f => p[f.key] && String(p[f.key]).trim() !== '')
-        .map(f => `
-            <span class="unit-info-tag">
-                <span class="tag-label">${f.label.toUpperCase()}</span>
-                ${esc(String(p[f.key]))}
-            </span>`)
-        .join('');
-    const unitInfoHTML = unitTags
-        ? `<div class="unit-info-area">${unitTags}</div>`
-        : '';
+    const activeUnitFields = unitFields.filter(
+        f => p[f.key] && String(p[f.key]).trim() !== '' && String(p[f.key]).trim() !== '0'
+    );
 
     // ── サイズ ──
     const sizeHTML = (p.size && p.size.trim() !== '' && p.size.toLowerCase() !== 'size')
@@ -191,9 +183,29 @@ function buildCard(p, idx) {
         : '';
 
     // ── 注文エリア ──
+    // activeUnitFields がある場合 → フィールド別に個数入力行（単位ラベルのみ表示、数値なし）
+    // ない場合 → unit=kg なら kg入力、unit=pc なら個数入力
     let orderHTML = '';
     if (isSake) {
         orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_ID}" target="_blank">💬 お問い合わせ / ASK FOR PRICE</a>`;
+
+    } else if (activeUnitFields.length > 0) {
+        const rows = activeUnitFields.map((f, fi) => `
+            <div class="calc-row" style="margin-bottom:${fi < activeUnitFields.length - 1 ? '6px' : '0'}">
+                <div class="qty-wrap">
+                    <button class="qty-btn" onclick="changeQty('input_${idx}_${fi}', -1)">−</button>
+                    <input type="number" class="qty-input"
+                        id="input_${idx}_${fi}" min="0" value="0"
+                        data-price="${p.price}"
+                        data-unit-label="${f.label}"
+                        data-product-name="${safeName}"
+                        oninput="updateTotal()" onchange="updateTotal()">
+                    <button class="qty-btn" onclick="changeQty('input_${idx}_${fi}', 1)">＋</button>
+                </div>
+                <span class="order-unit-label">${f.label.toUpperCase()}</span>
+            </div>`).join('');
+        orderHTML = `<div class="calc-container">${rows}</div>`;
+
     } else if (isWeightUnit) {
         orderHTML = `
             <div class="calc-container">
@@ -202,6 +214,8 @@ function buildCard(p, idx) {
                         <input type="number" class="weight-input"
                             id="input_${idx}" min="0.1" step="0.1" value="0"
                             data-price="${p.price}"
+                            data-unit-label="kg"
+                            data-product-name="${safeName}"
                             oninput="updateTotal()" onchange="updateTotal()">
                         <span class="weight-unit-label">kg</span>
                     </div>
@@ -216,9 +230,12 @@ function buildCard(p, idx) {
                         <input type="number" class="qty-input"
                             id="input_${idx}" min="0" value="0"
                             data-price="${p.price}"
+                            data-unit-label="pc"
+                            data-product-name="${safeName}"
                             oninput="updateTotal()" onchange="updateTotal()">
                         <button class="qty-btn" onclick="changeQty('input_${idx}', 1)">＋</button>
                     </div>
+                    <span class="order-unit-label">PC</span>
                 </div>
             </div>`;
     }
@@ -237,7 +254,6 @@ function buildCard(p, idx) {
             ${commentHTML}
             <div class="price-size-area">
                 ${priceHTML}
-                ${unitInfoHTML}
                 ${orderHTML}
             </div>
         </div>
@@ -279,17 +295,17 @@ function sendOrderTelegram() {
     let hasOrder = false;
 
     document.querySelectorAll('.card').forEach(card => {
-        const inp = card.querySelector('[data-price]');
-        if (!inp) return;
-        const qty = parseFloat(inp.value) || 0;
-        if (qty <= 0) return;
-        hasOrder = true;
         const name = card.querySelector('h3') ? card.querySelector('h3').innerText : '';
-        const isWeight = inp.classList.contains('weight-input');
-        const unitStr = isWeight ? `${qty}kg` : `× ${qty}pc`;
-        const price = parseFloat(inp.getAttribute('data-price')) || 0;
-        const sub = (price * qty).toFixed(2);
-        message += `- ${name} / ${unitStr} = $${sub}\n`;
+        // 複数inputがある場合（back_pic + stomach_pic など）をすべて収集
+        card.querySelectorAll('[data-price]').forEach(inp => {
+            const qty = parseFloat(inp.value) || 0;
+            if (qty <= 0) return;
+            hasOrder = true;
+            const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
+            const price = parseFloat(inp.getAttribute('data-price')) || 0;
+            const sub = (price * qty).toFixed(2);
+            message += `- ${name} / × ${qty} ${unitLabel.toUpperCase()} = $${sub}\n`;
+        });
     });
 
     if (!hasOrder) {
