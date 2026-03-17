@@ -19,7 +19,8 @@ const UI_TEXT = {
             <strong>JP:</strong><br>
             ・商品はカテゴリーや名前で絞り込みが可能です。<br>
             ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
-            ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。`,
+            ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。<br>
+            ・<strong>重量計算</strong>商品は請求時に実重量で計算いたします。<strong>数量計算</strong>商品は注文数で計算いたします。`,
         orderBtn: '📲 Telegramで注文する',
         orderBarLabel: '📋 注文内容はこちら',
         orderBarUnit: '点',
@@ -27,8 +28,8 @@ const UI_TEXT = {
         noProducts: '該当商品なし',
         selectItems: '商品を選択してください。',
         askBtn: '💬 お問い合わせ',
-        weight: '重量',
-        qty: '数量',
+        weight: '重量計算',
+        qty: '数量計算',
         stock: 'STOCK',
         size: 'サイズ',
     },
@@ -39,7 +40,8 @@ const UI_TEXT = {
             <strong>EN:</strong><br>
             - You can filter products by category or name.<br>
             - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
-            - After ordering via Telegram, you will receive an order sheet. Please sign or reply <strong>"Confirmed"</strong> to complete your order.`,
+            - After ordering via Telegram, you will receive an order sheet. Please sign or reply <strong>"Confirmed"</strong> to complete your order.<br>
+            - <strong>Weight-calc</strong> items are invoiced by actual weight upon delivery. <strong>Qty-calc</strong> items are invoiced by ordered quantity.`,
         orderBtn: '📲 Order via Telegram',
         orderBarLabel: '📋 Your Order',
         orderBarUnit: ' item(s)',
@@ -47,8 +49,8 @@ const UI_TEXT = {
         noProducts: 'No products found',
         selectItems: 'Please select items.',
         askBtn: '💬 ASK FOR PRICE',
-        weight: 'WEIGHT',
-        qty: 'QTY',
+        weight: 'WEIGHT CALC',
+        qty: 'QTY CALC',
         stock: 'STOCK',
         size: 'Size',
     }
