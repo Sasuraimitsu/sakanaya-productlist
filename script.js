@@ -62,9 +62,9 @@ const UI_TEXT = {
 // CATEGORY → UNIT FIELDS
 // ═══════════════════════════════════════════════════════════
 const CAT_UNIT_FIELDS = {
-    'FROZEN':       [{ key: 'pic',         label: 'pic' }],
-    'FRESH-WHOLE/SD':  [{ key: 'wo_pic',         label: 'wo_pic' }],
-    'FRESH-DR':     [{ key: 'dr_pic',      label: 'dr-pic' }],
+    'FROZEN':       [{ key: 'pic',         label: 'wo' }],
+    'FRESH-WHOLE':  [{ key: 'pic',         label: 'wo' }],
+    'FRESH-SD':     [{ key: 'sd_pic',      label: 'dr-pic' }],
     'FRESH-FILLET': [{ key: 'back_pic',    label: 'back-pic' },
                      { key: 'stomach_pic', label: 'stomach-pic' }],
     'SEASONING':    [{ key: 'pic',         label: 'pic' }],
