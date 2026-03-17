@@ -17,8 +17,6 @@ const UI_TEXT = {
         noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
         noticeBody: `
             <strong>JP:</strong><br>
-            ・重量単価商品（PRICE/kg）はご注文時にkg数を入力してください。<br>
-            ・数量単価商品（PRICE/pc）はご注文数量を入力してください。<br>
             ・商品はカテゴリーや名前で絞り込みが可能です。<br>
             ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
             ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。`,
@@ -39,8 +37,6 @@ const UI_TEXT = {
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
             <strong>EN:</strong><br>
-            - For weight-priced items (PRICE/kg), enter the quantity in kg when ordering.<br>
-            - For unit-priced items (PRICE/pc), enter the number of pieces.<br>
             - You can filter products by category or name.<br>
             - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
             - After ordering via Telegram, you will receive an order sheet. Please sign or reply <strong>"Confirmed"</strong> to complete your order.`,
