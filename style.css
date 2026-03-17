@@ -331,13 +331,12 @@ header {
 }
 
 /* カテゴリー別の左ボーダーカラー */
-.category-tag.FROZEN       { border-left: 5px solid var(--frozen-blue); }
-.category-tag.FRESH-WHOLE  { border-left: 5px solid var(--fresh-green); }
-.category-tag.FRESH-SD     { border-left: 5px solid #27ae60; }
-.category-tag.FRESH-FILLET { border-left: 5px solid #1abc9c; }
-.category-tag.SEASONING    { border-left: 5px solid var(--seasoning-orange); }
-.category-tag.KITCHEN      { border-left: 5px solid var(--kitchen-purple); }
-.category-tag.SAKE         { border-left: 5px solid var(--sake-gold); }
+.category-tag.FROZEN         { border-left: 5px solid var(--frozen-blue); }
+.category-tag.FRESH-WHOLE_SD { border-left: 5px solid var(--fresh-green); }
+.category-tag.FRESH-FILLET   { border-left: 5px solid #1abc9c; }
+.category-tag.OIL_SEASONING  { border-left: 5px solid var(--seasoning-orange); }
+.category-tag.KITCHEN        { border-left: 5px solid var(--kitchen-purple); }
+.category-tag.SAKE           { border-left: 5px solid var(--sake-gold); }
 
 /* country表示（JAPAN / CAMBODIA） */
 .country-flag {
