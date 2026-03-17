@@ -1,3 +1,36 @@
+/* ─── LANGUAGE SWITCHER ─── */
+.lang-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    max-width: 1200px;
+    margin: 8px auto 0;
+    padding: 0 20px;
+}
+
+.lang-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid #cbd5e0;
+    background: white;
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-btn:hover {
+    border-color: var(--main-blue);
+    color: var(--main-blue);
+}
+
+.lang-btn.active {
+    background: var(--main-blue);
+    border-color: var(--main-blue);
+    color: white;
+}
+
 :root {
     --main-blue: #1a3c5a;
     --accent-red: #e63946;
