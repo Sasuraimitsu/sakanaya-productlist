@@ -411,19 +411,6 @@ header {
     border: 1px solid #86efac;
 }
 
-/* FIXED価格バッジ */
-.fixed-badge {
-    display: inline-block;
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-left: 6px;
-    vertical-align: middle;
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
-}
 
 /* ─── ORDER UNIT LABEL（注文欄の単位表示: PIC / SD-PIC / BACK-PIC 等） ─── */
 .order-unit-label {
