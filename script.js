@@ -2,7 +2,7 @@
 // CONFIG
 // ═══════════════════════════════════════════════════════════
 const GAS_URL = 'YOUR_GAS_ENDPOINT_URL_HERE';
-const TELEGRAM_ID = 'SAKANAYAJAPON';
+const TELEGRAM_ID = 'sakanaya_bot';
 
 // ═══════════════════════════════════════════════════════════
 // STATE
