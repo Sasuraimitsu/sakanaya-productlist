@@ -5,43 +5,44 @@
     --japan-red: #e60012;
     --fresh-green: #2ecc71;
     --frozen-blue: #3498db;
+    --sake-gold: #c8a000;
+    --kitchen-purple: #7b5ea7;
+    --seasoning-orange: #e67e22;
 }
 
-body { 
-    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; 
-    margin: 0; 
-    background: var(--bg-light); 
-    color: #333; 
-    line-height: 1.6; 
+body {
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    margin: 0;
+    background: var(--bg-light);
+    color: #333;
+    line-height: 1.6;
 }
 
+/* ─── HEADER ─── */
 header {
     background: linear-gradient(135deg, #0d253f 0%, #1a3c5a 100%);
     color: white;
     padding: 15px 20px;
 }
 
-/* ヘッダー全体の横並び設定 */
 .header-flex-row {
     display: flex;
-    align-items: center; /* 垂直方向の中央揃え */
-    justify-content: space-between; /* 要素を左右に分散 */
+    align-items: center;
+    justify-content: space-between;
     gap: 15px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 10px 0;
 }
 
-/* 1. ロゴ：横並び用にサイズを抑える */
 .logo-mini {
-    height: 50px; /* 高さを固定して揃える */
+    height: 50px;
     width: auto;
     object-fit: contain;
 }
 
-/* 2. タイトルエリア */
 .title-section {
-    flex-grow: 1; /* 余白を埋めて中央に寄せる */
+    flex-grow: 1;
     text-align: left;
 }
 
@@ -58,7 +59,7 @@ header {
     white-space: nowrap;
 }
 
-.mini-footer-inline {
+.mini-footer {
     font-size: 10px;
     color: rgba(255,255,255,0.6);
     white-space: nowrap;
@@ -70,7 +71,6 @@ header {
     opacity: 0.8;
 }
 
-/* 3. 連絡先エリア */
 .contact-section-inline {
     display: flex;
     align-items: center;
@@ -97,26 +97,29 @@ header {
     white-space: nowrap;
 }
 
-/* スマホ対応：画面が狭すぎる場合はスクロールするか、2行にするか */
+.telegram-btn-mini:hover {
+    background: #007bb8;
+}
+
 @media (max-width: 768px) {
     .header-flex-row {
-        flex-wrap: wrap; /* スマホでは流石に2行に折り返す */
+        flex-wrap: wrap;
         justify-content: center;
     }
     .title-section {
         text-align: center;
         width: 100%;
-        order: -1; /* タイトルを一番上に持ってくるなど調整可能 */
+        order: -1;
     }
 }
 
-/* --- Navigation (スマホ対応強化) --- */
-nav { 
-    position: sticky; 
-    top: 0; 
-    background: rgba(244, 247, 249, 0.95); 
+/* ─── NAVIGATION ─── */
+.category-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(244, 247, 249, 0.95);
     backdrop-filter: blur(5px);
-    z-index: 100; 
+    z-index: 100;
     padding: 10px;
     display: flex;
     flex-wrap: wrap;
@@ -125,206 +128,38 @@ nav {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.nav-btn { 
-    padding: 8px 14px; 
-    cursor: pointer; 
-    border: 1px solid var(--main-blue); 
-    background: white; 
-    color: var(--main-blue); 
-    border-radius: 6px; 
-    font-weight: bold; 
+.nav-btn {
+    padding: 8px 14px;
+    cursor: pointer;
+    border: 1px solid var(--main-blue);
+    background: white;
+    color: var(--main-blue);
+    border-radius: 6px;
+    font-weight: bold;
     font-size: 0.85rem;
     transition: all 0.2s;
-    white-space: nowrap; /* 改行させない */
+    white-space: nowrap;
 }
 
-.nav-btn.active { background: var(--main-blue); color: white; }
-
-/* --- Container & Cards --- */
-.container { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-    gap: 25px; 
-    padding: 20px; 
-    max-width: 1200px; 
-    margin: auto; 
-}
-
-.card { 
-    background: white; 
-    border-radius: 12px; 
-    overflow: hidden; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-    display: flex;
-    flex-direction: column;
-    height: 100%; 
-    transition: transform 0.3s ease;
-}
-
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-
-.img-wrapper { position: relative; height: 220px; }
-.img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-
-/* お知らせエリア全体の余白 */
-.notice-area {
-    max-width: 800px;
-    margin: 10px auto;
-    padding: 0 15px;
-}
-
-/* 折り畳みの外枠 */
-.notice-box {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-left: 5px solid var(--accent-red);
-    border-radius: 8px;
-    padding: 0; /* summaryで制御するため一旦0に */
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-/* クリックする見出し部分 */
-.notice-box summary {
-    padding: 12px 20px;
-    font-weight: bold;
-    color: var(--accent-red);
-    cursor: pointer;
-    list-style: none; /* デフォルトの三角形を消す（一部ブラウザ） */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* クリックしたくなるように、右側に「＋」マークを出す例 */
-.notice-box summary::after {
-    content: '▼';
-    font-size: 0.8rem;
-    transition: transform 0.3s;
-}
-
-/* 開いている時は矢印を逆にする */
-.notice-box[open] summary::after {
-    transform: rotate(180deg);
-}
-
-/* 中身の余白 */
-.notice-content {
-    padding: 0 20px 20px 20px;
-    font-size: 0.9rem;
-    line-height: 1.6;
-}
-
-.notice-divider {
-    border: 0;
-    border-top: 1px dashed #ccc;
-    margin: 15px 0;
-}
-
-
-/* --- Tags (デザイン統一) --- */
-.category-tag {
-    position: absolute; top: 12px; left: 12px;
-    padding: 5px 12px; border-radius: 4px;
-    font-size: 0.7rem; font-weight: 800;
-    display: flex; align-items: center;
-    background: white; color: #333;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    text-transform: uppercase;
-}
-
-.category-tag.FRESH { border-left: 5px solid var(--fresh-green); }
-.category-tag.FROZEN { border-left: 5px solid var(--frozen-blue); }
-.category-tag.JAPAN_FARMED, .category-tag.JAPAN_FROZEN, .category-tag.SAKE { 
-    border-left: 5px solid var(--japan-red); 
-}
-
-/* --- Info Area --- */
-.info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-.code { font-size: 0.7rem; color: #aaa; margin-bottom: 5px; }
-.info h3 { margin: 0 0 10px; font-size: 1.2rem; color: var(--main-blue); }
-
-.comment-box { 
-    font-size: 0.85rem; color: #444; line-height: 1.6;
-    margin-bottom: 15px; flex-grow: 1; 
-}
-
-.en-comment { display: block; margin-top: 6px; color: #888; font-style: italic; font-size: 0.8rem; }
-
-/* --- Calculator Area --- */
-.calc-container {
-    background: #f1f5f9;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-.calc-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.unit-select {
-    flex: 2; padding: 8px; border: 1px solid #cbd5e0;
-    border-radius: 5px; font-size: 0.85rem; background: white;
-}
-
-.qty-input {
-    flex: 1; width: 60px; padding: 8px; border: 1px solid #cbd5e0;
-    border-radius: 5px; text-align: center; font-weight: bold;
-}
-
-.price { font-weight: 900; color: var(--accent-red); font-size: 1.3rem; margin: 10px 0; }
-.unit-text { font-size: 0.85rem; color: #666; font-weight: normal; }
-
-/* --- Total Bar (フローティングデザイン) --- */
-.total-bar {
-    position: fixed; bottom: -120px; left: 50%;
-    transform: translateX(-50%);
-    width: 92%; max-width: 450px;
-    background: white;
-    padding: 15px 20px;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
-    z-index: 1000;
-    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid #eee;
-}
-
-.total-bar.show { bottom: 0; }
-
-.total-content {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-}
-
-.total-label { font-weight: bold; color: var(--main-blue); }
-.total-price { font-size: 1.6rem; font-weight: 900; color: var(--main-blue); }
-
-.order-send-btn {
-    width: 100%; background: #0088cc; color: white; border: none;
-    padding: 14px; border-radius: 12px; font-weight: bold; font-size: 1rem;
-    cursor: pointer; transition: background 0.3s;
-}
-
-.order-send-btn:hover { background: #007bb8; }
-.total-note { font-size: 0.65rem; color: #999; margin-top: 8px; text-align: center; }
-
-/* --- Notice & Map --- */
-.notice-box { border-left: 5px solid var(--accent-red); background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-.map-section { padding: 50px 20px; background: #fff; }
-
-@media (max-width: 480px) {
-    .container { padding: 10px; }
-    .tel-link { font-size: 1.3rem; }
-    .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
-}
-/* カテゴリータグの色設定（例） */
-.category-tag.CONDIMENT {
-    background-color: #795548; /* 茶色系 */
+.nav-btn.active {
+    background: var(--main-blue);
     color: white;
 }
-.search-container {
+
+/* SAKEボタンはゴールド */
+.nav-btn-sake {
+    border-color: var(--sake-gold);
+    color: var(--sake-gold);
+}
+
+.nav-btn-sake.active,
+.nav-btn-sake:hover {
+    background: var(--sake-gold);
+    color: white;
+}
+
+/* ─── SEARCH ─── */
+.search-area {
     max-width: 800px;
     margin: 10px auto;
     padding: 0 15px;
@@ -334,7 +169,7 @@ nav {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid #ddd;
-    border-radius: 25px; /* 丸みをつけてモダンな印象に */
+    border-radius: 25px;
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s;
@@ -342,159 +177,536 @@ nav {
 }
 
 #search-input:focus {
-    border-color: #00448e; /* フォーカス時にブランドカラーに変更 */
+    border-color: var(--main-blue);
 }
 
-/* 画像を拡大可能に見せる */
-.img-wrapper img {
+/* ─── NOTICE ─── */
+.notice-area {
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 0 15px;
+}
+
+.notice-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-left: 5px solid var(--accent-red);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.notice-box summary {
+    padding: 12px 20px;
+    font-weight: bold;
+    color: var(--accent-red);
     cursor: pointer;
-    transition: 0.3s;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notice-box summary::after {
+    content: '▼';
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+
+.notice-box[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.notice-content {
+    padding: 0 20px 20px 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.notice-link {
+    color: var(--main-blue);
+    font-weight: bold;
+}
+
+.notice-divider {
+    border: 0;
+    border-top: 1px dashed #ccc;
+    margin: 15px 0;
+}
+
+/* ─── GRID ─── */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ─── CARD ─── */
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* ─── IMAGE ─── */
+.img-wrapper {
+    position: relative;
+    height: 220px;
+}
+
+.img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: opacity 0.3s;
 }
 
 .img-wrapper img:hover {
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
-/* モーダルの背景 */
-.modal {
-    display: none; /* 初期状態は非表示 */
-    position: fixed;
-    z-index: 2000; /* total-barより上に表示 */
-    padding-top: 50px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    cursor: zoom-out;
-}
-
-/* 拡大される画像本体 */
-.modal-content {
-    margin: auto;
-    display: block;
-    max-width: 90%;
-    max-height: 85vh;
-    border-radius: 8px;
-    animation: zoom 0.3s;
-}
-
-@keyframes zoom {
-    from {transform: scale(0)} 
-    to {transform: scale(1)}
-}
-
-/* 閉じるボタン */
-.close-btn {
+/* ─── CATEGORY TAG ─── */
+.category-tag {
     position: absolute;
-    top: 20px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    background: white;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1.4;
 }
-/* モーダル背景：少し透明度を下げて背後が見えるようにします */
+
+/* カテゴリー別の左ボーダーカラー */
+.category-tag.FROZEN       { border-left: 5px solid var(--frozen-blue); }
+.category-tag.FRESH-WHOLE  { border-left: 5px solid var(--fresh-green); }
+.category-tag.FRESH-SD     { border-left: 5px solid #27ae60; }
+.category-tag.FRESH-FILLET { border-left: 5px solid #1abc9c; }
+.category-tag.SEASONING    { border-left: 5px solid var(--seasoning-orange); }
+.category-tag.KITCHEN      { border-left: 5px solid var(--kitchen-purple); }
+.category-tag.SAKE         { border-left: 5px solid var(--sake-gold); }
+
+/* country表示（JAPAN / CAMBODIA） */
+.country-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.country-badge.JAPAN {
+    background: #e60012;
+    color: white;
+}
+
+.country-badge.CAMBODIA {
+    background: #032ea1;
+    color: white;
+}
+
+/* ─── STOCK BADGE ─── */
+.stock-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+/* ─── INFO AREA ─── */
+.info {
+    padding: 16px 20px 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.code {
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-bottom: 4px;
+}
+
+.info h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    color: var(--main-blue);
+}
+
+.size-detail {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0 0 8px;
+}
+
+.comment-box {
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+
+/* ─── PRICE ─── */
+.price {
+    font-weight: 900;
+    color: var(--accent-red);
+    font-size: 1.3rem;
+    margin: 6px 0;
+}
+
+.unit-text {
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: normal;
+}
+
+/* 単価タイプバッジ（WEIGHT / QTY） */
+.unit-type-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+}
+
+.unit-type-badge.weight {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #93c5fd;
+}
+
+.unit-type-badge.qty {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+/* FIXED価格バッジ */
+.fixed-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+/* ─── UNIT INFO TAGS（pic / sd_pic / back_pic / stomach_pic / case / bottle） ─── */
+.unit-info-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.unit-info-tag {
+    font-size: 0.72rem;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.unit-info-tag .tag-label {
+    font-weight: 700;
+    color: var(--main-blue);
+}
+
+/* ─── CALC AREA ─── */
+.calc-container {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.calc-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 重量入力（kg） */
+.weight-input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.weight-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: bold;
+    outline: none;
+}
+
+.weight-unit-label {
+    font-size: 0.85rem;
+    color: #555;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 数量入力（pc） */
+.qty-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid #cbd5e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: #e2e8f0;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.qty-btn:hover {
+    background: #cbd5e0;
+}
+
+.qty-input {
+    width: 50px;
+    padding: 8px 4px;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    outline: none;
+    background: white;
+}
+
+/* SAKE ASKボタン */
+.ask-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    background: transparent;
+    border: 2px solid var(--sake-gold);
+    border-radius: 8px;
+    color: var(--sake-gold);
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.ask-btn:hover {
+    background: var(--sake-gold);
+    color: white;
+}
+
+/* SAKE価格表示 */
+.price-ask {
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: var(--sake-gold);
+    margin: 6px 0;
+}
+
+.sake-special-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fde047;
+    border-radius: 4px;
+    padding: 2px 8px;
+    letter-spacing: 0.5px;
+}
+
+/* ─── TOTAL BAR ─── */
+.total-bar {
+    position: fixed;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 450px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #eee;
+}
+
+.total-bar.show {
+    bottom: 0;
+}
+
+.total-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.total-label {
+    font-weight: bold;
+    color: var(--main-blue);
+}
+
+.total-price {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--main-blue);
+}
+
+.order-send-btn {
+    width: 100%;
+    background: #0088cc;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.order-send-btn:hover {
+    background: #007bb8;
+}
+
+.total-note {
+    font-size: 0.65rem;
+    color: #999;
+    margin-top: 8px;
+    text-align: center;
+}
+
+/* ─── MODAL ─── */
 .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 3000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.7); /* 背景を少し薄く */
+    background-color: rgba(0,0,0,0.8);
     cursor: zoom-out;
 }
 
-/* ポップアップ画像：大きさを制限 */
 .modal-content {
     margin: auto;
     display: block;
     position: relative;
     top: 50%;
-    transform: translateY(-50%); /* 垂直中央寄せ */
-    
-    max-width: 80%;   /* 画面の80%幅までに制限 */
-    max-height: 70vh; /* 画面の70%高さまでに制限 */
-    width: auto;      /* アスペクト比維持 */
+    transform: translateY(-50%);
+    max-width: 85%;
+    max-height: 75vh;
+    width: auto;
     height: auto;
-    
-    /* あまりに大きくなりすぎないように最大値を設定 */
-    max-width: 500px; 
-    
-    border: 5px solid white;
+    max-width: 500px;
+    border: 4px solid white;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     animation: zoom 0.2s;
 }
 
-/* 閉じるボタン */
+@keyframes zoom {
+    from { transform: translateY(-50%) scale(0.95); opacity: 0; }
+    to   { transform: translateY(-50%) scale(1);    opacity: 1; }
+}
+
 .close-btn {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 15px;
+    right: 25px;
     color: white;
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
-    z-index: 2001;
+    z-index: 3001;
 }
 
-@keyframes zoom {
-    from {transform: translateY(-50%) scale(0.95); opacity: 0;}
-    to {transform: translateY(-50%) scale(1); opacity: 1;}
+/* ─── MAP ─── */
+.map-section {
+    padding: 40px 20px;
+    background: #fff;
+    text-align: center;
 }
-<style>
-    /* タイトルとフッターを横並びにする */
-    .title-flex {
-        display: flex;
-        align-items: baseline;
-        justify-content: center;
+
+.map-section h3 {
+    color: var(--main-blue);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.map-container {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        grid-template-columns: 1fr 1fr;
         gap: 12px;
-        margin-top: 5px;
     }
-    .mini-footer {
-        font-size: 11px;
-        color: #888;
-        white-space: nowrap;
-    }
-
-    /* ポップアップ画像のサイズを適切に制限する */
-    .modal-content {
-        margin: auto;
-        display: block;
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-        max-width: 85%;   /* 画面の85%まで */
-        max-height: 75vh; /* 画面の高さ75%まで */
-        width: auto;
-        max-width: 500px; /* PCでも大きくなりすぎないように制限 */
-        border: 4px solid white;
-        border-radius: 8px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-    }
-
-    /* モーダル背景 */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 3000; /* 最前面に */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.8);
-    }
-
-    /* 閉じるボタン */
-    .close-btn {
-        position: absolute;
-        top: 15px;
-        right: 25px;
-        color: white;
-        font-size: 35px;
-        cursor: pointer;
-    }
-</style>
+    .img-wrapper { height: 140px; }
+    .info { padding: 10px 12px 14px; }
+    .info h3 { font-size: 0.95rem; }
+    .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
+}
