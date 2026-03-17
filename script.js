@@ -129,8 +129,9 @@ function buildCard(p, idx) {
 
     // ── カテゴリータグ ──
     const country = (p.country || '').toUpperCase();
-    const countryBadge = country
-        ? `<span class="country-badge ${country}">${country}</span>`
+    const flagSrc = country === 'JAPAN' ? 'images/jp-flag.png' : country === 'CAMBODIA' ? 'images/kh-flag.png' : '';
+    const countryBadge = flagSrc
+        ? `<img class="country-flag" src="${flagSrc}" alt="${country}">`
         : '';
     const catTag = `
         <span class="category-tag ${cat}">
