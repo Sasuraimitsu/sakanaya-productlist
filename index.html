@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAKANAYA JAPON - PRODUCT LIST</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body>
     <header>
@@ -16,7 +15,7 @@
                     <h2 class="title-main-inline">PRODUCT LIST</h2>
                     <span class="mini-footer">© 2026 SAKANAYA JAPON</span>
                 </div>
-                <p class="update-date-inline">UPDATE: 2026/02/15</p>
+                <p class="update-date-inline" id="update-date">UPDATE: —</p>
             </div>
             <div class="contact-section-inline">
                 <a href="tel:016881370" class="tel-inline-text">📞 016-881-370</a>
@@ -27,40 +26,43 @@
 
     <nav class="category-nav">
         <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
-        <button class="nav-btn" onclick="filterCategory('FRESH', this)">FRESH</button>
         <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
-        <button class="nav-btn" onclick="filterCategory('JAPAN_FARMED', this)">JAPAN FARMED</button>
-        <button class="nav-btn" onclick="filterCategory('JAPAN_FROZEN', this)">JAPAN FROZEN</button>
-        <button class="nav-btn" onclick="filterCategory('SAKE', this)">JAPAN SAKE</button> 
+        <button class="nav-btn" onclick="filterCategory('FRESH-WHOLE', this)">FRESH WHOLE</button>
+        <button class="nav-btn" onclick="filterCategory('FRESH-SD', this)">FRESH SD</button>
+        <button class="nav-btn" onclick="filterCategory('FRESH-FILLET', this)">FRESH FILLET</button>
         <button class="nav-btn" onclick="filterCategory('SEASONING', this)">SEASONING</button>
+        <button class="nav-btn" onclick="filterCategory('KITCHEN', this)">KITCHEN PRODUCT</button>
+        <button class="nav-btn nav-btn-sake" onclick="filterCategory('SAKE', this)">SAKE</button>
     </nav>
 
-    <div class="search-area" style="max-width: 800px; margin: 10px auto; padding: 0 15px;">
-        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 25px; outline: none; font-size: 16px; box-sizing: border-box;">
+    <div class="search-area">
+        <input type="text" id="search-input" placeholder="Search product name... / 商品名で検索" onkeyup="applyFilters()">
     </div>
 
     <div class="notice-area">
-    <details class="notice-box">
-        <summary>【 NOTICE 】 クリックして詳細を表示 / Click to view details</summary>
-        <div class="notice-content">
-            <p>
-                <strong>JP:</strong><br>
-                ・地魚の鮮魚に関しては、㎏表示はフィレでのご提供価格となります。<br>
-                ・商品はカテゴリーや名前で絞り込みが可能です。<br>
-                ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
-                ・合計金額を計算してTelegramでご注文いただけます。
-            </p>
-            <hr class="notice-divider">
-            <p>
-                <strong>EN:</strong><br>
-                - For local fresh fish, the price shown per kg is for fillet.<br>
-                - You can filter products by category or name.<br>
-                - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
-                - Simulate the total amount and order via Telegram.
-            </p>
-        </div>
-    </details>
-</div>
+        <details class="notice-box">
+            <summary>【 NOTICE 】 クリックして詳細を表示 / Click to view details</summary>
+            <div class="notice-content">
+                <p>
+                    <strong>JP:</strong><br>
+                    ・重量単価商品（PRICE/kg）はご注文時にkg数を入力してください。<br>
+                    ・数量単価商品（PRICE/pc）はご注文数量を入力してください。<br>
+                    ・商品はカテゴリーや名前で絞り込みが可能です。<br>
+                    ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
+                    ・合計金額を計算してTelegramでご注文いただけます。
+                </p>
+                <hr class="notice-divider">
+                <p>
+                    <strong>EN:</strong><br>
+                    - For weight-priced items (PRICE/kg), enter the quantity in kg when ordering.<br>
+                    - For unit-priced items (PRICE/pc), enter the number of pieces.<br>
+                    - You can filter products by category or name.<br>
+                    - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
+                    - Simulate total and order via Telegram.
+                </p>
+            </div>
+        </details>
+    </div>
 
     <div id="product-container" class="container"></div>
 
