@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════
-const GAS_URL = 'YOUR_GAS_ENDPOINT_URL_HERE';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzRSqZYubM7bfS3ylxnSwYssYIiS9cV7iipxDlF9jEK8p7ehG07iYVaagseq1y0lG77/exec';
 const TELEGRAM_BOT = 'sakanaya_bot'; // 注文送信先Bot
 
 // ═══════════════════════════════════════════════════════════
