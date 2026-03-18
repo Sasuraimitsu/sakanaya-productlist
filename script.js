@@ -346,34 +346,6 @@ function updateTotal() {
 // ═══════════════════════════════════════════════════════════
 // TELEGRAM ORDER（注文メッセージは日英両方）
 // ═══════════════════════════════════════════════════════════
-function sendOrderTelegram() {
-    let message = '【New Order / 注文依頼】\n';
-    let hasOrder = false;
-    let itemCount = 0;
-    let totalQty = 0;
-
-    document.querySelectorAll('.card').forEach(card => {
-        card.querySelectorAll('[data-price]').forEach(inp => {
-            const qty = parseFloat(inp.value) || 0;
-            if (qty <= 0) return;
-            hasOrder = true;
-            itemCount++;
-            totalQty += qty;
-            const nameJp = inp.getAttribute('data-name-jp') || '';
-            const nameEn = inp.getAttribute('data-name-en') || '';
-            const nameLine = nameJp && nameEn && nameJp !== nameEn
-                ? `${nameJp} / ${nameEn}`
-                : nameJp || nameEn;
-            const calcType = inp.getAttribute('data-calc-type') || '';
-            message += `- ${nameLine} / × ${qty} PIC（${calcType}）\n`;
-        });
-    });
-
-    if (!hasOrder) {
-        alert(UI_TEXT[currentLang].selectItems);
-        return;
-    }
-    message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ 最終金額は納品時の重量・数量により確定いたします。\n* Final price confirmed upon delivery.`;
     async function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
     let hasOrder = false;
