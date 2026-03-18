@@ -358,7 +358,10 @@ function updateTotal() {
 let itemCount = 0;
 let totalQty = 0;
     document.querySelectorAll('.card [data-price]').forEach(inp => {
-        if ((parseFloat(inp.value) || 0) > 0) itemCount++;
+        if ((parseFloat(inp.value) || 0) > 0) 
+    // 変更後
+itemCount++;
+totalQty += qty;
     });
     document.getElementById('total-amount').textContent = itemCount + t.orderBarUnit;
     const bar = document.getElementById('total-bar');
@@ -380,7 +383,9 @@ let totalQty = 0;
             const qty = parseFloat(inp.value) || 0;
             if (qty <= 0) return;
             hasOrder = true;
-            itemCount++;
+            // 変更後
+itemCount++;
+totalQty += qty;
             const nameJp = inp.getAttribute('data-name-jp') || '';
             const nameEn = inp.getAttribute('data-name-en') || '';
             // 日英両方を併記
