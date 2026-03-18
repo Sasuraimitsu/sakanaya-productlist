@@ -385,8 +385,8 @@ function sendOrderTelegram() {
                 : nameJp || nameEn;
             const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
             const price = parseFloat(inp.getAttribute('data-price')) || 0;
-            const sub = (price * qty).toFixed(2);
-            message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()} = $${sub}\n`;
+            // 変更後
+     message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()}\n`;
         });
     });
 
