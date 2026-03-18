@@ -705,11 +705,21 @@ header {
 @media (max-width: 480px) {
     .container {
         padding: 10px;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         gap: 12px;
     }
-    .img-wrapper { height: 140px; }
+    .img-wrapper { height: 180px; }
     .info { padding: 10px 12px 14px; }
     .info h3 { font-size: 0.95rem; }
     .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
+    .calc-container { padding: 10px 8px; }
+    .calc-row { gap: 6px; }
+    .qty-btn { padding: 10px 14px; font-size: 1.1rem; }
+    .qty-input { width: 44px; font-size: 1rem; }
+    .order-unit-label { padding: 4px 8px; font-size: 0.72rem; }
+    .weight-input { padding: 10px 6px; }
+}
+
+@media (max-width: 380px) {
+    .qty-btn { padding: 10px 12px; }
 }
