@@ -17,6 +17,8 @@ const UI_TEXT = {
         noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
         noticeBody: `
             <strong>JP:</strong><br>
+            ・重量単価商品（PRICE/kg）はご注文時にkg数を入力してください。<br>
+            ・数量単価商品（PRICE/pc）はご注文数量を入力してください。<br>
             ・商品はカテゴリーや名前で絞り込みが可能です。<br>
             ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
             ・Telegramでご注文後、注文確認シートが送付されますので、内容確認してサインもしくは「Confirmed」とご返信ください。<br>
@@ -38,6 +40,8 @@ const UI_TEXT = {
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
             <strong>EN:</strong><br>
+            - For weight-priced items (PRICE/kg), enter the quantity in kg when ordering.<br>
+            - For unit-priced items (PRICE/pc), enter the number of pieces.<br>
             - You can filter products by category or name.<br>
             - Imported items not listed are also available on <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a>.<br>
             - After ordering via Telegram, you will receive an order sheet. Please sign or reply <strong>"Confirmed"</strong> to complete your order.<br>
@@ -49,8 +53,8 @@ const UI_TEXT = {
         noProducts: 'No products found',
         selectItems: 'Please select items.',
         askBtn: '💬 ASK FOR PRICE',
-        weight: 'WEIGHT CALC',
-        qty: 'QTY CALC',
+        weight: 'Weight Calc',
+        qty: 'Qty Calc',
         stock: 'STOCK',
         size: 'Size',
     }
@@ -230,19 +234,21 @@ function buildCard(p, idx) {
         : '';
 
     // ── 価格 ──
+    // unit=kg → 重量計算、unit=pc → 数量計算
+    const calcType = isWeightUnit
+        ? (currentLang === 'jp' ? '重量計算' : 'Weight Calc')
+        : (currentLang === 'jp' ? '数量計算' : 'Qty Calc');
+    const calcBadgeClass = isWeightUnit ? 'weight' : 'qty';
+
     let priceHTML = '';
     if (isSake) {
         priceHTML = `<p class="price-ask">ASK <span class="sake-special-label">⚡ 衝撃の大特価</span></p>`;
     } else {
-        const unitLabel = isWeightUnit ? 'kg' : 'pc';
-        const unitTypeBadge = isWeightUnit
-            ? `<span class="unit-type-badge weight">${t.weight}</span>`
-            : `<span class="unit-type-badge qty">${t.qty}</span>`;
         priceHTML = `
             <p class="price">
                 $${Number(p.price || 0).toFixed(2)}
-                <span class="unit-text">/ ${unitLabel}</span>
-                ${unitTypeBadge}
+                <span class="unit-text">/ pic</span>
+                <span class="unit-type-badge ${calcBadgeClass}">${calcType}</span>
             </p>`;
     }
 
@@ -263,42 +269,15 @@ function buildCard(p, idx) {
         : '';
 
     // ── 注文エリア ──
+    // 全商品PICで±ボタン整数入力のみ。kg入力廃止。
+    // data-calc-type: 重量計算/数量計算をメッセージに使用
+    const calcTypeLabel = isWeightUnit
+        ? (currentLang === 'jp' ? '重量計算' : 'Weight Calc')
+        : (currentLang === 'jp' ? '数量計算' : 'Qty Calc');
+
     let orderHTML = '';
     if (isSake) {
         orderHTML = `<a class="ask-btn" href="https://t.me/${TELEGRAM_BOT}" target="_blank">${t.askBtn}</a>`;
-    } else if (activeUnitFields.length > 0) {
-        const rows = activeUnitFields.map((f, fi) => `
-            <div class="calc-row" style="margin-bottom:${fi < activeUnitFields.length - 1 ? '6px' : '0'}">
-                <div class="qty-wrap">
-                    <button class="qty-btn" onclick="changeQty('input_${idx}_${fi}', -1)">−</button>
-                    <input type="number" class="qty-input"
-                        id="input_${idx}_${fi}" min="0" value="0"
-                        data-price="${p.price}"
-                        data-unit-label="${f.label}"
-                        data-name-jp="${safeNameJp}"
-                        data-name-en="${safeNameEn}"
-                        oninput="updateTotal()" onchange="updateTotal()">
-                    <button class="qty-btn" onclick="changeQty('input_${idx}_${fi}', 1)">＋</button>
-                </div>
-                <span class="order-unit-label">${f.label.toUpperCase()}</span>
-            </div>`).join('');
-        orderHTML = `<div class="calc-container">${rows}</div>`;
-    } else if (isWeightUnit) {
-        orderHTML = `
-            <div class="calc-container">
-                <div class="calc-row">
-                    <div class="weight-input-wrap">
-                        <input type="number" class="weight-input"
-                            id="input_${idx}" min="0.1" step="0.1" value="0"
-                            data-price="${p.price}"
-                            data-unit-label="kg"
-                            data-name-jp="${safeNameJp}"
-                            data-name-en="${safeNameEn}"
-                            oninput="updateTotal()" onchange="updateTotal()">
-                        <span class="weight-unit-label">kg</span>
-                    </div>
-                </div>
-            </div>`;
     } else {
         orderHTML = `
             <div class="calc-container">
@@ -308,13 +287,14 @@ function buildCard(p, idx) {
                         <input type="number" class="qty-input"
                             id="input_${idx}" min="0" value="0"
                             data-price="${p.price}"
-                            data-unit-label="pc"
+                            data-unit-label="PIC"
+                            data-calc-type="${calcTypeLabel}"
                             data-name-jp="${safeNameJp}"
                             data-name-en="${safeNameEn}"
                             oninput="updateTotal()" onchange="updateTotal()">
                         <button class="qty-btn" onclick="changeQty('input_${idx}', 1)">＋</button>
                     </div>
-                    <span class="order-unit-label">PC</span>
+                    <span class="order-unit-label">PIC</span>
                 </div>
             </div>`;
     }
@@ -354,14 +334,9 @@ function changeQty(id, delta) {
 // ═══════════════════════════════════════════════════════════
 function updateTotal() {
     const t = UI_TEXT[currentLang];
-    // 変更後
-let itemCount = 0;
-let totalQty = 0;
+    let itemCount = 0;
     document.querySelectorAll('.card [data-price]').forEach(inp => {
-        if ((parseFloat(inp.value) || 0) > 0) 
-    // 変更後
-itemCount++;
-totalQty += qty;
+        if ((parseFloat(inp.value) || 0) > 0) itemCount++;
     });
     document.getElementById('total-amount').textContent = itemCount + t.orderBarUnit;
     const bar = document.getElementById('total-bar');
@@ -371,10 +346,9 @@ totalQty += qty;
 // ═══════════════════════════════════════════════════════════
 // TELEGRAM ORDER（注文メッセージは日英両方）
 // ═══════════════════════════════════════════════════════════
-async function sendOrderTelegram() {
+function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
     let hasOrder = false;
-
     let itemCount = 0;
     let totalQty = 0;
 
@@ -382,46 +356,25 @@ async function sendOrderTelegram() {
         card.querySelectorAll('[data-price]').forEach(inp => {
             const qty = parseFloat(inp.value) || 0;
             if (qty <= 0) return;
-
             hasOrder = true;
             itemCount++;
             totalQty += qty;
-
             const nameJp = inp.getAttribute('data-name-jp') || '';
             const nameEn = inp.getAttribute('data-name-en') || '';
-
             const nameLine = nameJp && nameEn && nameJp !== nameEn
                 ? `${nameJp} / ${nameEn}`
                 : nameJp || nameEn;
-
-            const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
-
-            message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()}\n`;
+            const calcType = inp.getAttribute('data-calc-type') || '';
+            message += `- ${nameLine} / × ${qty} PIC（${calcType}）\n`;
         });
     });
 
     if (!hasOrder) {
-        alert("商品を選択してください");
+        alert(UI_TEXT[currentLang].selectItems);
         return;
     }
-
-    message += `\n---\n注文品種: ${itemCount}　総数: ${totalQty}\n`;
-
-    // 👇 ここが新しい処理
-    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/order", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            chatId: "あなたのchat_id",
-            product: message,
-            quantity: totalQty,
-            name: "注文ユーザー"
-        })
-    });
-
-    alert("注文を送信しました！");
+    message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ 最終金額は納品時の重量・数量により確定いたします。\n* Final price confirmed upon delivery.`;
+    window.open(`https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -450,9 +403,12 @@ function esc(str) {
 // ═══════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════
-fetchProducts();
-// 初期言語を適用（ボタンのactive状態のみ、テキストはfetchProducts後に設定）
-document.addEventListener('DOMContentLoaded', () => {
+async function init() {
+    // 先に言語ボタンのactive状態を設定
     document.getElementById('lang-' + currentLang).classList.add('active');
+    // 商品データ取得完了後に言語を適用（商品カードの言語表示に反映）
+    await fetchProducts();
     setLang(currentLang);
-});
+}
+
+document.addEventListener('DOMContentLoaded', init);
