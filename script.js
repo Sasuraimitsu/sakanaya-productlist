@@ -371,55 +371,57 @@ totalQty += qty;
 // ═══════════════════════════════════════════════════════════
 // TELEGRAM ORDER（注文メッセージは日英両方）
 // ═══════════════════════════════════════════════════════════
-function sendOrderTelegram() {
+async function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
     let hasOrder = false;
-    // 変更後
-let itemCount = 0;
-let totalQty = 0;
+
+    let itemCount = 0;
+    let totalQty = 0;
 
     document.querySelectorAll('.card').forEach(card => {
         card.querySelectorAll('[data-price]').forEach(inp => {
             const qty = parseFloat(inp.value) || 0;
             if (qty <= 0) return;
+
             hasOrder = true;
-            // 変更後
-itemCount++;
-totalQty += qty;
+            itemCount++;
+            totalQty += qty;
+
             const nameJp = inp.getAttribute('data-name-jp') || '';
             const nameEn = inp.getAttribute('data-name-en') || '';
-            // 日英両方を併記
+
             const nameLine = nameJp && nameEn && nameJp !== nameEn
                 ? `${nameJp} / ${nameEn}`
                 : nameJp || nameEn;
+
             const unitLabel = inp.getAttribute('data-unit-label') || 'pc';
-            const price = parseFloat(inp.getAttribute('data-price')) || 0;
-            // 変更後
-     message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()}\n`;
+
+            message += `- ${nameLine} / × ${qty} ${unitLabel.toUpperCase()}\n`;
         });
     });
 
     if (!hasOrder) {
-        alert(UI_TEXT[currentLang].selectItems);
+        alert("商品を選択してください");
         return;
     }
-    // 変更後
-    message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ ...`;
-    
-    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/order", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        chatId: "あなたのchat_id",
-        product: message,
-        quantity: totalQty,
-        name: "注文ユーザー"
-    })
-});
 
-alert("注文を送信しました！");
+    message += `\n---\n注文品種: ${itemCount}　総数: ${totalQty}\n`;
+
+    // 👇 ここが新しい処理
+    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chatId: "あなたのchat_id",
+            product: message,
+            quantity: totalQty,
+            name: "注文ユーザー"
+        })
+    });
+
+    alert("注文を送信しました！");
 }
 
 // ═══════════════════════════════════════════════════════════
