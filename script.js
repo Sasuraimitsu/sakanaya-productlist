@@ -405,7 +405,21 @@ totalQty += qty;
     }
     // 変更後
     message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ ...`;
-    window.open(`https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`, '_blank');
+    
+    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/order", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        chatId: "あなたのchat_id",
+        product: message,
+        quantity: totalQty,
+        name: "注文ユーザー"
+    })
+});
+
+alert("注文を送信しました！");
 }
 
 // ═══════════════════════════════════════════════════════════
