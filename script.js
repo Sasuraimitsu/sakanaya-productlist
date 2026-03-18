@@ -354,7 +354,9 @@ function changeQty(id, delta) {
 // ═══════════════════════════════════════════════════════════
 function updateTotal() {
     const t = UI_TEXT[currentLang];
-    let itemCount = 0;
+    // 変更後
+let itemCount = 0;
+let totalQty = 0;
     document.querySelectorAll('.card [data-price]').forEach(inp => {
         if ((parseFloat(inp.value) || 0) > 0) itemCount++;
     });
@@ -369,7 +371,9 @@ function updateTotal() {
 function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
     let hasOrder = false;
-    let itemCount = 0;
+    // 変更後
+let itemCount = 0;
+let totalQty = 0;
 
     document.querySelectorAll('.card').forEach(card => {
         card.querySelectorAll('[data-price]').forEach(inp => {
