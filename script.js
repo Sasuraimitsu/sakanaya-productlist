@@ -388,7 +388,7 @@ function updateTotal() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            chatId: "あなたのchat_id",
+            chatId: "771075691",
             product: message,
             quantity: totalQty,
             name: "注文ユーザー"
