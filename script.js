@@ -382,7 +382,7 @@ function updateTotal() {
     message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ 最終金額は納品時の重量・数量により確定いたします。\n* Final price confirmed upon delivery.`;
 
     // 👇 ここが新しい処理（超重要）
-    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/order", {
+    await fetch("https://telegram-bot-729928920450.asia-northeast1.run.app/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
