@@ -394,7 +394,8 @@ function sendOrderTelegram() {
         alert(UI_TEXT[currentLang].selectItems);
         return;
     }
-    message += `\n---\n注文商品数 / Items: ${itemCount}\n\n※ 最終金額は納品時の重量・数量により確定いたします。\n* Final price confirmed upon delivery.`;
+    // 変更後
+    message += `\n---\n注文品種 / Items: ${itemCount}　総数 / Total Qty: ${totalQty}\n\n※ ...`;
     window.open(`https://t.me/${TELEGRAM_BOT}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
