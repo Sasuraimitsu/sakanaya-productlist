@@ -300,6 +300,8 @@ function displayProducts(products) {
 }
 
 function buildCard(product) {
+    const calcLabel = getCalcLabel(product);
+    const calcHTML = `<div class="unit-type-badge ${calcLabel === t.weightCalc ? 'weight' : 'qty'}">${calcLabel}</div>`;
     const t = UI_TEXT[currentLang];
     const productId = esc(product.product_id);
     const category = getCategoryValue(product);
