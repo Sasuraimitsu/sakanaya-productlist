@@ -464,7 +464,6 @@ function renderCart() {
     const items = Object.values(cart);
 
     const cartItemsEl = document.getElementById('cart-items');
-    const totalAmountEl = document.getElementById('total-amount');
     const totalBar = document.getElementById('total-bar');
 
     if (!cartItemsEl || !totalAmountEl || !totalBar) return;
@@ -504,7 +503,6 @@ function renderCart() {
         `;
     }).join('');
 
-    totalAmountEl.textContent = total.toFixed(2);
     totalBar.classList.add('show');
 }
 
