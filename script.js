@@ -493,7 +493,7 @@ function renderCart() {
             <div class="cart-item">
                 <div class="cart-item-info">
                     <strong>${esc(productName)}</strong>
-                    <span>${esc(variantName)} × ${item.qty}</span>
+                    <span>${esc(variantName)} ${item.price_usd}$/${esc(item.price_unit_label)} × ${item.qty}</span>
                 </div>
                 <div class="cart-item-actions">
                     <button class="qty-btn" type="button" onclick="changeCartQty('${esc(item.variant_id)}', -1)">−</button>
