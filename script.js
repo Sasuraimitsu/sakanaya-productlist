@@ -352,30 +352,31 @@ function buildCard(product) {
         : `<div class="variant-note">${t.variantGuideDefault}</div>`;
 
     const variantsHTML = (product.variants || []).map(variant => {
-        const variantId = esc(variant.variant_id);
-        const variantName = esc(getVariantName(variant));
-        const price = toNumber(variant.price_usd, 0).toFixed(2);
-        const qty = cart[variant.variant_id]?.qty || 0;
-        const variantImage = (variant.image_variant || '').trim();
+    const variantId = esc(variant.variant_id);
+    const variantName = esc(getVariantName(variant));
+    const price = toNumber(variant.price_usd, 0).toFixed(2);
+    const qty = cart[variant.variant_id]?.qty || 0;
+    const variantImage = (variant.image_variant || '').trim();
+    const unitLabel = esc(getUnitLabel(variant));
 
-        return `
-            <div class="variant-row">
-                <button
-                    class="variant-select-btn"
-                    type="button"
-                    onclick="selectVariantImage('${productId}', '${esc(variantImage)}', '${esc(imageMain)}', this)"
-                >
-                   ${variantName} / $${price}/${esc(getUnitLabel(variant))}
-                </button>
+    return `
+        <div class="variant-row">
+            <button
+                class="variant-select-btn"
+                type="button"
+                onclick="selectVariantImage('${productId}', '${esc(variantImage)}', '${esc(imageMain)}', this)"
+            >
+                ${variantName} / $${price}/${unitLabel}
+            </button>
 
-                <div class="variant-qty-wrap">
-                    <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', -1)">−</button>
-                    <span class="variant-qty">${qty}</span>
-                    <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', 1)">＋</button>
-                </div>
+            <div class="variant-qty-wrap">
+                <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', -1)">−</button>
+                <span class="variant-qty">${qty}</span>
+                <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', 1)">＋</button>
             </div>
-        `;
-    }).join('');
+        </div>
+    `;
+}).join('');
 
     return `
         <div class="card" data-category="${esc(category)}">
