@@ -24,12 +24,13 @@
         </div>
     </header>
 
-    <!-- 言語切り替えボタン -->
+    <!-- 言語切り替え -->
     <div class="lang-bar">
         <button id="lang-jp" class="lang-btn" onclick="setLang('jp')">🇯🇵 日本語</button>
         <button id="lang-en" class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
     </div>
 
+    <!-- カテゴリ -->
     <nav class="category-nav">
         <button class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
         <button class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
@@ -40,10 +41,17 @@
         <button class="nav-btn nav-btn-sake" onclick="filterCategory('SAKE', this)">SAKE</button>
     </nav>
 
+    <!-- 検索 -->
     <div class="search-area">
-        <input type="text" id="search-input" placeholder="Search product name..." onkeyup="applyFilters()">
+        <input
+            type="text"
+            id="search-input"
+            placeholder="Search product name..."
+            onkeyup="applyFilters()"
+        >
     </div>
 
+    <!-- お知らせ -->
     <div class="notice-area">
         <details class="notice-box">
             <summary id="notice-summary-text">【 NOTICE 】 Click to view details</summary>
@@ -53,28 +61,72 @@
         </details>
     </div>
 
-    <div id="product-container" class="container"></div>
+    <!-- おすすめ -->
+    <section id="recommend-section" class="recommend-section hidden">
+        <div class="section-header">
+            <h3 id="recommend-title">🔥 Today's Recommendation</h3>
+        </div>
+        <div id="recommend-container" class="container recommend-container"></div>
+    </section>
 
+    <!-- 通常商品 -->
+    <section class="product-section">
+        <div id="product-container" class="container"></div>
+    </section>
+
+    <!-- 地図 -->
     <section class="map-section">
         <h3>STORE LOCATION</h3>
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=..."
+                width="100%"
+                height="400"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy">
+            </iframe>
         </div>
     </section>
 
+    <!-- 固定問い合わせボタン -->
+    <a
+        id="inquiry-floating-btn"
+        class="inquiry-floating-btn"
+        href="https://t.me/SAKANAYAJAPON"
+        target="_blank"
+    >
+        💬 Inquiry
+    </a>
+
+    <!-- 画像モーダル -->
     <div id="image-modal" class="modal" onclick="closeModal()">
         <span class="close-btn">×</span>
-        <img class="modal-content" id="modal-img">
+        <img class="modal-content" id="modal-img" alt="Product Image">
     </div>
 
+    <!-- 注文バー -->
     <div id="total-bar" class="total-bar">
         <div class="total-content">
-            <span class="total-label" id="order-bar-label">📋 Your Order</span>
-            <span class="total-price"><span id="total-amount">0</span></span>
+            <div class="order-bar-header">
+                <span class="total-label" id="order-bar-label">📋 Your Order</span>
+                <span class="total-price">$<span id="total-amount">0.00</span></span>
+            </div>
+
+            <div id="cart-items" class="cart-items">
+                <p class="cart-empty">No items selected.</p>
+            </div>
         </div>
-        <button onclick="sendOrderTelegram()" class="order-send-btn">
-            <span id="order-btn-text">📲 Order via Telegram</span>
-        </button>
+
+        <div class="order-bar-actions">
+            <button onclick="sendOrderTelegram()" class="order-send-btn">
+                <span id="order-btn-text">📲 Order via Telegram</span>
+            </button>
+            <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">
+                Clear
+            </button>
+        </div>
+
         <p class="total-note" id="order-bar-note">* Final price confirmed upon delivery</p>
     </div>
 
