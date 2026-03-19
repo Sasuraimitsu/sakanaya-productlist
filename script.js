@@ -555,12 +555,18 @@ async function sendOrderTelegram() {
             : item.variant_name_jp || item.variant_name_en;
 
         totalQty += item.qty;
-
         message += `- ${productName} / ${variantName} ${item.price_usd}$/${item.price_unit_label} × ${item.qty}\n`;
     });
 
-    message += `\n---\nTotal Items: ${totalQty}\n`;
-    message += '\n※ Final quantity/weight confirmed upon delivery.';
+    const payload = {
+        chatId: '771075691',
+        product: message,
+        quantity: totalQty,
+        name: '注文ユーザー'
+    };
+
+    console.log('TELEGRAM_API_URL:', TELEGRAM_API_URL);
+    console.log('payload:', payload);
 
     try {
         const res = await fetch(TELEGRAM_API_URL, {
@@ -568,13 +574,12 @@ async function sendOrderTelegram() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                chatId: '771075691',
-                product: message,
-                quantity: totalQty,
-                name: '注文ユーザー'
-            })
+            body: JSON.stringify(payload)
         });
+
+        console.log('response status:', res.status);
+        const text = await res.text();
+        console.log('response body:', text);
 
         if (!res.ok) {
             throw new Error('Failed to send order');
@@ -583,7 +588,7 @@ async function sendOrderTelegram() {
         alert(t.orderSent);
         clearCart();
     } catch (error) {
-        console.error(error);
+        console.error('sendOrderTelegram error:', error);
         alert(t.orderFailed);
     }
 }
