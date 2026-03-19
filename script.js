@@ -365,7 +365,7 @@ function buildCard(product) {
                     type="button"
                     onclick="selectVariantImage('${productId}', '${esc(variantImage)}', '${esc(imageMain)}', this)"
                 >
-                    ${variantName} / $${price}
+                   ${variantName} / $${price}/${esc(getUnitLabel(variant))}
                 </button>
 
                 <div class="variant-qty-wrap">
