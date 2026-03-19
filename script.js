@@ -354,9 +354,19 @@ function buildCard(product) {
         ? `<span class="recommend-badge">RECOMMEND</span>`
         : '';
 
-    const sizeHTML = size ? `<p class="size-detail">${t.size}: ${size}</p>` : '';
     const commentHTML = comment ? `<div class="comment-box">${comment}</div>` : '';
-    const calcHTML = `<span class="unit-type-badge ${getCalcClass(product)}">${getCalcLabel(product)}</span>`;
+    const sizeAndCalcHTML = size
+    ? `
+        <div class="size-calc-row">
+            <p class="size-detail">${t.size}: ${size}</p>
+            <span class="calc-mini ${getCalcClass(product)}">${getCalcLabel(product)}</span>
+        </div>
+      `
+    : `
+        <div class="size-calc-row">
+            <span class="calc-mini ${getCalcClass(product)}">${getCalcLabel(product)}</span>
+        </div>
+      `;
 
     const variantGuide = product.size
         ? `<div class="variant-note">${esc(product.size)}</div>`
