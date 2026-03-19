@@ -42,6 +42,8 @@ const UI_TEXT = {
         orderFailed: '送信に失敗しました。',
         variantGuideDefault: '種類をお選びください'
         floatingInquiry: '💬 お問い合わせ'
+        weightCalc: '重量計算',
+        qtyCalc: '数量計算'
     },
     en: {
         searchPlaceholder: 'Search product name...',
@@ -68,6 +70,8 @@ const UI_TEXT = {
         orderFailed: 'Failed to send order.',
         variantGuideDefault: 'Please select a type'
         floatingInquiry: '💬 Inquiry'
+        weightCalc: 'Weight',
+        qtyCalc: 'Quantity'
     }
 };
 
