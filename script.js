@@ -121,6 +121,13 @@ function toNumber(value, fallback = 0) {
     return Number.isFinite(n) ? n : fallback;
 }
 
+function getCalcLabel(product) {
+    const t = UI_TEXT[currentLang];
+    const variants = product.variants || [];
+    const hasKg = variants.some(v => String(v.order_type || v.price_unit || '').toUpperCase() === 'KG');
+    return hasKg ? t.weightCalc : t.qtyCalc;
+}
+
 // ═══════════════════════════════════════════════════════════
 // LANGUAGE SWITCH
 // ═══════════════════════════════════════════════════════════
