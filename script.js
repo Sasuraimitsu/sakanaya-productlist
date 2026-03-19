@@ -151,6 +151,9 @@ function setLang(lang) {
     const recommendTitle = document.getElementById('recommend-title');
     if (recommendTitle) recommendTitle.textContent = t.recommendTitle;
 
+    const inquiryBtn = document.getElementById('inquiry-floating-btn');
+    if (inquiryBtn) inquiryBtn.textContent = t.floatingInquiry;
+
     applyFilters();
     renderCart();
 }
