@@ -128,6 +128,16 @@ function getCalcLabel(product) {
     return hasKg ? t.weightCalc : t.qtyCalc;
 }
 
+function getUnitLabel(variant) {
+    const raw = String(variant.price_unit || variant.order_type || '').trim().toLowerCase();
+    if (raw === 'kg') return 'kg';
+    if (raw === 'pic') return 'pic';
+    if (raw === 'pc') return 'pc';
+    if (raw === 'case') return 'case';
+    if (raw === 'bottle') return 'bottle';
+    return raw || 'unit';
+}
+
 // ═══════════════════════════════════════════════════════════
 // LANGUAGE SWITCH
 // ═══════════════════════════════════════════════════════════
