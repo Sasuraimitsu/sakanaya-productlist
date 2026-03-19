@@ -1,36 +1,3 @@
-/* ─── LANGUAGE SWITCHER ─── */
-.lang-bar {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    max-width: 1200px;
-    margin: 8px auto 0;
-    padding: 0 20px;
-}
-
-.lang-btn {
-    padding: 5px 14px;
-    border-radius: 20px;
-    border: 1px solid #cbd5e0;
-    background: white;
-    color: #555;
-    font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.lang-btn:hover {
-    border-color: var(--main-blue);
-    color: var(--main-blue);
-}
-
-.lang-btn.active {
-    background: var(--main-blue);
-    border-color: var(--main-blue);
-    color: white;
-}
-
 :root {
     --main-blue: #1a3c5a;
     --accent-red: #e63946;
@@ -41,6 +8,10 @@
     --sake-gold: #c8a000;
     --kitchen-purple: #7b5ea7;
     --seasoning-orange: #e67e22;
+    --border-soft: #d9e2ec;
+    --text-light: #666;
+    --shadow-soft: 0 4px 15px rgba(0,0,0,0.05);
+    --shadow-hover: 0 10px 25px rgba(0,0,0,0.10);
 }
 
 body {
@@ -49,6 +20,10 @@ body {
     background: var(--bg-light);
     color: #333;
     line-height: 1.6;
+}
+
+.hidden {
+    display: none !important;
 }
 
 /* ─── HEADER ─── */
@@ -134,16 +109,37 @@ header {
     background: #007bb8;
 }
 
-@media (max-width: 768px) {
-    .header-flex-row {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    .title-section {
-        text-align: center;
-        width: 100%;
-        order: -1;
-    }
+/* ─── LANGUAGE SWITCHER ─── */
+.lang-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    max-width: 1200px;
+    margin: 8px auto 0;
+    padding: 0 20px;
+}
+
+.lang-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid #cbd5e0;
+    background: white;
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-btn:hover {
+    border-color: var(--main-blue);
+    color: var(--main-blue);
+}
+
+.lang-btn.active {
+    background: var(--main-blue);
+    border-color: var(--main-blue);
+    color: white;
 }
 
 /* ─── NAVIGATION ─── */
@@ -174,12 +170,15 @@ header {
     white-space: nowrap;
 }
 
+.nav-btn:hover {
+    background: #edf4fb;
+}
+
 .nav-btn.active {
     background: var(--main-blue);
     color: white;
 }
 
-/* SAKEボタンはゴールド */
 .nav-btn-sake {
     border-color: var(--sake-gold);
     color: var(--sake-gold);
@@ -266,6 +265,20 @@ header {
     margin: 15px 0;
 }
 
+/* ─── SECTION ─── */
+.section-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6px 20px 0;
+}
+
+.section-header h3 {
+    color: var(--main-blue);
+    margin: 8px 0 0;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
 /* ─── GRID ─── */
 .container {
     display: grid;
@@ -276,12 +289,20 @@ header {
     margin: auto;
 }
 
+.recommend-section {
+    margin-top: 8px;
+}
+
+.recommend-container .card {
+    border: 2px solid rgba(230, 57, 70, 0.18);
+}
+
 /* ─── CARD ─── */
 .card {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-soft);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -290,13 +311,14 @@ header {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-hover);
 }
 
 /* ─── IMAGE ─── */
 .img-wrapper {
     position: relative;
     height: 220px;
+    background: #eef3f7;
 }
 
 .img-wrapper > img {
@@ -309,6 +331,15 @@ header {
 
 .img-wrapper > img:hover {
     opacity: 0.85;
+}
+
+.img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    font-size: 48px;
+    color: #9aa9b8;
 }
 
 /* ─── CATEGORY TAG ─── */
@@ -330,15 +361,14 @@ header {
     line-height: 1.4;
 }
 
-/* カテゴリー別の左ボーダーカラー */
 .category-tag.FROZEN         { border-left: 5px solid var(--frozen-blue); }
 .category-tag.FRESH-WHOLE_SD { border-left: 5px solid var(--fresh-green); }
 .category-tag.FRESH-FILLET   { border-left: 5px solid #1abc9c; }
+.category-tag.FRESH-DR       { border-left: 5px solid #20bf6b; }
 .category-tag.OIL_SEASONING  { border-left: 5px solid var(--seasoning-orange); }
 .category-tag.KITCHEN        { border-left: 5px solid var(--kitchen-purple); }
 .category-tag.SAKE           { border-left: 5px solid var(--sake-gold); }
 
-/* country表示（JAPAN / CAMBODIA） */
 .country-flag {
     width: 18px;
     height: 12px;
@@ -351,7 +381,7 @@ header {
     flex-shrink: 0;
 }
 
-/* ─── STOCK BADGE ─── */
+/* ─── BADGES ─── */
 .stock-badge {
     position: absolute;
     top: 12px;
@@ -364,6 +394,20 @@ header {
     border-radius: 6px;
     letter-spacing: 0.5px;
     border: 1px solid rgba(255,255,255,0.2);
+}
+
+.recommend-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #fff4f4;
+    color: var(--accent-red);
+    border: 1px solid rgba(230, 57, 70, 0.25);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 2;
 }
 
 /* ─── INFO AREA ─── */
@@ -384,6 +428,7 @@ header {
     margin: 0 0 8px;
     font-size: 1.1rem;
     color: var(--main-blue);
+    line-height: 1.4;
 }
 
 .size-detail {
@@ -397,10 +442,8 @@ header {
     color: #444;
     line-height: 1.6;
     margin-bottom: 12px;
-    flex-grow: 1;
 }
 
-/* ─── PRICE ─── */
 .price {
     font-weight: 900;
     color: var(--accent-red);
@@ -414,7 +457,6 @@ header {
     font-weight: normal;
 }
 
-/* 単価タイプバッジ（WEIGHT / QTY） */
 .unit-type-badge {
     display: inline-block;
     font-size: 0.65rem;
@@ -438,8 +480,6 @@ header {
     border: 1px solid #86efac;
 }
 
-
-/* ─── ORDER UNIT LABEL（注文欄の単位表示: PIC / SD-PIC / BACK-PIC 等） ─── */
 .order-unit-label {
     font-size: 0.78rem;
     font-weight: 700;
@@ -453,7 +493,7 @@ header {
     align-self: center;
 }
 
-/* ─── CALC AREA ─── */
+/* ─── OLD CALC AREA (残してOK / 旧互換) ─── */
 .calc-container {
     background: #f1f5f9;
     padding: 12px;
@@ -467,7 +507,6 @@ header {
     gap: 8px;
 }
 
-/* 重量入力（kg） */
 .weight-input-wrap {
     flex: 1;
     display: flex;
@@ -493,26 +532,12 @@ header {
     white-space: nowrap;
 }
 
-/* 数量入力（pc） */
 .qty-wrap {
     display: flex;
     align-items: center;
     border: 1px solid #cbd5e0;
     border-radius: 5px;
     overflow: hidden;
-}
-
-.qty-btn {
-    background: #e2e8f0;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.qty-btn:hover {
-    background: #cbd5e0;
 }
 
 .qty-input {
@@ -526,16 +551,104 @@ header {
     background: white;
 }
 
-/* SAKE ASKボタン */
+/* ─── NEW VARIANT UI ─── */
+.variant-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.variant-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+    background: #f8fbfd;
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.variant-select-btn {
+    border: 1px solid #cfd9e3;
+    background: white;
+    color: var(--main-blue);
+    font-weight: 700;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.variant-select-btn:hover {
+    border-color: var(--main-blue);
+    background: #edf4fb;
+}
+
+.variant-select-btn.active {
+    background: #edf4fb;
+    border-color: var(--main-blue);
+}
+
+.variant-qty-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.variant-qty {
+    min-width: 22px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--main-blue);
+}
+
+.variant-note {
+    margin-top: 6px;
+    font-size: 0.76rem;
+    color: #7a8694;
+}
+
+/* ─── QTY BUTTON ─── */
+.qty-btn {
+    background: #e2e8f0;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.qty-btn:hover {
+    background: #cbd5e0;
+}
+
+/* ─── CARD ACTIONS ─── */
+.card-actions {
+    margin-top: 12px;
+}
+
 .ask-btn {
     display: block;
     width: 100%;
     margin-top: 8px;
     padding: 10px;
     background: transparent;
-    border: 2px solid var(--sake-gold);
+    border: 2px solid var(--main-blue);
     border-radius: 8px;
-    color: var(--sake-gold);
+    color: var(--main-blue);
     font-weight: bold;
     font-size: 0.9rem;
     text-align: center;
@@ -543,14 +656,14 @@ header {
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
     letter-spacing: 0.5px;
+    box-sizing: border-box;
 }
 
 .ask-btn:hover {
-    background: var(--sake-gold);
+    background: var(--main-blue);
     color: white;
 }
 
-/* SAKE価格表示 */
 .price-ask {
     font-weight: 900;
     font-size: 1.3rem;
@@ -570,20 +683,43 @@ header {
     letter-spacing: 0.5px;
 }
 
+/* ─── FLOATING INQUIRY BUTTON ─── */
+.inquiry-floating-btn {
+    position: fixed;
+    right: 18px;
+    bottom: 110px;
+    z-index: 1200;
+    background: white;
+    color: var(--main-blue);
+    border: 2px solid var(--main-blue);
+    border-radius: 999px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: 0.2s;
+}
+
+.inquiry-floating-btn:hover {
+    background: var(--main-blue);
+    color: white;
+}
+
 /* ─── TOTAL BAR ─── */
 .total-bar {
     position: fixed;
-    bottom: -120px;
+    bottom: -420px;
     left: 50%;
     transform: translateX(-50%);
     width: 92%;
-    max-width: 450px;
+    max-width: 520px;
     background: white;
-    padding: 15px 20px;
+    padding: 16px 18px 14px;
     border-radius: 20px 20px 0 0;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
     z-index: 1000;
-    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: bottom 0.4s ease;
     border: 1px solid #eee;
 }
 
@@ -592,10 +728,16 @@ header {
 }
 
 .total-content {
+    display: block;
+    margin-bottom: 0;
+}
+
+.order-bar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .total-label {
@@ -604,9 +746,68 @@ header {
 }
 
 .total-price {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 900;
     color: var(--main-blue);
+    white-space: nowrap;
+}
+
+.cart-items {
+    max-height: 180px;
+    overflow-y: auto;
+    border-top: 1px solid #eef2f6;
+    border-bottom: 1px solid #eef2f6;
+    padding: 8px 0;
+}
+
+.cart-empty {
+    margin: 0;
+    color: #8895a7;
+    font-size: 0.88rem;
+    text-align: center;
+    padding: 12px 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+.cart-item + .cart-item {
+    border-top: 1px dashed #e6edf3;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cart-item-info strong {
+    color: var(--main-blue);
+    font-size: 0.9rem;
+    line-height: 1.3;
+}
+
+.cart-item-info span {
+    color: var(--text-light);
+    font-size: 0.82rem;
+}
+
+.cart-item-actions {
+    display: inline-flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.order-bar-actions {
+    display: grid;
+    grid-template-columns: 1fr 92px;
+    gap: 8px;
+    margin-top: 12px;
 }
 
 .order-send-btn {
@@ -626,8 +827,23 @@ header {
     background: #007bb8;
 }
 
+.order-clear-btn {
+    background: #f1f5f9;
+    color: var(--main-blue);
+    border: 1px solid #d5dee8;
+    padding: 14px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.order-clear-btn:hover {
+    background: #e2e8f0;
+}
+
 .total-note {
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     color: #999;
     margin-top: 8px;
     text-align: center;
@@ -665,7 +881,7 @@ header {
 
 @keyframes zoom {
     from { transform: translateY(-50%) scale(0.95); opacity: 0; }
-    to   { transform: translateY(-50%) scale(1);    opacity: 1; }
+    to   { transform: translateY(-50%) scale(1); opacity: 1; }
 }
 
 .close-btn {
@@ -681,7 +897,7 @@ header {
 
 /* ─── MAP ─── */
 .map-section {
-    padding: 40px 20px;
+    padding: 40px 20px 120px;
     background: #fff;
     text-align: center;
 }
@@ -702,24 +918,102 @@ header {
 }
 
 /* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    .header-flex-row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .title-section {
+        text-align: center;
+        width: 100%;
+        order: -1;
+    }
+}
+
 @media (max-width: 480px) {
     .container {
         padding: 10px;
         grid-template-columns: 1fr;
         gap: 12px;
     }
-    .img-wrapper { height: 180px; }
-    .info { padding: 10px 12px 14px; }
-    .info h3 { font-size: 0.95rem; }
-    .nav-btn { padding: 6px 10px; font-size: 0.75rem; }
-    .calc-container { padding: 10px 8px; }
-    .calc-row { gap: 6px; }
-    .qty-btn { padding: 10px 14px; font-size: 1.1rem; }
-    .qty-input { width: 44px; font-size: 1rem; }
-    .order-unit-label { padding: 4px 8px; font-size: 0.72rem; }
-    .weight-input { padding: 10px 6px; }
+
+    .img-wrapper {
+        height: 180px;
+    }
+
+    .info {
+        padding: 10px 12px 14px;
+    }
+
+    .info h3 {
+        font-size: 0.95rem;
+    }
+
+    .nav-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .calc-container {
+        padding: 10px 8px;
+    }
+
+    .calc-row {
+        gap: 6px;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .qty-input {
+        width: 44px;
+        font-size: 1rem;
+    }
+
+    .order-unit-label {
+        padding: 4px 8px;
+        font-size: 0.72rem;
+    }
+
+    .weight-input {
+        padding: 10px 6px;
+    }
+
+    .variant-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .variant-qty-wrap {
+        justify-content: flex-end;
+    }
+
+    .total-bar {
+        width: 100%;
+        max-width: none;
+        border-radius: 16px 16px 0 0;
+        padding: 14px 14px 12px;
+    }
+
+    .order-bar-actions {
+        grid-template-columns: 1fr 82px;
+    }
+
+    .inquiry-floating-btn {
+        right: 12px;
+        bottom: 96px;
+        font-size: 0.82rem;
+        padding: 10px 14px;
+    }
 }
 
 @media (max-width: 380px) {
-    .qty-btn { padding: 10px 12px; }
+    .qty-btn {
+        width: 30px;
+        height: 30px;
+    }
 }
