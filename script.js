@@ -379,6 +379,8 @@ function buildCard(product) {
             <div class="info">
                 ${code ? `<span class="code">Code: ${code}</span>` : ''}
                 <h3>${productName}</h3>
+                ${calcHTML}
+                ${sizeHTML}
                 ${sizeHTML}
                 ${commentHTML}
                 ${variantGuide}
