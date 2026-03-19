@@ -437,6 +437,7 @@ function changeCartQty(variantId, delta) {
             variant_name_jp: variant.variant_name_jp || '',
             variant_name_en: variant.variant_name_en || '',
             price_usd: toNumber(variant.price_usd, 0),
+            price_unit_label: getUnitLabel(variant),
             qty: 0
         };
     }
