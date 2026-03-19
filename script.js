@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxMRaaCDTKEe9JEwTwMbzJsemjz99RUAbz11niTe_snAlEVkJOCnh824fY7APbegaGa/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwpHTrnOgUWMHb8cZ7sQlGXNKSz0Pvz5nu9zVP2Eh3Nju1t1T9g5xZrheQZAjTX6qOE/exec';
 const TELEGRAM_API_URL = 'https://telegram-bot-729928920450.asia-northeast1.run.app/';
 const TELEGRAM_LINK = 'https://t.me/SAKANAYAJAPON';
 
@@ -33,15 +33,14 @@ const UI_TEXT = {
         clearBtn: 'クリア',
         noProducts: '該当商品なし',
         selectItems: '商品を選択してください。',
-        askBtn: '💬 お問い合わせ',
         stock: 'STOCK',
         size: 'サイズ',
         recommendTitle: '🔥 本日のおすすめ',
         emptyCart: '商品が選択されていません。',
         orderSent: '注文を送信しました。',
         orderFailed: '送信に失敗しました。',
-        variantGuideDefault: '種類をお選びください'
-        floatingInquiry: '💬 お問い合わせ'
+        variantGuideDefault: '種類をお選びください',
+        floatingInquiry: '💬 お問い合わせ',
         weightCalc: '重量計算',
         qtyCalc: '数量計算'
     },
@@ -57,19 +56,18 @@ const UI_TEXT = {
             - Final price is confirmed upon delivery.`,
         orderBtn: '📲 Order via Telegram',
         orderBarLabel: '📋 Your Order',
-        orderNote: '* Final price confirmed upon delivery',
+        orderNote: '* Final quantity/weight confirmed upon delivery',
         clearBtn: 'Clear',
         noProducts: 'No products found',
         selectItems: 'Please select items.',
-        askBtn: '💬 Inquiry',
         stock: 'STOCK',
         size: 'Size',
         recommendTitle: "🔥 Today's Recommendation",
         emptyCart: 'No items selected.',
         orderSent: 'Order sent successfully.',
         orderFailed: 'Failed to send order.',
-        variantGuideDefault: 'Please select a type'
-        floatingInquiry: '💬 Inquiry'
+        variantGuideDefault: 'Please select a type',
+        floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
         qtyCalc: 'Quantity'
     }
@@ -121,21 +119,35 @@ function toNumber(value, fallback = 0) {
     return Number.isFinite(n) ? n : fallback;
 }
 
-function getCalcLabel(product) {
-    const t = UI_TEXT[currentLang];
-    const variants = product.variants || [];
-    const hasKg = variants.some(v => String(v.order_type || v.price_unit || '').toUpperCase() === 'KG');
-    return hasKg ? t.weightCalc : t.qtyCalc;
+function getRawUnit(variant) {
+    return String(variant.price_unit || variant.order_type || '').trim().toLowerCase();
 }
 
 function getUnitLabel(variant) {
-    const raw = String(variant.price_unit || variant.order_type || '').trim().toLowerCase();
+    const raw = getRawUnit(variant);
     if (raw === 'kg') return 'kg';
     if (raw === 'pic') return 'pic';
     if (raw === 'pc') return 'pc';
     if (raw === 'case') return 'case';
     if (raw === 'bottle') return 'bottle';
     return raw || 'unit';
+}
+
+function isWeightVariant(variant) {
+    return getRawUnit(variant) === 'kg';
+}
+
+function getCalcLabel(product) {
+    const t = UI_TEXT[currentLang];
+    const variants = product.variants || [];
+    const hasWeight = variants.some(v => isWeightVariant(v));
+    return hasWeight ? t.weightCalc : t.qtyCalc;
+}
+
+function getCalcClass(product) {
+    const variants = product.variants || [];
+    const hasWeight = variants.some(v => isWeightVariant(v));
+    return hasWeight ? 'weight' : 'qty';
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -181,8 +193,7 @@ function setLang(lang) {
 
 // ═══════════════════════════════════════════════════════════
 // FETCH DATA
-// GAS側は products + variants を結合して返す想定
-// 例:
+// GAS側:
 // {
 //   updateDate: "2026/03/19",
 //   products: [
@@ -193,7 +204,8 @@ function setLang(lang) {
 //       variants: [
 //         {
 //           variant_id, product_id, variant_name_jp, variant_name_en,
-//           price_usd, stock, image_variant, sort_order
+//           price_usd, stock, image_variant, sort_order,
+//           order_type, price_unit
 //         }
 //       ]
 //     }
@@ -310,8 +322,6 @@ function displayProducts(products) {
 }
 
 function buildCard(product) {
-    const calcLabel = getCalcLabel(product);
-    const calcHTML = `<div class="unit-type-badge ${calcLabel === t.weightCalc ? 'weight' : 'qty'}">${calcLabel}</div>`;
     const t = UI_TEXT[currentLang];
     const productId = esc(product.product_id);
     const category = getCategoryValue(product);
@@ -346,37 +356,38 @@ function buildCard(product) {
 
     const sizeHTML = size ? `<p class="size-detail">${t.size}: ${size}</p>` : '';
     const commentHTML = comment ? `<div class="comment-box">${comment}</div>` : '';
+    const calcHTML = `<span class="unit-type-badge ${getCalcClass(product)}">${getCalcLabel(product)}</span>`;
 
     const variantGuide = product.size
         ? `<div class="variant-note">${esc(product.size)}</div>`
         : `<div class="variant-note">${t.variantGuideDefault}</div>`;
 
     const variantsHTML = (product.variants || []).map(variant => {
-    const variantId = esc(variant.variant_id);
-    const variantName = esc(getVariantName(variant));
-    const price = toNumber(variant.price_usd, 0).toFixed(2);
-    const qty = cart[variant.variant_id]?.qty || 0;
-    const variantImage = (variant.image_variant || '').trim();
-    const unitLabel = esc(getUnitLabel(variant));
+        const variantId = esc(variant.variant_id);
+        const variantName = esc(getVariantName(variant));
+        const price = toNumber(variant.price_usd, 0).toFixed(2);
+        const qty = cart[variant.variant_id]?.qty || 0;
+        const variantImage = (variant.image_variant || '').trim();
+        const unitLabel = esc(getUnitLabel(variant));
 
-    return `
-        <div class="variant-row">
-            <button
-                class="variant-select-btn"
-                type="button"
-                onclick="selectVariantImage('${productId}', '${esc(variantImage)}', '${esc(imageMain)}', this)"
-            >
-                ${variantName} / $${price}/${unitLabel}
-            </button>
+        return `
+            <div class="variant-row">
+                <button
+                    class="variant-select-btn"
+                    type="button"
+                    onclick="selectVariantImage('${productId}', '${esc(variantImage)}', '${esc(imageMain)}', this)"
+                >
+                    ${variantName} / $${price}/${unitLabel}
+                </button>
 
-            <div class="variant-qty-wrap">
-                <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', -1)">−</button>
-                <span class="variant-qty">${qty}</span>
-                <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', 1)">＋</button>
+                <div class="variant-qty-wrap">
+                    <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', -1)">−</button>
+                    <span class="variant-qty">${qty}</span>
+                    <button class="qty-btn" type="button" onclick="changeCartQty('${variantId}', 1)">＋</button>
+                </div>
             </div>
-        </div>
-    `;
-}).join('');
+        `;
+    }).join('');
 
     return `
         <div class="card" data-category="${esc(category)}">
@@ -392,13 +403,11 @@ function buildCard(product) {
                 <h3>${productName}</h3>
                 ${calcHTML}
                 ${sizeHTML}
-                ${sizeHTML}
                 ${commentHTML}
                 ${variantGuide}
                 <div class="variant-list">
                     ${variantsHTML}
                 </div>
-                
             </div>
         </div>
     `;
@@ -478,16 +487,13 @@ function renderCart() {
     const cartItemsEl = document.getElementById('cart-items');
     const totalBar = document.getElementById('total-bar');
 
-    if (!cartItemsEl || !totalAmountEl || !totalBar) return;
+    if (!cartItemsEl || !totalBar) return;
 
     if (items.length === 0) {
         cartItemsEl.innerHTML = `<p class="cart-empty">${t.emptyCart}</p>`;
-        totalAmountEl.textContent = '0.00';
         totalBar.classList.remove('show');
         return;
     }
-
-    let total = 0;
 
     cartItemsEl.innerHTML = items.map(item => {
         const productName = currentLang === 'jp'
@@ -497,9 +503,6 @@ function renderCart() {
         const variantName = currentLang === 'jp'
             ? (item.variant_name_jp || item.variant_name_en)
             : (item.variant_name_en || item.variant_name_jp);
-
-        const lineTotal = item.qty * item.price_usd;
-        total += lineTotal;
 
         return `
             <div class="cart-item">
@@ -531,8 +534,6 @@ async function sendOrderTelegram() {
     }
 
     let totalQty = 0;
-    let totalPrice = 0;
-
     let message = '【New Order / 注文依頼】\n';
 
     items.forEach(item => {
@@ -544,15 +545,13 @@ async function sendOrderTelegram() {
             ? `${item.variant_name_jp} / ${item.variant_name_en}`
             : item.variant_name_jp || item.variant_name_en;
 
-        const lineTotal = item.qty * item.price_usd;
         totalQty += item.qty;
-        totalPrice += lineTotal;
 
-        message += `- ${productName} / ${variantName} × ${item.qty} = $${lineTotal.toFixed(2)}\n`;
+        message += `- ${productName} / ${variantName} ${item.price_usd}$/${item.price_unit_label} × ${item.qty}\n`;
     });
 
-    message += `\n---\nTotal Qty: ${totalQty}\nEstimated Total: $${totalPrice.toFixed(2)}\n`;
-    message += '\n※ Final price confirmed upon delivery.\n* Final price confirmed upon delivery.';
+    message += `\n---\nTotal Items: ${totalQty}\n`;
+    message += '\n※ Final quantity/weight confirmed upon delivery.';
 
     try {
         const res = await fetch(TELEGRAM_API_URL, {
