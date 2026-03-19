@@ -41,6 +41,7 @@ const UI_TEXT = {
         orderSent: '注文を送信しました。',
         orderFailed: '送信に失敗しました。',
         variantGuideDefault: '種類をお選びください'
+        floatingInquiry: '💬 お問い合わせ'
     },
     en: {
         searchPlaceholder: 'Search product name...',
@@ -66,6 +67,7 @@ const UI_TEXT = {
         orderSent: 'Order sent successfully.',
         orderFailed: 'Failed to send order.',
         variantGuideDefault: 'Please select a type'
+        floatingInquiry: '💬 Inquiry'
     }
 };
 
