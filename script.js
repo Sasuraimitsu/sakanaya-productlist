@@ -367,9 +367,7 @@ function buildCard(product) {
                 <div class="variant-list">
                     ${variantsHTML}
                 </div>
-                <div class="card-actions">
-                    <a class="ask-btn" href="${TELEGRAM_LINK}" target="_blank">${t.askBtn}</a>
-                </div>
+                
             </div>
         </div>
     `;
