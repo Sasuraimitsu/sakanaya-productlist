@@ -492,15 +492,13 @@ function clearCart() {
 function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
-
     const cartItemsEl = document.getElementById('cart-items');
-    const totalBar = document.getElementById('total-bar');
 
-    if (!cartItemsEl || !totalBar) return;
+    if (!cartItemsEl) return;
 
     if (items.length === 0) {
         cartItemsEl.innerHTML = `<p class="cart-empty">${t.emptyCart}</p>`;
-        totalBar.classList.remove('show');
+        updateCartBadge();
         return;
     }
 
@@ -527,7 +525,7 @@ function renderCart() {
         `;
     }).join('');
 
-    totalBar.classList.add('show');
+    updateCartBadge();
 }
 
 // ═══════════════════════════════════════════════════════════
