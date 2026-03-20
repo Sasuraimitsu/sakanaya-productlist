@@ -499,6 +499,20 @@ function clearCart() {
     closeCartPanel();
 }
 
+function toggleCartPanel() {
+    const panel = document.getElementById('cart-panel');
+    if (!panel) return;
+    panel.classList.toggle('show');
+}
+
+function closeCartPanel() {
+    const panel = document.getElementById('cart-panel');
+    if (!panel) return;
+    panel.classList.remove('show');
+}
+
+
+
 function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
