@@ -710,10 +710,11 @@ header {
 .total-bar {
     position: fixed;
     bottom: -420px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 92%;
-    max-width: 520px;
+    right: 24px;
+    left: auto;
+    transform: none;
+    width: 420px;
+    max-width: calc(100vw - 48px);
     background: white;
     padding: 16px 18px 14px;
     border-radius: 20px 20px 0 0;
@@ -726,7 +727,6 @@ header {
 .total-bar.show {
     bottom: 0;
 }
-
 .total-content {
     display: block;
     margin-bottom: 0;
