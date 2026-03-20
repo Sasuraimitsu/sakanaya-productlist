@@ -110,6 +110,26 @@
 
     <!-- 注文バー -->
     <div id="cart-panel" class="cart-panel">
+    <div class="cart-panel-header">
+        <span class="total-label" id="order-bar-label">📋 Your Order</span>
+        <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
+    </div>
+
+    <div id="cart-items" class="cart-items">
+        <p class="cart-empty">No items selected.</p>
+    </div>
+
+    <div class="order-bar-actions">
+        <button onclick="sendOrderTelegram()" class="order-send-btn">
+            <span id="order-btn-text">📲 Order via Telegram</span>
+        </button>
+        <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">
+            Clear
+        </button>
+    </div>
+
+    <p class="total-note" id="order-bar-note">* Final quantity/weight confirmed upon delivery</p>
+</div>
         
     <script src="script.js"></script>
 </body>
