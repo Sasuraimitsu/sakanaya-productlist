@@ -19,6 +19,14 @@ let cart = {};
 const UI_TEXT = {
     jp: {
         searchPlaceholder: '商品名で検索...',
+        cat_all: 'すべて',
+        cat_frozen: '冷凍',
+        cat_fresh_whole: '丸魚 / SD',
+        cat_fresh_dr: 'ドレス',
+        cat_fresh_fillet: 'フィレ',
+        cat_oil: '油・調味料',
+        cat_sake: '酒',
+
         noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
         noticeBody: `
             <strong>JP:</strong><br>
@@ -43,16 +51,18 @@ const UI_TEXT = {
         floatingInquiry: '💬 お問い合わせ',
         weightCalc: '重量計算',
         qtyCalc: '数量計算'
-        cat_all: "すべて",
-    　　cat_frozen: "冷凍",
-    　　cat_fresh_whole: "丸魚 / SD",
-    　　cat_fresh_dr: "ドレス",
-    　　cat_fresh_fillet: "フィレ",
-    　　cat_oil: "油・調味料",
-    　　cat_sake: "酒"
     },
+
     en: {
         searchPlaceholder: 'Search product name...',
+        cat_all: 'ALL',
+        cat_frozen: 'FROZEN',
+        cat_fresh_whole: 'WHOLE / SD',
+        cat_fresh_dr: 'DRESSED',
+        cat_fresh_fillet: 'FILLET',
+        cat_oil: 'OIL & SEASONING',
+        cat_sake: 'SAKE',
+
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
             <strong>EN:</strong><br>
@@ -77,13 +87,6 @@ const UI_TEXT = {
         floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
         qtyCalc: 'Quantity'
-        cat_all: "すべて",
-    　　cat_frozen: "冷凍",
-    　　cat_fresh_whole: "丸魚 / SD",
-    　　cat_fresh_dr: "ドレス",
-    　　cat_fresh_fillet: "フィレ",
-    　　cat_oil: "油・調味料",
-    　　cat_sake: "酒"
     }
 };
 
