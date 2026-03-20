@@ -173,7 +173,14 @@ function setLang(lang) {
 
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('lang-' + lang)?.classList.add('active');
-
+    document.getElementById('cat-all').textContent = t.cat_all;
+    document.getElementById('cat-frozen').textContent = t.cat_frozen;
+    document.getElementById('cat-whole').textContent = t.cat_fresh_whole;
+    document.getElementById('cat-dr').textContent = t.cat_fresh_dr;
+    document.getElementById('cat-fillet').textContent = t.cat_fresh_fillet;
+    document.getElementById('cat-oil').textContent = t.cat_oil;
+    document.getElementById('cat-sake').textContent = t.cat_sake;
+    
     const searchInput = document.getElementById('search-input');
     if (searchInput) searchInput.placeholder = t.searchPlaceholder;
 
