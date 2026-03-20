@@ -43,6 +43,13 @@ const UI_TEXT = {
         floatingInquiry: '💬 お問い合わせ',
         weightCalc: '重量計算',
         qtyCalc: '数量計算'
+        cat_all: "すべて",
+    　　cat_frozen: "冷凍",
+    　　cat_fresh_whole: "丸魚 / SD",
+    　　cat_fresh_dr: "ドレス",
+    　　cat_fresh_fillet: "フィレ",
+    　　cat_oil: "油・調味料",
+    　　cat_sake: "酒"
     },
     en: {
         searchPlaceholder: 'Search product name...',
@@ -70,6 +77,13 @@ const UI_TEXT = {
         floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
         qtyCalc: 'Quantity'
+        cat_all: "すべて",
+    　　cat_frozen: "冷凍",
+    　　cat_fresh_whole: "丸魚 / SD",
+    　　cat_fresh_dr: "ドレス",
+    　　cat_fresh_fillet: "フィレ",
+    　　cat_oil: "油・調味料",
+    　　cat_sake: "酒"
     }
 };
 
