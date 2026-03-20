@@ -40,32 +40,32 @@
     <button id="cat-oil" class="nav-btn" onclick="filterCategory('OIL&SEASONING', this)">OIL &amp; SEASONING</button>
     <button id="cat-sake" class="nav-btn nav-btn-sake" onclick="filterCategory('SAKE', this)">SAKE</button>
         <div class="cart-wrapper">
-        <button id="cart-toggle-btn" class="cart-toggle-btn" onclick="toggleCartPanel()">
-            🛒 <span id="cart-count-badge" class="cart-count-badge">0</span>
-        </button>
+    <button id="cart-toggle-btn" class="cart-toggle-btn" onclick="toggleCartPanel()">
+        🛒 <span id="cart-count-badge" class="cart-count-badge">0</span>
+    </button>
 
-        <div id="cart-panel" class="cart-panel">
-            <div class="cart-panel-header">
-                <span class="total-label">📋 Your Order</span>
-                <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
-            </div>
-
-            <div id="cart-items" class="cart-items">
-                <p class="cart-empty">No items selected.</p>
-            </div>
-
-            <div class="order-bar-actions">
-                <button onclick="sendOrderTelegram()" class="order-send-btn">
-                    📲 Order via Telegram
-                </button>
-                <button onclick="clearCart()" class="order-clear-btn">
-                    Clear
-                </button>
-            </div>
-
-            <p class="total-note">* Final quantity/weight confirmed upon delivery</p>
+    <div id="cart-panel" class="cart-panel">
+        <div class="cart-panel-header">
+            <span class="total-label" id="order-bar-label">📋 Your Order</span>
+            <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
         </div>
+
+        <div id="cart-items" class="cart-items">
+            <p class="cart-empty">No items selected.</p>
+        </div>
+
+        <div class="order-bar-actions">
+            <button onclick="sendOrderTelegram()" class="order-send-btn">
+                <span id="order-btn-text">📲 Order via Telegram</span>
+            </button>
+            <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">
+                Clear
+            </button>
+        </div>
+
+        <p class="total-note" id="order-bar-note">* Final quantity/weight confirmed upon delivery</p>
     </div>
+</div>
 </nav>
 
     <!-- 検索 -->
