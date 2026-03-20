@@ -479,12 +479,14 @@ function changeCartQty(variantId, delta) {
         delete cart[variantId];
     }
 
+     if (delta > 0) {
+    document.getElementById('cart-panel')?.classList.add('show');
+}
+ 
     applyFilters();
     renderCart();
 
-    if (delta > 0) {
-    document.getElementById('cart-panel')?.classList.add('show');
-}
+   
 
 
     
