@@ -481,6 +481,13 @@ function changeCartQty(variantId, delta) {
 
     applyFilters();
     renderCart();
+
+    if (delta > 0) {
+    document.getElementById('cart-panel')?.classList.add('show');
+}
+
+
+    
 }
 
 function clearCart() {
