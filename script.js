@@ -496,6 +496,7 @@ function clearCart() {
     cart = {};
     applyFilters();
     renderCart();
+    closeCartPanel();
 }
 
 function renderCart() {
