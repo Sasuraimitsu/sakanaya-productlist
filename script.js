@@ -511,7 +511,13 @@ function closeCartPanel() {
     panel.classList.remove('show');
 }
 
+function updateCartBadge() {
+    const badge = document.getElementById('cart-count-badge');
+    if (!badge) return;
 
+    const totalCount = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+    badge.textContent = totalCount;
+}
 
 function renderCart() {
     const t = UI_TEXT[currentLang];
