@@ -995,6 +995,9 @@ header {
     .total-bar {
         width: 100%;
         max-width: none;
+        right: 0;
+        left: 0;
+        transform: none;
         border-radius: 16px 16px 0 0;
         padding: 14px 14px 12px;
     }
@@ -1005,9 +1008,10 @@ header {
 
     .inquiry-floating-btn {
         right: 12px;
-        bottom: 96px;
+        bottom: 150px;
         font-size: 0.82rem;
         padding: 10px 14px;
+        z-index: 1300;
     }
 }
 
