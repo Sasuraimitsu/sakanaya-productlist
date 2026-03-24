@@ -1294,3 +1294,17 @@ header {
   color: #333;
   min-height: 40px;
 }
+
+.order-summary-box {
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px dashed #bbb;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  min-height: 40px;
+  max-height: 180px;
+  overflow-y: auto;
+}
