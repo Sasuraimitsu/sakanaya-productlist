@@ -162,7 +162,9 @@
         <img class="modal-content" id="modal-img" alt="Product Image">
     </div>
        
-    <script src="script.js">
+   <script src="script.js"></script>
+
+<script>
 
 // ←ここに全部貼る
 
@@ -204,16 +206,6 @@ function showRepeatOrderForm() {
 }
 
 async function submitFirstOrder() {
-  const storeName = document.getElementById('first-store-name').value.trim();
-  const contactName = document.getElementById('first-contact-name').value.trim();
-  const phone = document.getElementById('first-phone').value.trim();
-  const summary = getCartSummary();
-
-  if (!storeName || !contactName || !phone || !summary) {
-    alert('Please fill in all fields.');
-    return;
-  }
-
   alert('初回登録はTelegram Botで /start を行ってください。');
 }
 
@@ -250,7 +242,7 @@ async function submitRepeatOrder() {
     alert('通信エラー');
   }
 }
-        
-    </script>
+
+</script>
 </body>
 </html>
