@@ -1304,7 +1304,10 @@ header {
   border-radius: 8px;
   background: #fff;
   color: #333;
-  min-height: 40px;
+
+  /* 👇これが今回のポイント */
   max-height: 180px;
   overflow-y: auto;
+
+  margin-bottom: 10px;
 }
