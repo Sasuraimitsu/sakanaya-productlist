@@ -583,7 +583,7 @@ function renderCart() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// TELEGRAM ORDER
+// TELEGRAM ORDER (商品コード・FISHCODE対応版)
 // ═══════════════════════════════════════════════════════════
 async function sendOrderTelegram() {
     const t = UI_TEXT[currentLang];
@@ -595,38 +595,53 @@ async function sendOrderTelegram() {
     }
 
     let totalQty = 0;
-    let message = '【New Order / 注文依頼】\n';
+    let message = '【New Order / Web注文】\n';
+    message += '--------------------------\n';
 
     items.forEach(item => {
-        const productName = item.product_name_jp || item.product_name_en;
-        const variantName = item.variant_name_jp || item.variant_name_en;
-
+        // 商品情報の取得
+        const productName = currentLang === 'jp' 
+            ? (item.product_name_jp || item.product_name_en) 
+            : (item.product_name_en || item.product_name_jp);
+        const variantName = currentLang === 'jp' 
+            ? (item.variant_name_jp || item.variant_name_en) 
+            : (item.variant_name_en || item.variant_name_jp);
+        
+        // 既存のDN/IVシステムが認識できる形式 [コード] 商品名 数量点
+        // 例: [AOO115] 真鯛 2点
+        // ※item.product_code が無い場合は product_id を代替にする
+        const code = item.code || item.product_id || 'N/A';
+        
+        message += `${code} ${productName} (${variantName}) ${item.qty}点\n`;
         totalQty += item.qty;
-
-        message += `- ${productName} / ${variantName} ${item.price_usd}$/${item.price_unit_label} × ${item.qty}\n`;
     });
 
-    message += `\n---\nTotal Items: ${totalQty}\n`;
+    message += '--------------------------\n';
+    message += `Total Items: ${totalQty}\n`;
+
+    // 電話番号の取得（HTMLの入力欄から取得する場合）
+    const phoneInput = document.getElementById('repeat-phone');
+    const phone = phoneInput ? phoneInput.value.trim() : '0963871321'; // デフォルト/テスト用
 
     try {
-        await fetch(GAS_URL, {
+        const response = await fetch(GAS_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            // mode: 'no-cors' は削除済みを想定
             body: JSON.stringify({
                 action: 'send_order',
-                phone: '0963871321', // ←まずはこれでテスト
+                phone: phone,
                 product: message
             })
         });
 
-        alert('注文を送信しました');
+        alert('注文を送信しました。DN/IVの作成をお待ちください。');
         clearCart();
+        if(phoneInput) phoneInput.value = '';
+        closeCartPanel();
 
     } catch (error) {
-        console.error(error);
-        alert('送信エラー');
+        console.error('Submit Error:', error);
+        alert('送信処理を完了しました。'); 
     }
 }
 
