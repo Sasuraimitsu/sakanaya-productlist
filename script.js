@@ -603,6 +603,10 @@ async function sendOrderTelegram() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
 
+    // ★ 修正箇所1: 備考欄の入力内容を取得する
+    const notesInput = document.getElementById('cart-notes');
+    const notes = notesInput ? notesInput.value.trim() : "";
+
     if (items.length === 0) {
         alert(t.selectItems);
         return;
@@ -613,7 +617,6 @@ async function sendOrderTelegram() {
     message += '--------------------------\n';
 
     items.forEach(item => {
-        // 商品情報の取得
         const productName = currentLang === 'jp' 
             ? (item.product_name_jp || item.product_name_en) 
             : (item.product_name_en || item.product_name_jp);
@@ -621,9 +624,6 @@ async function sendOrderTelegram() {
             ? (item.variant_name_jp || item.variant_name_en) 
             : (item.variant_name_en || item.variant_name_jp);
         
-        // 既存のDN/IVシステムが認識できる形式 [コード] 商品名 数量点
-        // 例: [AOO115] 真鯛 2点
-        // ※item.product_code が無い場合は product_id を代替にする
         const code = item.code || item.product_id || 'N/A';
         
         message += `${code} ${productName} (${variantName}) ${item.qty}点\n`;
@@ -631,16 +631,21 @@ async function sendOrderTelegram() {
     });
 
     message += '--------------------------\n';
+
+    // ★ 修正箇所2: 備考がある場合のみ、メッセージに付け加える
+    if (notes) {
+        message += `📝 Notes:\n${notes}\n`;
+        message += '--------------------------\n';
+    }
+
     message += `Total Items: ${totalQty}\n`;
 
-    // 電話番号の取得（HTMLの入力欄から取得する場合）
     const phoneInput = document.getElementById('repeat-phone');
-    const phone = phoneInput ? phoneInput.value.trim() : '0963871321'; // デフォルト/テスト用
+    const phone = phoneInput ? phoneInput.value.trim() : '0963871321';
 
     try {
         const response = await fetch(GAS_URL, {
             method: 'POST',
-            // mode: 'no-cors' は削除済みを想定
             body: JSON.stringify({
                 action: 'send_order',
                 phone: phone,
@@ -649,6 +654,10 @@ async function sendOrderTelegram() {
         });
 
         alert('注文を送信しました。DN/IVの作成をお待ちください。');
+        
+        // ★ 修正箇所3: 送信が成功したら備考欄を空にする
+        if (notesInput) notesInput.value = '';
+        
         clearCart();
         if(phoneInput) phoneInput.value = '';
         closeCartPanel();
@@ -658,7 +667,6 @@ async function sendOrderTelegram() {
         alert('送信処理を完了しました。'); 
     }
 }
-
 // ═══════════════════════════════════════════════════════════
 // IMAGE MODAL
 // ═══════════════════════════════════════════════════════════
