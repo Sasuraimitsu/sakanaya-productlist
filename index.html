@@ -219,10 +219,12 @@ async function submitRepeatOrder() {
   }
 
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwkQ3iur0HsRPLNTvGqcji46qjXbnhu7_S15zXztohuGH8DRCwiAusCbjipYimsMiso/exec', {
+    await fetch('https://script.google.com/macros/s/AKfycbwkQ3iur0HsRPLNTvGqcji46qjXbnhu7_S15zXztohuGH8DRCwiAusCbjipYimsMiso/exec', {
       method: 'POST',
-      mode: 'no-cors', // 👈 これ追加
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         action: 'send_order',
         phone: phone,
@@ -230,16 +232,11 @@ async function submitRepeatOrder() {
       })
     });
 
-    const result = await response.json();
+    alert('注文を送信しました');
+    clearCart();
 
-    if (result.status === 'ok') {
-      alert('注文を送信しました');
-      clearCart();
-      document.getElementById('repeat-phone').value = '';
-      document.getElementById('repeat-order-form').style.display = 'none';
-    } else {
-      alert('電話番号未登録です');
-    }
+    document.getElementById('repeat-phone').value = '';
+    document.getElementById('repeat-order-form').style.display = 'none';
 
   } catch (e) {
     console.error(e);
