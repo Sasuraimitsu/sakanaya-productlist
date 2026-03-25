@@ -51,6 +51,8 @@ const UI_TEXT = {
         floatingInquiry: '💬 お問い合わせ',
         weightCalc: '重量計算',
         qtyCalc: '数量計算'
+        labelNotes: '備考 (アレルギー、配送希望など)',
+        notesPlaceholder: 'ご要望があれば入力してください',
     },
 
     en: {
@@ -87,6 +89,8 @@ const UI_TEXT = {
         floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
         qtyCalc: 'Quantity'
+    　　labelNotes: 'Notes (Allergies, Delivery, etc.)',
+        notesPlaceholder: 'Enter any special requests here',
     }
 };
 
