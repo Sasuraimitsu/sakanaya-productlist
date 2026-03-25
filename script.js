@@ -217,6 +217,12 @@ function setLang(lang) {
 
     applyFilters();
     renderCart();
+
+    const t = UI_TEXT[lang];
+    const labelNotes = document.getElementById('label-notes');
+    const cartNotes = document.getElementById('cart-notes');
+    if (labelNotes) labelNotes.textContent = t.labelNotes;
+    if (cartNotes) cartNotes.placeholder = t.notesPlaceholder;
 }
 
 // ═══════════════════════════════════════════════════════════
