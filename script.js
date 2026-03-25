@@ -485,6 +485,10 @@ function changeCartQty(variantId, delta) {
         cart[variantId] = {
             variant_id: variant.variant_id,
             product_id: product.product_id,
+            
+            // ★ここに挿入：DN/IVシステムが解析に使うコードを保存します
+            code: product.code || "", 
+
             product_name_jp: product.name_jp || '',
             product_name_en: product.name_en || '',
             variant_name_jp: variant.variant_name_jp || '',
