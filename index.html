@@ -209,38 +209,76 @@ async function submitFirstOrder() {
 }
 
 async function submitRepeatOrder() {
-  const phone = document.getElementById('repeat-phone').value.trim();
-  const summary = getCartSummary();
+    const phoneInput = document.getElementById('repeat-phone');
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const notesInput = document.getElementById('cart-notes');
+    const notes = notesInput ? notesInput.value.trim() : "";
+    
+    // カートの中身をテキスト形式で取得
+    const items = Object.values(cart);
 
-  if (!phone || !summary) {
-    alert('Please enter your phone number.');
-    return;
-  }
+    if (!phone) {
+        alert('Please enter your phone number.');
+        return;
+    }
+    if (items.length === 0) {
+        alert('Please select products first.');
+        return;
+    }
 
-  try {
-    await fetch('https://script.google.com/macros/s/AKfycbyZf1wIg5gaKkLN1Fyyj0vVckSrlfWFoTpbohpOAVmw0LgsckkqZ_Yk31ueCtaUhq99/exec', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        action: 'send_order',
-        phone: phone,
-        product: summary
-      })
+    // --- メッセージの組み立て (DN/IVシステム対応形式) ---
+    let totalQty = 0;
+    let message = '【New Order / Web注文(リピート)】\n';
+    message += '--------------------------\n';
+
+    items.forEach(item => {
+        const productName = currentLang === 'jp' 
+            ? (item.product_name_jp || item.product_name_en) 
+            : (item.product_name_en || item.product_name_jp);
+        const variantName = currentLang === 'jp' 
+            ? (item.variant_name_jp || item.variant_name_en) 
+            : (item.variant_name_en || item.variant_name_jp);
+        
+        const code = item.code || item.product_id || 'N/A';
+        
+        message += `${code} ${productName} (${variantName}) ${item.qty}点\n`;
+        totalQty += item.qty;
     });
 
-    alert('注文受付を送信しました。Telegramをご確認ください。');
-    clearCart();
+    message += '--------------------------\n';
 
-    document.getElementById('repeat-phone').value = '';
-    document.getElementById('repeat-order-form').style.display = 'none';
+    // 備考がある場合のみ追加
+    if (notes) {
+        message += `📝 Notes:\n${notes}\n`;
+        message += '--------------------------\n';
+    }
 
-  } catch (e) {
-    console.error(e);
-    alert('通信エラー');
-  }
+    message += `Total Items: ${totalQty}\n`;
+
+    try {
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'send_order',
+                phone: phone,
+                product: message
+            })
+        });
+
+        alert('注文受付を送信しました。Telegramをご確認ください。');
+        
+        // 入力欄とカートをリセット
+        if (notesInput) notesInput.value = '';
+        if (phoneInput) phoneInput.value = '';
+        clearCart();
+        
+        document.getElementById('repeat-order-form').style.display = 'none';
+        closeCartPanel();
+
+    } catch (e) {
+        console.error(e);
+        alert('通信エラーが発生しました。');
+    }
 }
 
 </script>
