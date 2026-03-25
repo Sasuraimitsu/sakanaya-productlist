@@ -598,13 +598,8 @@ async function sendOrderTelegram() {
     let message = '【New Order / 注文依頼】\n';
 
     items.forEach(item => {
-        const productName = item.product_name_jp && item.product_name_en && item.product_name_jp !== item.product_name_en
-            ? `${item.product_name_jp} / ${item.product_name_en}`
-            : item.product_name_jp || item.product_name_en;
-
-        const variantName = item.variant_name_jp && item.variant_name_en && item.variant_name_jp !== item.variant_name_en
-            ? `${item.variant_name_jp} / ${item.variant_name_en}`
-            : item.variant_name_jp || item.variant_name_en;
+        const productName = item.product_name_jp || item.product_name_en;
+        const variantName = item.variant_name_jp || item.variant_name_en;
 
         totalQty += item.qty;
 
@@ -612,34 +607,29 @@ async function sendOrderTelegram() {
     });
 
     message += `\n---\nTotal Items: ${totalQty}\n`;
-    message += '\n※ Final quantity/weight confirmed upon delivery.';
 
     try {
-        const res = await fetch(TELEGRAM_API_URL, {
+        await fetch(GAS_URL, {
             method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                chatId: '771075691',
-                product: message,
-                quantity: totalQty,
-                name: '注文ユーザー'
+                action: 'send_order',
+                phone: '0963871321', // ←まずはこれでテスト
+                product: message
             })
         });
 
-        if (!res.ok) {
-            throw new Error('Failed to send order');
-        }
-
-        alert(t.orderSent);
+        alert('注文を送信しました');
         clearCart();
+
     } catch (error) {
         console.error(error);
-        alert(t.orderFailed);
+        alert('送信エラー');
     }
 }
-
 
 // ═══════════════════════════════════════════════════════════
 // IMAGE MODAL
