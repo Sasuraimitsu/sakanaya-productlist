@@ -1117,6 +1117,9 @@ header {
 
     display: none; /* 初期非表示 */
     padding: 16px;
+    max-height: 80vh; 
+    display: flex;
+    flex-direction: column;
 }
 
 /* 開いた状態 */
