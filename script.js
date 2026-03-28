@@ -18,6 +18,8 @@ let cart = {};
 // ═══════════════════════════════════════════════════════════
 const UI_TEXT = {
     jp: {
+        firstOrder: "初めての方 / Only First Order",
+        repeatOrder: "2回目以降のご注文 / Order",
         searchPlaceholder: '商品名で検索...',
         cat_all: 'すべて',
         cat_frozen: '冷凍',
@@ -56,6 +58,8 @@ const UI_TEXT = {
         notesPlaceholder: 'ご要望があれば入力してください'
     },
     en: {
+        firstOrder: "First Time Customer",
+        repeatOrder: "Repeat Customer / Order",        
         searchPlaceholder: 'Search product name...',
         cat_all: 'ALL',
         cat_frozen: 'FROZEN',
