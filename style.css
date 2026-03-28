@@ -1215,11 +1215,6 @@ header {
         font-size: 0.8rem;
     }
 
-    .cart-items {
-        max-height: 200px;
-    }
-}
-
 .telegram-order-form {
   display: flex;
   flex-direction: column;
