@@ -156,6 +156,20 @@ function setLang(lang) {
     if (document.getElementById('recommend-title')) document.getElementById('recommend-title').textContent = t.recommendTitle;
     if (document.getElementById('inquiry-floating-btn')) document.getElementById('inquiry-floating-btn').textContent = t.floatingInquiry;
 
+    // --- ここから追加：注文ボタンとフォームの翻訳 ---
+    const btnFirst = document.getElementById('btn-first-order'); // HTMLにidを振る必要があります
+    const btnRepeat = document.getElementById('btn-repeat-order');
+
+    if (btnFirst) btnFirst.textContent = t.btnFirstOrder;
+    if (btnRepeat) btnRepeat.textContent = t.btnRepeatOrder;
+
+    // フォーム内の店名・名前・電話番号のプレースホルダーも翻訳する場合
+    if (document.getElementById('first-store-name')) document.getElementById('first-store-name').placeholder = t.placeholderStore;
+    if (document.getElementById('first-contact-name')) document.getElementById('first-contact-name').placeholder = t.placeholderName;
+    if (document.getElementById('first-phone')) document.getElementById('first-phone').placeholder = t.placeholderPhone;
+    if (document.getElementById('repeat-phone')) document.getElementById('repeat-phone').placeholder = t.placeholderPhone;
+    // --- ここまで追加 ---
+
     applyFilters();
     renderCart();
 
