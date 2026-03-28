@@ -58,7 +58,7 @@ const UI_TEXT = {
         btnRepeatOrder: "2回目以降のご注文",
         placeholderStore: "店名",
         placeholderName: "担当者名",
-        placeholderPhone: "電話番号",
+        placeholderPhone: "電話番号"
     },
     en: {     
         searchPlaceholder: 'Search product name...',
@@ -101,7 +101,7 @@ const UI_TEXT = {
         btnRepeatOrder: "Repeat Order",
         placeholderStore: "Store Name",
         placeholderName: "Contact Name",
-        placeholderPhone: "Phone Number",
+        placeholderPhone: "Phone Number"
     }
 };
 
