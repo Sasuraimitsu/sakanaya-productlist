@@ -345,7 +345,11 @@ async function sendOrderTelegram() {
     msg += `Total Items: ${items.reduce((s,i)=>s+i.qty,0)}\n`;
 
     const pi = document.getElementById('repeat-phone');
-    const phone = pi ? pi.value.trim() : '0963871321';
+    const phone = pi ? pi.value.trim() : "";
+if (!phone) { 
+    alert('電話番号を入力してください。'); 
+    return; // 番号がない場合は送信を中断する
+}
 
     try {
         await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', phone, product: msg }) });
