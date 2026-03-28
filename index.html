@@ -214,7 +214,7 @@ async function submitFirstOrder() {
   
   if (confirm(message)) {
     // 公式アプリを直接起動し、あなたのボットのチャット画面を開くリンク
-    window.location.href = `https://t.me/${botUsername}?start=ordered`;
+    window.open(`https://t.me/${botUsername}?start=ordered`, '_blank');
   }
 }
 
