@@ -50,7 +50,7 @@ const UI_TEXT = {
         variantGuideDefault: '種類をお選びください',
         floatingInquiry: '💬 お問い合わせ',
         weightCalc: '重量計算',
-        qtyCalc: '数量計算'
+        qtyCalc: '数量計算',
         labelNotes: '備考 (アレルギー、配送希望など)',
         notesPlaceholder: 'ご要望があれば入力してください',
     },
@@ -88,7 +88,7 @@ const UI_TEXT = {
         variantGuideDefault: 'Please select a type',
         floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
-        qtyCalc: 'Quantity'
+        qtyCalc: 'Quantity',
     　　labelNotes: 'Notes (Allergies, Delivery, etc.)',
         notesPlaceholder: 'Enter any special requests here',
     }
@@ -218,7 +218,6 @@ function setLang(lang) {
     applyFilters();
     renderCart();
 
-    const t = UI_TEXT[lang];
     const labelNotes = document.getElementById('label-notes');
     const cartNotes = document.getElementById('cart-notes');
     if (labelNotes) labelNotes.textContent = t.labelNotes;
