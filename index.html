@@ -25,93 +25,71 @@
         </div>
     </header>
 
-    <!-- 言語切り替え -->
     <div class="lang-bar">
         <button id="lang-jp" class="lang-btn" onclick="setLang('jp')">🇯🇵 日本語</button>
         <button id="lang-en" class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
     </div>
 
-    <!-- カテゴリ -->
     <nav class="category-nav">
-    <button id="cat-all" class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
-    <button id="cat-frozen" class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
-    <button id="cat-whole" class="nav-btn" onclick="filterCategory('FRESH-WHOLE', this)">FRESH WHOLE</button>
-    <button id="cat-dr" class="nav-btn" onclick="filterCategory('FRESH-SD/DR', this)">FRESH SD/DR</button>
-    <button id="cat-fillet" class="nav-btn" onclick="filterCategory('FRESH-FILLET', this)">FRESH FILLET</button>
-    <button class="nav-btn" id="cat-vege" onclick="filterCategory('VEGE', this)">VEGETABLE</button>    
-    <button id="cat-oil" class="nav-btn" onclick="filterCategory('OIL&SEASONING', this)">OIL &amp; SEASONING</button>
-    <button class="nav-btn" id="cat-kitchen" onclick="filterCategory('KITCHEN', this)">KITCHEN SUPPLIES</button>
-    <button id="cat-sake" class="nav-btn nav-btn-sake" onclick="filterCategory('SAKE', this)">SAKE</button>
+        <button id="cat-all" class="nav-btn active" onclick="filterCategory('ALL', this)">ALL</button>
+        <button id="cat-frozen" class="nav-btn" onclick="filterCategory('FROZEN', this)">FROZEN</button>
+        <button id="cat-whole" class="nav-btn" onclick="filterCategory('FRESH-WHOLE', this)">FRESH WHOLE</button>
+        <button id="cat-dr" class="nav-btn" onclick="filterCategory('FRESH-SD/DR', this)">FRESH SD/DR</button>
+        <button id="cat-fillet" class="nav-btn" onclick="filterCategory('FRESH-FILLET', this)">FRESH FILLET</button>
+        <button class="nav-btn" id="cat-vege" onclick="filterCategory('VEGE', this)">VEGETABLE</button>    
+        <button id="cat-oil" class="nav-btn" onclick="filterCategory('OIL&SEASONING', this)">OIL & SEASONING</button>
+        <button class="nav-btn" id="cat-kitchen" onclick="filterCategory('KITCHEN', this)">KITCHEN SUPPLIES</button>
+        <button id="cat-sake" class="nav-btn nav-btn-sake" onclick="filterCategory('SAKE', this)">SAKE</button>
+
         <div class="cart-wrapper">
-    <button id="cart-toggle-btn" class="cart-toggle-btn" onclick="toggleCartPanel()">
-        🛒 <span id="cart-count-badge" class="cart-count-badge">0</span>
-    </button>
+            <button id="cart-toggle-btn" class="cart-toggle-btn" onclick="toggleCartPanel()">
+                🛒 <span id="cart-count-badge" class="cart-count-badge">0</span>
+            </button>
 
-    <div id="cart-panel" class="cart-panel">
-        <div class="cart-panel-header">
-            <span class="total-label" id="order-bar-label">📋 Your Order</span>
-            <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
+            <div id="cart-panel" class="cart-panel">
+                <div class="cart-panel-header">
+                    <span class="total-label" id="order-bar-label">📋 Your Order</span>
+                    <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
+                </div>
+
+                <div id="cart-items" class="cart-items">
+                    <p class="cart-empty">No items selected.</p>
+                </div>
+
+                <div class="cart-notes-wrapper" style="padding: 10px 15px; border-top: 1px solid #eee;">
+                    <label id="label-notes" style="display: block; font-size: 12px; color: #888; margin-bottom: 5px; font-weight: bold;"></label>
+                    <textarea id="cart-notes" class="order-input" style="width: 100%; height: 50px; resize: none; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; padding: 8px; box-sizing: border-box;" placeholder=""></textarea>
+                </div>
+
+                <div class="order-bar-actions">
+                    <button onclick="showFirstOrderForm()" class="order-send-btn">初めての方 / Only First Order</button>
+                    <button onclick="showRepeatOrderForm()" class="order-send-btn">2回目以降のご注文 / Order</button>
+                    <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">Clear</button>
+                </div>
+
+                <div id="first-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
+                    <h4>初めての方 / First Order</h4>
+                    <input id="first-store-name" type="text" placeholder="Store Name / 店名" class="order-input">
+                    <input id="first-contact-name" type="text" placeholder="Contact Name / 担当者名" class="order-input">
+                    <input id="first-phone" type="text" placeholder="Phone Number / 電話番号" class="order-input">
+                    <button onclick="submitFirstOrder()" class="order-send-btn" style="margin-top:10px;">登録案内を受け取る / Get Registration Guide</button>
+                </div>
+
+                <div id="repeat-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
+                    <h4>2回目以降のご注文 / Order</h4>
+                    <input id="repeat-phone" type="text" placeholder="Phone Number / 電話番号" class="order-input">
+                    <button onclick="submitRepeatOrder()" class="order-send-btn" style="margin-top:10px;">Telegramで注文する / Send Order via Telegram</button>
+                </div>
+
+                <p class="total-note" id="order-bar-note">* Final quantity/weight confirmed upon delivery</p>
+            </div>
         </div>
+    </nav>
 
-        <div id="cart-items" class="cart-items">
-            <p class="cart-empty">No items selected.</p>
-        </div>
-
-        <div class="cart-notes-wrapper" style="padding: 10px 15px; border-top: 1px solid #eee;">
-    <label id="label-notes" style="display: block; font-size: 12px; color: #888; margin-bottom: 5px; font-weight: bold;"></label>
-    <textarea id="cart-notes" class="order-input" style="width: 100%; height: 50px; resize: none; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; padding: 8px; box-sizing: border-box;" placeholder=""></textarea>
-</div>
-
-        <div class="order-bar-actions">
-    <button onclick="showFirstOrderForm()" class="order-send-btn">
-        初めての方 / Only First Order
-    </button>
-
-    <button onclick="showRepeatOrderForm()" class="order-send-btn">
-        2回目以降のご注文 / Order
-    </button>
-
-    <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">
-        Clear
-    </button>
-</div>
-
-<div id="first-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
-    <h4>初めての方 / First Order</h4>
-    <input id="first-store-name" type="text" placeholder="Store Name / 店名" class="order-input">
-    <input id="first-contact-name" type="text" placeholder="Contact Name / 担当者名" class="order-input">
-    <input id="first-phone" type="text" placeholder="Phone Number / 電話番号" class="order-input">
-
-    <button onclick="submitFirstOrder()" class="order-send-btn" style="margin-top:10px;">
-        登録案内を受け取る / Get Registration Guide
-    </button>
-</div>
-
-<div id="repeat-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
-    <h4>2回目以降のご注文 / Order</h4>
-    <input id="repeat-phone" type="text" placeholder="Phone Number / 電話番号" class="order-input">
-
-    <button onclick="submitRepeatOrder()" class="order-send-btn" style="margin-top:10px;">
-        Telegramで注文する / Send Order via Telegram
-    </button>
-</div>
-
-        <p class="total-note" id="order-bar-note">* Final quantity/weight confirmed upon delivery</p>
-    </div>
-</div>
-</nav>
-
-    <!-- 検索 -->
     <div class="search-area">
-        <input
-            type="text"
-            id="search-input"
-            placeholder="Search product name..."
-            onkeyup="applyFilters()"
-        >
+        <input type="text" id="search-input" placeholder="Search product name..." onkeyup="applyFilters()">
     </div>
 
-    <!-- お知らせ -->
     <div class="notice-area">
         <details class="notice-box">
             <summary id="notice-summary-text">【 NOTICE 】 Click to view details</summary>
@@ -121,176 +99,32 @@
         </details>
     </div>
 
-    <!-- おすすめ -->
     <section id="recommend-section" class="recommend-section hidden">
-        <div class="section-header">
-            <h3 id="recommend-title">🔥 Today's Recommendation</h3>
-        </div>
+        <div class="section-header"><h3 id="recommend-title">🔥 Today's Recommendation</h3></div>
         <div id="recommend-container" class="container recommend-container"></div>
     </section>
 
-    <!-- 通常商品 -->
     <section class="product-section">
         <div id="product-container" class="container"></div>
     </section>
 
-    <!-- 地図 -->
     <section class="map-section">
-    <h3>STORE LOCATION</h3>
-    <div class="map-container">
-        <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.8200651872694!2d104.92023017318286!3d11.564753444162296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951653c292489%3A0x20508e114c68ae7c!2z4Z6g4Z624Z6E4Z6P4Z-S4Z6a4Z644Z6H4Z6U4Z-J4Z674Z6T4oCLIFNha2FuYXlh4oCLIOKAi0phcG9u!5e0!3m2!1sja!2sjp!4v1774444906354!5m2!1sja!2sjp" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
-            width="100%" 
-            height="400" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-    </div>
-</section>
+        <h3>STORE LOCATION</h3>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=...（実際の地図URL）" 
+                width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </section>
 
-    <!-- 固定問い合わせボタン -->
-    <a
-        id="inquiry-floating-btn"
-        class="inquiry-floating-btn"
-        href="https://t.me/SAKANAYAJAPON"
-        target="_blank"
-    >
-        💬 Inquiry
-    </a>
+    <a id="inquiry-floating-btn" class="inquiry-floating-btn" href="https://t.me/SAKANAYAJAPON" target="_blank">💬 Inquiry</a>
 
-    <!-- 画像モーダル -->
     <div id="image-modal" class="modal" onclick="closeModal()">
         <span class="close-btn">×</span>
         <img class="modal-content" id="modal-img" alt="Product Image">
     </div>
-       
-   <script src="script.js"></script>
 
-<script>
-
-// ←ここに全部貼る
-
-function getCartSummary() {
-  const cartItemsContainer = document.getElementById('cart-items');
-  const text = cartItemsContainer ? cartItemsContainer.innerText.trim() : '';
-
-  if (!text || text.includes('No items selected.')) {
-    return '';
-  }
-
-  return text;
-}
-
-function showFirstOrderForm() {
-  const summary = getCartSummary();
-
-  if (!summary) {
-    alert('Please select products first.');
-    return;
-  }
-
-  document.getElementById('first-order-form').style.display = 'block';
-  document.getElementById('repeat-order-form').style.display = 'none';
-}
-
-function showRepeatOrderForm() {
-  const summary = getCartSummary();
-
-  if (!summary) {
-    alert('Please select products first.');
-    return;
-  }
-
-  document.getElementById('repeat-order-form').style.display = 'block';
-  document.getElementById('first-order-form').style.display = 'none';
-}
-
-async function submitFirstOrder() {
-  const botUsername = "sakanaya_bot"; // ★ここを実際のボット名（例: sakanaya_bot）に変えてください
-  
-  const message = "初めてのご利用ありがとうございます！\n\n注文を確定するために、今から開くTelegram画面で「開始 (START)」ボタンを一度だけ押してください。\n\n今すぐTelegramを開きますか？";
-  
-  if (confirm(message)) {
-    // 公式アプリを直接起動し、あなたのボットのチャット画面を開くリンク
-    window.open(`https://t.me/${botUsername}?start=ordered`, '_blank');
-  }
-}
-
-async function submitRepeatOrder() {
-    const phoneInput = document.getElementById('repeat-phone');
-    const phone = phoneInput ? phoneInput.value.trim() : "";
-    const notesInput = document.getElementById('cart-notes');
-    const notes = notesInput ? notesInput.value.trim() : "";
-    
-    // カートの中身をテキスト形式で取得
-    const items = Object.values(cart);
-
-    if (!phone) {
-        alert('Please enter your phone number.');
-        return;
-    }
-    if (items.length === 0) {
-        alert('Please select products first.');
-        return;
-    }
-
-    // --- メッセージの組み立て (DN/IVシステム対応形式) ---
-    let totalQty = 0;
-    let message = '【New Order / Web注文(リピート)】\n';
-    message += '--------------------------\n';
-
-    items.forEach(item => {
-        const productName = currentLang === 'jp' 
-            ? (item.product_name_jp || item.product_name_en) 
-            : (item.product_name_en || item.product_name_jp);
-        const variantName = currentLang === 'jp' 
-            ? (item.variant_name_jp || item.variant_name_en) 
-            : (item.variant_name_en || item.variant_name_jp);
-        
-        const code = item.code || item.product_id || 'N/A';
-        
-        message += `${code} ${productName} (${variantName}) ${item.qty}点\n`;
-        totalQty += item.qty;
-    });
-
-    message += '--------------------------\n';
-
-    // 備考がある場合のみ追加
-    if (notes) {
-        message += `📝 Notes:\n${notes}\n`;
-        message += '--------------------------\n';
-    }
-
-    message += `Total Items: ${totalQty}\n`;
-
-    try {
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'send_order',
-                phone: phone,
-                product: message
-            })
-        });
-
-        alert('注文受付を送信しました。Telegramをご確認ください。');
-        
-        // 入力欄とカートをリセット
-        if (notesInput) notesInput.value = '';
-        if (phoneInput) phoneInput.value = '';
-        clearCart();
-        
-        document.getElementById('repeat-order-form').style.display = 'none';
-        closeCartPanel();
-
-    } catch (e) {
-        console.error(e);
-        alert('通信エラーが発生しました。');
-    }
-}
-
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
