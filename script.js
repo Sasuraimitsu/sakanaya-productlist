@@ -96,7 +96,7 @@ const UI_TEXT = {
         weightCalc: 'Weight',
         qtyCalc: 'Quantity',
         labelNotes: 'Notes (Allergies, Delivery, etc.)',
-        notesPlaceholder: 'Enter any special requests here'
+        notesPlaceholder: 'Enter any special requests here',
         btnFirstOrder: "First Time Customer",
         btnRepeatOrder: "Repeat Order",
         placeholderStore: "Store Name",
