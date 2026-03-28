@@ -544,3 +544,13 @@ window.addEventListener('load', () => {
         }
     }, 500); 
 });
+
+// カートパネルを閉じる関数
+function closeCartPanel() {
+    const cartPanel = document.getElementById('cart-panel');
+    if (cartPanel) {
+        cartPanel.classList.remove('active'); // CSSで .active で表示を制御している場合
+        // もし style.display で制御している場合はこちら↓
+        // cartPanel.style.display = 'none';
+    }
+}
