@@ -208,7 +208,17 @@ function showRepeatOrderForm() {
 }
 
 async function submitFirstOrder() {
-  alert('初回登録はTelegram Botで /start を行ってください。');
+  // 1. お客様に分かりやすい言葉で説明する
+  const message = "初めてのご利用ありがとうございます！\n\n注文を確定するには、当店の公式Telegramで「開始(START)」ボタンを押して登録を完了させてください。\n\n今すぐTelegramを開きますか？";
+  
+  // 2. 「OK」を押した時だけTelegramへ飛ばす
+  if (confirm(message)) {
+    // あなたのBotのユーザー名（@を除いたもの）に書き換えてください
+    const botUsername = "あなたのボット名_bot"; 
+    
+    // Telegramアプリを起動し、自動で/startを促すリンク
+    window.location.href = `https://t.me/${botUsername}?start=ordered`;
+  }
 }
 
 async function submitRepeatOrder() {
