@@ -417,11 +417,58 @@ function showRepeatOrderForm() {
 
 // 初めての方：Telegram登録案内（別タブ版）
 async function submitFirstOrder() {
-    const botUsername = "sakanaya_bot"; // ★ご自身のボット名に書き換えてください
-    const message = "初めてのご利用ありがとうございます！\n\n注文を確定するために、別画面で開くTelegramで「開始 (START)」ボタンを一度だけ押してください。\n\nTelegramを別タブで開きますか？";
+    // 1. 入力内容を取得
+    const storeName = document.getElementById('first-store-name')?.value.trim();
+    const contactName = document.getElementById('first-contact-name')?.value.trim();
+    const phone = document.getElementById('first-phone')?.value.trim();
+
+    // 2. 入力チェック（空欄があれば警告）
+    if (!storeName || !contactName || !phone) {
+        alert(currentLang === 'jp' ? "すべての項目を入力してください。" : "Please fill in all fields.");
+        return;
+    }
+
+    // 3. GASにデータを送信（Usersシートへの記録）
+    try {
+        // ボタンを一時的に無効化して連打を防止（任意）
+        const btn = document.querySelector('#first-order-form button');
+        if (btn) btn.disabled = true;
+
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: 'register_user', // GAS側で判別するアクション名
+                phone: phone,           // これが Users シートの ID になります
+                username: storeName,    // 店名
+                firstName: contactName  // 担当者名
+            })
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+    } catch (e) {
+        console.error("Registration error:", e);
+        // エラーが出てもTelegramには案内しますが、ログに記録されます
+    }
+
+    // 4. Telegramへの案内（別タブで開く）
+    const botUsername = "sakanaya_bot"; // ★ここをご自身のボット名に！
+    const message = currentLang === 'jp' 
+        ? "ご入力ありがとうございます！\n\n最後に、別画面で開くTelegramで「開始 (START)」ボタンを一度だけ押して登録を完了させてください。"
+        : "Thank you!\n\nFinally, please click the 'START' button on the Telegram screen that opens in a new tab to complete your registration.";
     
     if (confirm(message)) {
-        window.open(`https://t.me/${botUsername}?start=ordered`, '_blank');
+        // startパラメータに電話番号を付けておくと、ボット側で紐付けが楽になります
+        window.open(`https://t.me/${botUsername}?start=${phone}`, '_blank');
+        
+        // フォームを閉じてカートをクリア
+        document.getElementById('first-order-form').style.display = 'none';
+        clearCart();
+        closeCartPanel();
+    } else {
+        // キャンセルした場合はボタンを戻す
+        const btn = document.querySelector('#first-order-form button');
+        if (btn) btn.disabled = false;
     }
 }
 
