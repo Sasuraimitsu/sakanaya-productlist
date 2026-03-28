@@ -26,6 +26,8 @@ const UI_TEXT = {
         cat_fresh_fillet: 'フィレ',
         cat_oil: '食用油・調味料',
         cat_sake: '酒',
+        cat_kitchen: '厨房用品', // 追加
+        cat_vege: '野菜',        // 追加
         noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
         noticeBody: `
             <strong>JP:</strong><br>
@@ -62,6 +64,8 @@ const UI_TEXT = {
         cat_fresh_fillet: 'FILLET',
         cat_oil: 'OIL & SEASONING',
         cat_sake: 'SAKE',
+        cat_kitchen: 'KITCHEN SUPPLIES', // 追加
+        cat_vege: 'VEGETABLES',           // 追加
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
             <strong>EN:</strong><br>
@@ -135,6 +139,8 @@ function setLang(lang) {
     document.getElementById('cat-fillet').textContent = t.cat_fresh_fillet;
     document.getElementById('cat-oil').textContent = t.cat_oil;
     document.getElementById('cat-sake').textContent = t.cat_sake;
+    document.getElementById('cat-kitchen').textContent = t.cat_kitchen; // 追加
+    document.getElementById('cat-vege').textContent = t.cat_vege;       // 追加
     
     if (document.getElementById('search-input')) document.getElementById('search-input').placeholder = t.searchPlaceholder;
     if (document.getElementById('notice-summary-text')) document.getElementById('notice-summary-text').textContent = t.noticeTitle;
