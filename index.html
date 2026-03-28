@@ -62,10 +62,16 @@
                 </div>
 
                 <div class="order-bar-actions">
-                    <button onclick="showFirstOrderForm()" class="order-send-btn">初めての方 / Only First Order</button>
-                    <button onclick="showRepeatOrderForm()" class="order-send-btn">2回目以降のご注文 / Order</button>
-                    <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">Clear</button>
-                </div>
+    　          <button onclick="showFirstOrderForm()" class="order-send-btn" id="btn-first-order">
+                </button>
+
+                <button onclick="showRepeatOrderForm()" class="order-send-btn" id="btn-repeat-order">
+                </button>
+
+               <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn">
+               Clear
+               </button>
+               </div>
 
                 <div id="first-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
                     <h4>初めての方 / First Order</h4>
