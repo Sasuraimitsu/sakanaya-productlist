@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzF32_fUN41vl4H6Ps7Z46GGG4i7tm0hJssbYoBipOhV00coCJATOzSq45dK_OdrZEv/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxnAPUuZmJHjqoTKoRwkTf1FS7-t9iN2GvY3lxRt8NuaS4le67hoBbY1XTvve7D5z3l/exec';
 const TELEGRAM_API_URL = 'https://telegram-bot-729928920450.asia-northeast1.run.app/';
 const TELEGRAM_LINK = 'https://t.me/SAKANAYAJAPON';
 
