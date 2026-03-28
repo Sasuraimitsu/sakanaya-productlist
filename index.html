@@ -208,15 +208,12 @@ function showRepeatOrderForm() {
 }
 
 async function submitFirstOrder() {
-  // 1. お客様に分かりやすい言葉で説明する
-  const message = "初めてのご利用ありがとうございます！\n\n注文を確定するには、当店の公式Telegramで「開始(START)」ボタンを押して登録を完了させてください。\n\n今すぐTelegramを開きますか？";
+  const botUsername = "sakanaya_bot"; // ★ここを実際のボット名（例: sakanaya_bot）に変えてください
   
-  // 2. 「OK」を押した時だけTelegramへ飛ばす
+  const message = "初めてのご利用ありがとうございます！\n\n注文を確定するために、今から開くTelegram画面で「開始 (START)」ボタンを一度だけ押してください。\n\n今すぐTelegramを開きますか？";
+  
   if (confirm(message)) {
-    // あなたのBotのユーザー名（@を除いたもの）に書き換えてください
-    const botUsername = "8645916455:AAEwHG2uGh-DNSTAiyF02C11h_y9_TA_6OY"; 
-    
-    // Telegramアプリを起動し、自動で/startを促すリンク
+    // 公式アプリを直接起動し、あなたのボットのチャット画面を開くリンク
     window.location.href = `https://t.me/${botUsername}?start=ordered`;
   }
 }
