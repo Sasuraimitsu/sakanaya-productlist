@@ -1103,28 +1103,27 @@ header {
 /* ================================
    CART PANEL（PC）
 ================================ */
+/* --- 修正箇所：.cart-panel (PC用) --- */
 .cart-panel {
     position: fixed;
     top: 110px;
-    right: 20px;
+    right: -420px;   /* ★最初は画面の外（右）に隠しておく */
     width: 380px;
-    max-width: calc(100vw - 30px);
     background: white;
     border-radius: 16px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    border: 1px solid #e5e7eb;
+    transition: right 0.3s ease; /* ★スッと動くアニメーション */
     z-index: 9999;
-
-    display: none; /* 初期非表示 */
     padding: 16px;
-    max-height: 80vh; 
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
 }
 
-/* 開いた状態 */
+/* ★ボタンを押して「show」クラスがついた時だけ画面内に出す */
 .cart-panel.show {
-    display: block;
+    display: flex;   /* 消えていたのを出す */
+    right: 20px;     /* 右から20pxの位置まで戻ってくる */
 }
 
 /* ================================
