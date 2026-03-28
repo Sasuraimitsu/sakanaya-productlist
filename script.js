@@ -55,7 +55,7 @@ const UI_TEXT = {
         labelNotes: '備考 (アレルギー、配送希望など)',
         notesPlaceholder: 'ご要望があれば入力してください',
         btnFirstOrder: "初めての方",
-        btnRepeatOrder: "2回目以降のご注文",
+        btnRepeatOrder: "ご注文",
         placeholderStore: "店名",
         placeholderName: "担当者名",
         placeholderPhone: "電話番号"
@@ -98,7 +98,7 @@ const UI_TEXT = {
         labelNotes: 'Notes (Allergies, Delivery, etc.)',
         notesPlaceholder: 'Enter any special requests here',
         btnFirstOrder: "First Time Customer",
-        btnRepeatOrder: "Repeat Order",
+        btnRepeatOrder: "Order",
         placeholderStore: "Store Name",
         placeholderName: "Contact Name",
         placeholderPhone: "Phone Number"
