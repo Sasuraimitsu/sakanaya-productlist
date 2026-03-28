@@ -371,3 +371,77 @@ async function init() {
     setLang(currentLang);
 }
 document.addEventListener('DOMContentLoaded', init);
+
+// --- script.js に統合する注文管理ロジック ---
+
+function getCartSummary() {
+    const items = Object.values(cart);
+    return items.length > 0 ? items : null;
+}
+
+function showFirstOrderForm() {
+    if (!getCartSummary()) { alert('Please select products first.'); return; }
+    document.getElementById('first-order-form').style.display = 'block';
+    document.getElementById('repeat-order-form').style.display = 'none';
+}
+
+function showRepeatOrderForm() {
+    if (!getCartSummary()) { alert('Please select products first.'); return; }
+    document.getElementById('repeat-order-form').style.display = 'block';
+    document.getElementById('first-order-form').style.display = 'none';
+}
+
+// 初めての方：Telegram登録案内（別タブ版）
+async function submitFirstOrder() {
+    const botUsername = "sakanaya_bot"; // ★ご自身のボット名に書き換えてください
+    const message = "初めてのご利用ありがとうございます！\n\n注文を確定するために、別画面で開くTelegramで「開始 (START)」ボタンを一度だけ押してください。\n\nTelegramを別タブで開きますか？";
+    
+    if (confirm(message)) {
+        window.open(`https://t.me/${botUsername}?start=ordered`, '_blank');
+    }
+}
+
+// 2回目以降の方：GASへ注文送信
+async function submitRepeatOrder() {
+    const phoneInput = document.getElementById('repeat-phone');
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    const notesInput = document.getElementById('cart-notes');
+    const notes = notesInput ? notesInput.value.trim() : "";
+    const items = Object.values(cart);
+
+    // ★電話番号の必須チェック（デフォルト096...は削除済み）
+    if (!phone) {
+        alert(currentLang === 'jp' ? '電話番号を入力してください。' : 'Please enter your phone number.');
+        return;
+    }
+    if (items.length === 0) {
+        alert('Please select products first.');
+        return;
+    }
+
+    let totalQty = 0;
+    let message = '【New Order / Web注文】\n--------------------------\n';
+
+    items.forEach(item => {
+        const productName = currentLang === 'jp' ? (item.name_jp || item.name_en) : (item.name_en || item.name_jp);
+        const variantName = currentLang === 'jp' ? (item.variant_name_jp || item.variant_name_en) : (item.variant_name_en || item.variant_name_jp);
+        message += `${item.code || 'N/A'} ${productName} (${variantName}) ${item.qty}点\n`;
+        totalQty += item.qty;
+    });
+
+    message += '--------------------------\n';
+    if (notes) message += `📝 Notes:\n${notes}\n--------------------------\n`;
+    message += `Total Items: ${totalQty}\n`;
+
+    try {
+        const response = await fetch(GAS_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'send_order', phone: phone, product: message })
+        });
+        alert('注文を送信しました。DN/IVの作成をお待ちください。');
+        clearCart();
+        closeCartPanel();
+    } catch (e) {
+        alert('送信に失敗しました。ネットワークを確認してください。');
+    }
+}
