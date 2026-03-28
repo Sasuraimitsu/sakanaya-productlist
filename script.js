@@ -18,8 +18,6 @@ let cart = {};
 // ═══════════════════════════════════════════════════════════
 const UI_TEXT = {
     jp: {
-        firstOrder: "初めての方 / Only First Order",
-        repeatOrder: "2回目以降のご注文 / Order",
         searchPlaceholder: '商品名で検索...',
         cat_all: 'すべて',
         cat_frozen: '冷凍',
@@ -55,11 +53,14 @@ const UI_TEXT = {
         weightCalc: '重量計算',
         qtyCalc: '数量計算',
         labelNotes: '備考 (アレルギー、配送希望など)',
-        notesPlaceholder: 'ご要望があれば入力してください'
+        notesPlaceholder: 'ご要望があれば入力してください',
+        btnFirstOrder: "初めての方",
+        btnRepeatOrder: "2回目以降のご注文",
+        placeholderStore: "店名",
+        placeholderName: "担当者名",
+        placeholderPhone: "電話番号",
     },
-    en: {
-        firstOrder: "First Time Customer",
-        repeatOrder: "Repeat Customer / Order",        
+    en: {     
         searchPlaceholder: 'Search product name...',
         cat_all: 'ALL',
         cat_frozen: 'FROZEN',
@@ -96,6 +97,11 @@ const UI_TEXT = {
         qtyCalc: 'Quantity',
         labelNotes: 'Notes (Allergies, Delivery, etc.)',
         notesPlaceholder: 'Enter any special requests here'
+        btnFirstOrder: "First Time Customer",
+        btnRepeatOrder: "Repeat Order",
+        placeholderStore: "Store Name",
+        placeholderName: "Contact Name",
+        placeholderPhone: "Phone Number",
     }
 };
 
