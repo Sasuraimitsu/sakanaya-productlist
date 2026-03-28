@@ -458,12 +458,14 @@ async function submitFirstOrder() {
         : "Thank you!\n\nFinally, please click the 'START' button on the Telegram screen that opens in a new tab to complete your registration.";
     
     if (confirm(message)) {
+
+        // ★ 1. カートの中身をブラウザに一時保存する（消さない！）
+        localStorage.setItem('temp_cart', JSON.stringify(cart));
         // startパラメータに電話番号を付けておくと、ボット側で紐付けが楽になります
         window.open(`https://t.me/${botUsername}?start=${phone}`, '_blank');
         
         // フォームを閉じてカートをクリア
         document.getElementById('first-order-form').style.display = 'none';
-        clearCart();
         closeCartPanel();
     } else {
         // キャンセルした場合はボタンを戻す
@@ -516,3 +518,19 @@ async function submitRepeatOrder() {
         alert('送信に失敗しました。ネットワークを確認してください。');
     }
 }
+
+// ページが読み込まれたとき、もし保存されたカートがあれば復活させる
+window.addEventListener('load', () => {
+    const savedData = localStorage.getItem('temp_cart');
+    if (savedData) {
+        // 保存されていたデータをカートに戻す
+        cart = JSON.parse(savedData);
+        // 画面の数字やリストを更新する
+        renderCart(); 
+        // 戻ってきたときに自動でカートを開いてあげると親切です
+        toggleCartPanel(); 
+        
+        // 復活させたら、保存データは一度消しておく（重複防止）
+        localStorage.removeItem('temp_cart');
+    }
+});
