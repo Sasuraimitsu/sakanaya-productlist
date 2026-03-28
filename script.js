@@ -458,13 +458,13 @@ async function submitFirstOrder() {
         : "Thank you!\n\nFinally, please click the 'START' button on the Telegram screen that opens in a new tab to complete your registration.";
     
     if (confirm(message)) {
-
-        // ★ 1. カートの中身をブラウザに一時保存する（消さない！）
+        // ★ カートの中身をブラウザに一時保存する
         localStorage.setItem('temp_cart', JSON.stringify(cart));
-        // startパラメータに電話番号を付けておくと、ボット側で紐付けが楽になります
+        
+        // Telegramを別タブで開く
         window.open(`https://t.me/${botUsername}?start=${phone}`, '_blank');
         
-        // フォームを閉じてカートをクリア
+        // フォームを閉じてパネルを閉じる（★clearCart() は絶対に入れない！）
         document.getElementById('first-order-form').style.display = 'none';
         closeCartPanel();
     } else {
@@ -519,18 +519,28 @@ async function submitRepeatOrder() {
     }
 }
 
-// ページが読み込まれたとき、もし保存されたカートがあれば復活させる
+// ページ読み込み時に保存されたカートを復活させる
 window.addEventListener('load', () => {
-    const savedData = localStorage.getItem('temp_cart');
-    if (savedData) {
-        // 保存されていたデータをカートに戻す
-        cart = JSON.parse(savedData);
-        // 画面の数字やリストを更新する
-        renderCart(); 
-        // 戻ってきたときに自動でカートを開いてあげると親切です
-        toggleCartPanel(); 
-        
-        // 復活させたら、保存データは一度消しておく（重複防止）
-        localStorage.removeItem('temp_cart');
-    }
+    // 他の処理が終わるのを少し待ってから実行（0.5秒）
+    setTimeout(() => {
+        const savedData = localStorage.getItem('temp_cart');
+        if (savedData) {
+            try {
+                // 保存されたデータを取得してカート(cart変数)に合体させる
+                const parsedCart = JSON.parse(savedData);
+                Object.assign(cart, parsedCart); 
+                
+                // 画面表示（バッジやリスト）を更新
+                if (typeof renderCart === 'function') {
+                    renderCart();
+                }
+                
+                // 復活が完了したら、保存データは削除する
+                localStorage.removeItem('temp_cart');
+                console.log("Cart items restored successfully!");
+            } catch (e) {
+                console.error("Cart restore failed:", e);
+            }
+        }
+    }, 500); 
 });
