@@ -1239,25 +1239,23 @@ header {
 /* ================================
    MOBILE（スマホ）
 ================================ */
+/* --- 修正箇所：@media (max-width: 480px) の中の .cart-panel --- */
 @media (max-width: 480px) {
-
-    /* カートパネルは下から出す */
     .cart-panel {
         top: auto;
-        right: 0;
         left: 0;
-        bottom: -100%;
+        right: 0;
+        bottom: -100%; /* ★最初は画面の下に沈めて隠す */
         width: 100%;
-        max-width: none;
         border-radius: 18px 18px 0 0;
-        padding: 14px;
-        transition: bottom 0.3s ease;
+        transition: bottom 0.3s ease; /* ★下からスッと出るアニメーション */
     }
 
+    /* ★「show」がついたら下からせり上がる */
     .cart-panel.show {
-        display: block;
         bottom: 0;
     }
+}
 
     /* ボタン少し小さく */
     .cart-toggle-btn {
