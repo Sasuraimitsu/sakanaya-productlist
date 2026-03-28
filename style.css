@@ -1249,11 +1249,7 @@ header {
         border-radius: 18px 18px 0 0;
         padding: 14px;
         transition: bottom 0.3s ease;
-    max-height: 85vh;    /* 画面の高さの85%までに制限（これで入力欄が隠れません） */
-    display: flex;       /* 中身を整列させる */
-    flex-direction: column; /* 縦に並べる */
-    overflow-y: auto;    /* パネル自体も溢れたらスクロールできるようにする */
-      }
+    }
 
     .cart-panel.show {
         display: block;
