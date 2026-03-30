@@ -509,7 +509,7 @@ async function submitRepeatOrder() {
     try {
         const response = await fetch(GAS_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: 'send_order', phone: phone, product: message })
+            body: JSON.stringify({ action: 'send_order', phone: phone, name: "Web User", product: message })
         });
         alert('注文を送信しました。DN/IVの作成をお待ちください。');
         clearCart();
