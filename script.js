@@ -18,17 +18,17 @@ let cart = {};
 // ═══════════════════════════════════════════════════════════
 const UI_TEXT = {
     jp: {
-        searchPlaceholder: '商品名で検索...',
-        cat_all: 'すべて',
-        cat_frozen: '冷凍',
-        cat_fresh_whole: 'ホール',
-        cat_fresh_dr: 'セミドレス/ドレス',
-        cat_fresh_fillet: 'フィレ',
-        cat_oil: '食用油・調味料',
-        cat_sake: '酒',
-        cat_kitchen: '厨房用品', // 追加
-        cat_vege: '野菜',        // 追加
-        noticeTitle: '【 お知らせ 】 クリックして詳細を表示',
+        cat_all: "すべて",
+        cat_frozen: "冷凍品",
+        cat_fresh_whole: "鮮魚一匹",
+        cat_fresh_dr: "鮮魚セミドレス",
+        cat_fresh_fillet: "鮮魚フィレ",
+        cat_oil: "調味料・油",
+        cat_kitchen: "厨房用品",
+        cat_vege: "野菜",
+        cat_sake: "酒類",
+        searchPlaceholder: "商品名で検索...",
+        noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         noticeBody: `
             <strong>JP:</strong><br>
             ・商品はカテゴリーや名前で絞り込みが可能です。<br>
@@ -37,14 +37,14 @@ const UI_TEXT = {
             ・記載にない輸入商品は <a href="https://t.me/+9MZ3SB5xav42YjZl" target="_blank" class="notice-link">OFFICIAL TELEGRAM</a> でもご案内しております。<br>
             ・最終金額は納品時の重量・数量により確定いたします。`,
         orderBtn: '📲 Telegramで注文する',
-        orderBarLabel: '📋 注文内容はこちら',
-        orderNote: '※ 最終金額は納品時に確定いたします',
+        orderBarLabel: "📋 ご注文内容",
+        orderNote: "* 最終的な数量・重量は納品時に確定いたします",
         clearBtn: 'クリア',
+        recommendTitle: "🔥 本日のおすすめ",
         noProducts: '該当商品なし',
         selectItems: '商品を選択してください。',
         stock: 'STOCK',
         size: 'サイズ',
-        recommendTitle: '🔥 本日のおすすめ',
         emptyCart: '商品が選択されていません。',
         orderSent: '注文を送信しました。',
         orderFailed: '送信に失敗しました。',
@@ -56,9 +56,13 @@ const UI_TEXT = {
         notesPlaceholder: 'ご要望があれば入力してください',
         btnFirstOrder: "初めての方",
         btnRepeatOrder: "ご注文",
+        formFirstTitle: "初めての方 (新規登録)",
+        formRepeatTitle: "ご注文 (リピート)",
         placeholderStore: "店名",
         placeholderName: "担当者名",
-        placeholderPhone: "電話番号"
+        placeholderPhone: "電話番号",
+        btnSubmitFirst: "登録案内を受け取る",
+        btnSubmitRepeat: "Telegramで注文する"
     },
     en: {     
         searchPlaceholder: 'Search product name...',
@@ -68,9 +72,10 @@ const UI_TEXT = {
         cat_fresh_dr: 'SEMI DRESS/DRESS',
         cat_fresh_fillet: 'FILLET',
         cat_oil: 'OIL & SEASONING',
-        cat_sake: 'SAKE',
         cat_kitchen: 'KITCHEN SUPPLIES', // 追加
         cat_vege: 'VEGETABLES',           // 追加
+        cat_sake: 'SAKE',
+        searchPlaceholder: "Search product name...",
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
             <strong>EN:</strong><br>
@@ -95,13 +100,16 @@ const UI_TEXT = {
         floatingInquiry: '💬 Inquiry',
         weightCalc: 'Weight',
         qtyCalc: 'Quantity',
-        labelNotes: 'Notes (Allergies, Delivery, etc.)',
+        labelNotes: 'Notes (Delivery time, etc.)',
         notesPlaceholder: 'Enter any special requests here',
-        btnFirstOrder: "First Time Customer",
-        btnRepeatOrder: "Order",
+        btnFirstOrder: "First Time User",
+        btnRepeatOrder: "Order(Repeat)",
+        formRepeatTitle: "Order (Repeat)",
         placeholderStore: "Store Name",
         placeholderName: "Contact Name",
-        placeholderPhone: "Phone Number"
+        placeholderPhone: "Phone Number",
+        btnSubmitFirst: "Get Registration Guide",
+        btnSubmitRepeat: "Send Order via Telegram"
     }
 };
 
