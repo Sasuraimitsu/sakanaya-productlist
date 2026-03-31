@@ -1194,33 +1194,45 @@ header {
 /* ================================
    BUTTONS
 ================================ */
+/* ================================
+   BUTTONS (文字色をしっかり指定)
+================================ */
 .order-bar-actions {
     display: flex;
     gap: 8px;
     margin-top: 10px;
 }
 
+/* 注文ボタン（紺色の背景） */
 .order-send-btn {
     flex: 1;
-    padding: 10px;
+    padding: 12px 10px; /* 少し高さを出す */
     border: none;
     background: #0f2a44;
-    color: white;
+    color: #ffffff !important; /* ★文字色を白に強制 */
     border-radius: 8px;
-    font-weight: bold;
+    font-weight: 900;           /* ★文字を一番太く */
+    font-size: 1rem;
     cursor: pointer;
+    display: inline-block;
+    text-align: center;
 }
 
 .order-send-btn:hover {
-    background: #12385c;
+    background: #1a3c5a;
 }
 
+/* クリアボタン（薄いグレーの背景） */
 .order-clear-btn {
     width: 80px;
     border: none;
     background: #e5e7eb;
+    color: #333333 !important; /* ★文字色を濃いグレーに強制 */
     border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.85rem;
     cursor: pointer;
+    text-align: center;
 }
 
 .order-clear-btn:hover {
