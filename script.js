@@ -185,8 +185,11 @@ function setLang(lang) {
     // フォーム表示ボタン
     const btnFirst = document.getElementById('btn-first-order');
     const btnRepeat = document.getElementById('btn-repeat-order');
+    const btnClear = document.getElementById('order-clear-btn');
+    
     if (btnFirst) btnFirst.textContent = t.btnFirstOrder;
     if (btnRepeat) btnRepeat.textContent = t.btnRepeatOrder;
+    if (btnClear) btnClear.textContent = t.clearBtn;
 
     // フォーム内タイトル
     if (document.getElementById('form-first-title')) document.getElementById('form-first-title').textContent = t.formFirstTitle;
