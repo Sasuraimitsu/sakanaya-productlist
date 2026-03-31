@@ -214,9 +214,39 @@ function setLang(lang) {
     if (document.getElementById('btn-submit-first')) document.getElementById('btn-submit-first').textContent = t.btnSubmitFirst;
     if (document.getElementById('btn-submit-repeat')) document.getElementById('btn-submit-repeat').textContent = t.btnSubmitRepeat;
 
+　　// ★★★ ここから追加・上書き ★★★
+    // ボタンやタイトルのIDと、辞書(UI_TEXT)のキーを紐付けます
+    const ids = {
+        'btn-first-order': t.btnFirstOrder,    // 初めての方ボタン
+        'btn-repeat-order': t.btnRepeatOrder,  // ご注文ボタン
+        'order-clear-btn': t.clearBtn,         // クリアボタン
+        'form-first-title': t.formFirstTitle,  // フォーム内のタイトル
+        'form-repeat-title': t.formRepeatTitle,
+        'btn-submit-first': t.btnSubmitFirst,  // 送信ボタン
+        'btn-submit-repeat': t.btnSubmitRepeat
+    };
+
+    // ループで一気に書き換えます
+    for (let id in ids) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = ids[id];
+        } else {
+            // もし表示されないなら、ブラウザのコンソールに「どのIDが間違っているか」が出ます
+            console.warn("IDが見つかりません: " + id);
+        }
+    }
+    // ★★★ ここまで ★★★
+    
     // フィルタ再適用とカート再描画
     applyFilters();
     renderCart();
+
+    // 備考欄の処理
+    const ln = document.getElementById('label-notes');
+    const cn = document.getElementById('cart-notes');
+    if (ln) ln.textContent = t.labelNotes;
+    if (cn) cn.placeholder = t.notesPlaceholder;
 }
 
 // ═══════════════════════════════════════════════════════════
