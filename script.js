@@ -486,58 +486,55 @@ async function submitFirstOrder() {
     const contactName = document.getElementById('first-contact-name')?.value.trim();
     const phone = document.getElementById('first-phone')?.value.trim();
 
-    // 2. 入力チェック（空欄があれば警告）
+    // 2. 入力チェック
     if (!storeName || !contactName || !phone) {
         alert(currentLang === 'jp' ? "すべての項目を入力してください。" : "Please fill in all fields.");
         return;
     }
 
-    // 3. GASにデータを送信（Usersシートへの記録）
+    // 3. GASにデータを送信
+    const btn = document.querySelector('#first-order-form button');
     try {
-        // ボタンを一時的に無効化して連打を防止（任意）
-        const btn = document.querySelector('#first-order-form button');
         if (btn) btn.disabled = true;
 
-        const response = await fetch(GAS_URL, {
+        // 【修正点】mode: 'no-cors' を追加して確実にGASへ飛ばす
+        await fetch(GAS_URL, {
             method: 'POST',
+            mode: 'no-cors', 
             body: JSON.stringify({
-                action: 'register_user', // GAS側で判別するアクション名
-                phone: phone,           // これが Users シートの ID になります
+                action: 'register_user',
+                phone: phone,
                 username: storeName,    // 店名
                 firstName: contactName  // 担当者名
             })
         });
 
-        if (!response.ok) throw new Error('Network response was not ok');
-
     } catch (e) {
         console.error("Registration error:", e);
-        // エラーが出てもTelegramには案内しますが、ログに記録されます
     }
 
-    // 4. Telegramへの案内（別タブで開く）
-    const botUsername = "sakanaya_bot"; // ★ここをご自身のボット名に！
+    // 4. Telegramへの案内
+    const botUsername = "SAKANAYAJAPON_bot"; // ★ここをご自身のボット名（@なし）に修正！
     const message = currentLang === 'jp' 
         ? "ご入力ありがとうございます！\n\n最後に、別画面で開くTelegramで「開始 (START)」ボタンを一度だけ押して登録を完了させてください。"
         : "Thank you!\n\nFinally, please click the 'START' button on the Telegram screen that opens in a new tab to complete your registration.";
     
     if (confirm(message)) {
-        // ★ カートの中身をブラウザに一時保存する
+        // カートの中身を保存
         localStorage.setItem('temp_cart', JSON.stringify(cart));
         
-        // Telegramを別タブで開く
-        window.open(`https://t.me/${botUsername}?start=${phone}`, '_blank');
+        // Telegramを別タブで開く（電話番号をパラメータとして渡す）
+        const cleanPhone = phone.replace(/\D/g, "");
+        window.open(`https://t.me/${botUsername}?start=${cleanPhone}`, '_blank');
         
-        // フォームを閉じてパネルを閉じる（★clearCart() は絶対に入れない！）
+        // フォームを閉じる
         document.getElementById('first-order-form').style.display = 'none';
         closeCartPanel();
-    } else {
-        // キャンセルした場合はボタンを戻す
-        const btn = document.querySelector('#first-order-form button');
-        if (btn) btn.disabled = false;
     }
+    
+    // 最後にボタンを戻す（送信完了後）
+    if (btn) btn.disabled = false;
 }
-
 // 2回目以降の方：GASへ注文送信
 async function submitRepeatOrder() {
     const phoneInput = document.getElementById('repeat-phone');
