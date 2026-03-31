@@ -141,56 +141,70 @@ function isWeightVariant(v) { return getRawUnit(v) === 'kg'; }
 function getCalcLabel(p) { return (p.variants || []).some(v => isWeightVariant(v)) ? UI_TEXT[currentLang].weightCalc : UI_TEXT[currentLang].qtyCalc; }
 function getCalcClass(p) { return (p.variants || []).some(v => isWeightVariant(v)) ? 'weight' : 'qty'; }
 
-// ═══════════════════════════════════════════════════════════
-// LANGUAGE SWITCH
-// ═══════════════════════════════════════════════════════════
+// ==========================================
+// 言語切り替え実行関数
+// ==========================================
 function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
 
+    // 言語ボタンの表示切り替え
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('lang-' + lang)?.classList.add('active');
-    document.getElementById('cat-all').textContent = t.cat_all;
-    document.getElementById('cat-frozen').textContent = t.cat_frozen;
-    document.getElementById('cat-whole').textContent = t.cat_fresh_whole;
-    document.getElementById('cat-dr').textContent = t.cat_fresh_dr;
-    document.getElementById('cat-fillet').textContent = t.cat_fresh_fillet;
-    document.getElementById('cat-oil').textContent = t.cat_oil;
-    document.getElementById('cat-sake').textContent = t.cat_sake;
-    document.getElementById('cat-kitchen').textContent = t.cat_kitchen; // 追加
-    document.getElementById('cat-vege').textContent = t.cat_vege;       // 追加
-    
+
+    // カテゴリナビ
+    const cats = {
+        'cat-all': t.cat_all,
+        'cat-frozen': t.cat_frozen,
+        'cat-whole': t.cat_fresh_whole,
+        'cat-dr': t.cat_fresh_dr,
+        'cat-fillet': t.cat_fresh_fillet,
+        'cat-oil': t.cat_oil,
+        'cat-sake': t.cat_sake,
+        'cat-kitchen': t.cat_kitchen,
+        'cat-vege': t.cat_vege
+    };
+    for (let id in cats) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = cats[id];
+    }
+
+    // 検索・お知らせ・カート
     if (document.getElementById('search-input')) document.getElementById('search-input').placeholder = t.searchPlaceholder;
     if (document.getElementById('notice-summary-text')) document.getElementById('notice-summary-text').textContent = t.noticeTitle;
     if (document.getElementById('notice-body-content')) document.getElementById('notice-body-content').innerHTML = t.noticeBody;
     if (document.getElementById('order-bar-label')) document.getElementById('order-bar-label').textContent = t.orderBarLabel;
-    if (document.getElementById('order-btn-text')) document.getElementById('order-btn-text').textContent = t.orderBtn;
     if (document.getElementById('order-bar-note')) document.getElementById('order-bar-note').textContent = t.orderNote;
     if (document.getElementById('order-clear-btn')) document.getElementById('order-clear-btn').textContent = t.clearBtn;
     if (document.getElementById('recommend-title')) document.getElementById('recommend-title').textContent = t.recommendTitle;
     if (document.getElementById('inquiry-floating-btn')) document.getElementById('inquiry-floating-btn').textContent = t.floatingInquiry;
+    if (document.getElementById('label-notes')) document.getElementById('label-notes').textContent = t.labelNotes;
+    if (document.getElementById('cart-notes')) document.getElementById('cart-notes').placeholder = t.notesPlaceholder;
 
-    // --- ここから追加：注文ボタンとフォームの翻訳 ---
-    const btnFirst = document.getElementById('btn-first-order'); // HTMLにidを振る必要があります
+    // --- フォーム関連の翻訳 ---
+    // フォーム表示ボタン
+    const btnFirst = document.getElementById('btn-first-order');
     const btnRepeat = document.getElementById('btn-repeat-order');
-
     if (btnFirst) btnFirst.textContent = t.btnFirstOrder;
     if (btnRepeat) btnRepeat.textContent = t.btnRepeatOrder;
 
-    // フォーム内の店名・名前・電話番号のプレースホルダーも翻訳する場合
+    // フォーム内タイトル
+    if (document.getElementById('form-first-title')) document.getElementById('form-first-title').textContent = t.formFirstTitle;
+    if (document.getElementById('form-repeat-title')) document.getElementById('form-repeat-title').textContent = t.formRepeatTitle;
+
+    // 入力欄プレースホルダー
     if (document.getElementById('first-store-name')) document.getElementById('first-store-name').placeholder = t.placeholderStore;
     if (document.getElementById('first-contact-name')) document.getElementById('first-contact-name').placeholder = t.placeholderName;
     if (document.getElementById('first-phone')) document.getElementById('first-phone').placeholder = t.placeholderPhone;
     if (document.getElementById('repeat-phone')) document.getElementById('repeat-phone').placeholder = t.placeholderPhone;
-    // --- ここまで追加 ---
 
+    // ★送信ボタンのテキスト
+    if (document.getElementById('btn-submit-first')) document.getElementById('btn-submit-first').textContent = t.btnSubmitFirst;
+    if (document.getElementById('btn-submit-repeat')) document.getElementById('btn-submit-repeat').textContent = t.btnSubmitRepeat;
+
+    // フィルタ再適用とカート再描画
     applyFilters();
     renderCart();
-
-    const ln = document.getElementById('label-notes');
-    const cn = document.getElementById('cart-notes');
-    if (ln) ln.textContent = t.labelNotes;
-    if (cn) cn.placeholder = t.notesPlaceholder;
 }
 
 // ═══════════════════════════════════════════════════════════
