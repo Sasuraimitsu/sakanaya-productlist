@@ -187,9 +187,18 @@ function setLang(lang) {
     const btnRepeat = document.getElementById('btn-repeat-order');
     const btnClear = document.getElementById('order-clear-btn');
     
-    if (btnFirst) btnFirst.textContent = t.btnFirstOrder;
-    if (btnRepeat) btnRepeat.textContent = t.btnRepeatOrder;
-    if (btnClear) btnClear.textContent = t.clearBtn;
+    if (btnFirst) {
+        btnFirst.textContent = t.btnFirstOrder;
+        console.log("Firstボタン書き換え成功"); // ログで確認用
+    }
+    if (btnRepeat) {
+        btnRepeat.textContent = t.btnRepeatOrder;
+        console.log("Repeatボタン書き換え成功");
+    }
+    if (btnClear) {
+        btnClear.textContent = t.clearBtn;
+        console.log("Clearボタン書き換え成功");
+    }
 
     // フォーム内タイトル
     if (document.getElementById('form-first-title')) document.getElementById('form-first-title').textContent = t.formFirstTitle;
