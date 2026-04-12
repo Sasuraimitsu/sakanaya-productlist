@@ -974,16 +974,6 @@ header {
         justify-content: flex-end;
     }
 
-    .total-bar {
-        width: 100%;
-        max-width: none;
-        right: 0;
-        left: 0;
-        transform: none;
-        border-radius: 16px 16px 0 0;
-        padding: 14px 14px 12px;
-    }
-
     .order-bar-actions {
         grid-template-columns: 1fr 82px;
     }
