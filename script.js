@@ -27,6 +27,7 @@ const UI_TEXT = {
         cat_kitchen: "厨房用品",
         cat_vege: "野菜",
         cat_sake: "酒類",
+        cat_waiting: "入荷待ち",
         searchPlaceholder: "商品名で検索...",
         noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         noticeBody: `
@@ -75,6 +76,7 @@ const UI_TEXT = {
         cat_kitchen: 'KITCHEN SUPPLIES', // 追加
         cat_vege: 'VEGETABLES',           // 追加
         cat_sake: 'SAKE',
+        cat_waiting: "OUT OF STOCK",
         searchPlaceholder: "Search product name...",
         noticeTitle: '【 NOTICE 】 Click to view details',
         noticeBody: `
