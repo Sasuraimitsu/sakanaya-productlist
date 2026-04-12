@@ -1069,10 +1069,6 @@ header {
     text-align: center;
 }
 
-.order-send-btn:hover {
-    background: #1a3c5a;
-}
-
 /* クリアボタン（薄いグレーの背景） */
 .order-clear-btn {
     width: 80px;
