@@ -263,9 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setLang(currentLang);
 });
 
-/═══════════════════════════════════════════════════════════
+//═══════════════════════════════════════════════════════════
  ORDER & INITIALIZE
-/═══════════════════════════════════════════════════════════
+//═══════════════════════════════════════════════════════════
 async function sendOrderTelegram() {
     const items = Object.values(cart);
     const ni = document.getElementById('cart-notes');
