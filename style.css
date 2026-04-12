@@ -1039,24 +1039,24 @@ header {
     gap: 8px;
     margin-top: 10px;
 }
-
-/* クリアボタン（薄いグレーの背景） */
+/* クリアボタン：薄いグレーの背景に濃い文字 */
 .order-clear-btn {
     width: 80px;
+    padding: 12px 10px; /* 他のボタンと高さを合わせる */
     border: none;
     background: #e5e7eb;
-    color: #333333 !important; /* ★文字色を濃いグレーに強制 */
+    color: #333333 !important; /* 文字色をはっきりさせる */
     border-radius: 8px;
     font-weight: bold;
     font-size: 0.85rem;
     cursor: pointer;
     text-align: center;
+    transition: background 0.2s;
 }
 
 .order-clear-btn:hover {
     background: #d1d5db;
 }
-
 /* ================================
    NOTE
 ================================ */
