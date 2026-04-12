@@ -175,7 +175,8 @@ function renderCart() {
     const panel = document.getElementById('cart-panel');
     const el = document.getElementById('cart-items');
     
-    if (panel) items.length > 0 ? panel.classList.add('show') : panel.classList.remove('show');
+    if (panel && items.length === 0) {
+    panel.classList.remove('show');}
     if (!el) return;
 
     if (items.length === 0) {
