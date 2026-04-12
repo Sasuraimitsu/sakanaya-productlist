@@ -179,7 +179,6 @@ function setLang(lang) {
     if (document.getElementById('order-bar-note')) document.getElementById('order-bar-note').textContent = t.orderNote;
     if (document.getElementById('order-clear-btn')) document.getElementById('order-clear-btn').textContent = t.clearBtn;
     if (document.getElementById('recommend-title')) document.getElementById('recommend-title').textContent = t.recommendTitle;
-    if (document.getElementById('inquiry-floating-btn')) document.getElementById('inquiry-floating-btn').textContent = t.floatingInquiry;
     if (document.getElementById('label-notes')) document.getElementById('label-notes').textContent = t.labelNotes;
     if (document.getElementById('cart-notes')) document.getElementById('cart-notes').placeholder = t.notesPlaceholder;
 
