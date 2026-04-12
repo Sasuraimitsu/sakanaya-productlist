@@ -263,11 +263,12 @@ async function fetchProducts() {
         }
         const raw = Array.isArray(data.products) ? data.products : [];
         allProducts = raw.map(p => {
-            const vs = Array.isArray(p.variants) ? p.variants : [];
-            const visible = vs.filter(v => toNumber(v.stock, 0) > 0).sort((a, b) => toNumber(a.sort_order, 9999) - toNumber(b.sort_order, 9999));
-            return { ...p, variants: visible };
-        }).filter(p => (p.name_jp || p.name_en || '').trim() !== '' && p.variants.length > 0)
-          .sort((a, b) => toNumber(a.sort_order, 9999) - toNumber(b.sort_order, 9999));
+    const vs = Array.isArray(p.variants) ? p.variants : [];
+    // 在庫0も含めて全てのバリエーションを取得するように変更
+    const visible = vs.sort((a, b) => toNumber(a.sort_order, 9999) - toNumber(b.sort_order, 9999));
+    return { ...p, variants: visible };
+}).filter(p => (p.name_jp || p.name_en || '').trim() !== '') // variants.length > 0 の制限を外す
+  .sort((a, b) => toNumber(a.sort_order, 9999) - toNumber(b.sort_order, 9999));
         applyFilters();
     } catch (e) {
         document.getElementById('product-container').innerHTML = `<p style="text-align:center;padding:40px;color:#999;">⚠️ Failed to load products.<br><small>${esc(e.message)}</small></p>`;
