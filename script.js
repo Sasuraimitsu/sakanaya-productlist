@@ -17,7 +17,7 @@ const UI_TEXT = {
     jp: {
         cat_all: "すべて", cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", cat_dr: "鮮魚セミドレス",
         cat_fillet: "鮮魚フィレ", cat_oil: "調味料・油", cat_kitchen: "厨房用品", cat_vege: "野菜",
-        cat_sake: "酒類", cat_waiting: "入荷待ち",
+        cat_sake: "酒類", cat_waiting: "入荷待ち",inquiry: "問い合わせ",
         searchPlaceholder: "商品名で検索...", noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         orderBarLabel: "📋 ご注文内容", orderNote: "* 最終的な数量・重量は納品時に確定いたします",
         clearBtn: 'クリア', recommendTitle: "🔥 本日のおすすめ", noProducts: '該当商品なし',
@@ -33,7 +33,7 @@ const UI_TEXT = {
     en: {
         cat_all: "ALL", cat_frozen: "FROZEN", cat_whole: "WHOLE", cat_dr: "SEMI DRESS",
         cat_fillet: "FILLET", cat_oil: "OIL & SEASONING", cat_kitchen: "KITCHEN", cat_vege: "VEGETABLES",
-        cat_sake: "SAKE", cat_waiting: "OUT OF STOCK",
+        cat_sake: "SAKE", cat_waiting: "OUT OF STOCK",inquiry: "INQUIRY",
         searchPlaceholder: "Search...", noticeTitle: "【 NOTICE 】 Click for details",
         orderBarLabel: "📋 Your Order", orderNote: "* Final price confirmed upon delivery",
         clearBtn: 'Clear', recommendTitle: "🔥 Recommendation", noProducts: 'No products',
