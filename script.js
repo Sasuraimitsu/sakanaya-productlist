@@ -295,6 +295,7 @@ function applyFilters() {
     });
     displayProducts(filtered);
 }
+// ★ここまで
 
 function displayProducts(products) {
     const t = UI_TEXT[currentLang];
