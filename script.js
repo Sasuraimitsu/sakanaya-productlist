@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //═══════════════════════════════════════════════════════════
- ORDER & INITIALIZE
+// ORDER & INITIALIZE
 //═══════════════════════════════════════════════════════════
 async function sendOrderTelegram() {
     const items = Object.values(cart);
