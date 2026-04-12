@@ -73,8 +73,8 @@ const UI_TEXT = {
         cat_fresh_dr: 'SEMI DRESS/DRESS',
         cat_fresh_fillet: 'FILLET',
         cat_oil: 'OIL & SEASONING',
-        cat_kitchen: 'KITCHEN SUPPLIES', // 追加
-        cat_vege: 'VEGETABLES',           // 追加
+        cat_kitchen: 'KITCHEN SUPPLIES',
+        cat_vege: 'VEGETABLES',
         cat_sake: 'SAKE',
         cat_waiting: "OUT OF STOCK",
         searchPlaceholder: "Search product name...",
