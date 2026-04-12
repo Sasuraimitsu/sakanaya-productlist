@@ -223,245 +223,138 @@ function setLang(lang) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// 7. INITIALIZE & EVENT LISTENERS
+// 7. UI & MODAL CONTROL
 // ═══════════════════════════════════════════════════════════
-function changeCartQty(vid, delta) {
-    let found = null;
-    allProducts.forEach(p => {
-        const v = p.variants.find(x => String(x.variant_id) === String(vid));
-        if (v) found = {p, v};
-    });
-    if (!found) return;
+function toggleCartPanel() { document.getElementById('cart-panel')?.classList.toggle('show'); }
 
-    if (!cart[vid] && delta > 0) {
-        cart[vid] = {
-            variant_id: vid, product_name_jp: found.p.name_jp, product_name_en: found.p.name_en,
-            price_usd: toNumber(found.v.price_usd), qty: 0
-        };
-    }
-    if (cart[vid]) {
-        cart[vid].qty += delta;
-        if (cart[vid].qty <= 0) delete cart[vid];
-        renderCart();
+function closeCartPanel() {
+    const cartPanel = document.getElementById('cart-panel');
+    if (cartPanel) {
+        cartPanel.classList.remove('show');   // style.cssの定義に合わせる
+        cartPanel.classList.remove('active'); // 念のため両方のクラスに対応
     }
 }
 
-function clearCart() { cart = {}; renderCart(); }
-function openModal(src) { document.getElementById('modal-img').src = src; document.getElementById('image-modal').style.display = 'block'; }
+function openModal(src) {
+    if(src) {
+        document.getElementById('modal-img').src = src;
+        document.getElementById('image-modal').style.display = 'block';
+    }
+}
+
 function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
+
 function selectVariantImage(pid, vImg, fImg, btn) {
     const img = document.getElementById(`product-image-${pid}`);
     if (img) img.src = vImg && vImg.trim() !== '' ? vImg : fImg;
-}
-
-// フォーム表示切替
-function showFirstOrderForm() { document.getElementById('first-order-form').style.display = 'block'; document.getElementById('repeat-order-form').style.display = 'none'; }
-function showRepeatOrderForm() { document.getElementById('repeat-order-form').style.display = 'block'; document.getElementById('first-order-form').style.display = 'none'; }
-
-document.addEventListener('DOMContentLoaded', () => {
-    fetchProducts();
-    setLang(currentLang);
-});
-
-//═══════════════════════════════════════════════════════════
-// ORDER & INITIALIZE
-//═══════════════════════════════════════════════════════════
-async function sendOrderTelegram() {
-    const items = Object.values(cart);
-    const ni = document.getElementById('cart-notes');
-    const notes = ni ? ni.value.trim() : "";
-    if (items.length === 0) { alert(UI_TEXT[currentLang].selectItems); return; }
-
-    let msg = '【New Order / Web注文】\n--------------------------\n';
-    items.forEach(item => {
-        const name = currentLang==='jp'?(item.product_name_jp||item.product_name_en):(item.product_name_en||item.product_name_jp);
-        const vname = currentLang==='jp'?(item.variant_name_jp||item.variant_name_en):(item.variant_name_en||item.variant_name_jp);
-        msg += `${item.code || 'N/A'} ${name} (${vname}) ${item.qty}点\n`;
-    });
-    msg += '--------------------------\n';
-    if (notes) msg += `📝 Notes:\n${notes}\n--------------------------\n`;
-    msg += `Total Items: ${items.reduce((s,i)=>s+i.qty,0)}\n`;
-
-    const pi = document.getElementById('repeat-phone');
-    const phone = pi ? pi.value.trim() : "";
-if (!phone) { 
-    alert('電話番号を入力してください。'); 
-    return; // 番号がない場合は送信を中断する
-}
-
-    try {
-        await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', phone, product: msg }) });
-        alert('注文を送信しました。DN/IVの作成をお待ちください。');
-        if (ni) ni.value = '';
-        if (pi) pi.value = '';
-        cart = {}; applyFilters(); renderCart();
-        document.getElementById('cart-panel')?.classList.remove('show');
-    } catch (e) { alert('送信に失敗しました。'); }
-}
-
-function clearCart() { cart = {}; applyFilters(); renderCart(); document.getElementById('cart-panel')?.classList.remove('show'); }
-function toggleCartPanel() { document.getElementById('cart-panel')?.classList.toggle('show'); }
-function openModal(src) { if(src) { document.getElementById('modal-img').src = src; document.getElementById('image-modal').style.display = 'block'; } }
-function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
-
-async function init() {
-    await fetchProducts();
-    setLang(currentLang);
-}
-document.addEventListener('DOMContentLoaded', init);
-
-// --- script.js に統合する注文管理ロジック ---
-
-function getCartSummary() {
-    const items = Object.values(cart);
-    return items.length > 0 ? items : null;
+    if (btn) {
+        btn.closest('.variant-list').querySelectorAll('.variant-select-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
 }
 
 function showFirstOrderForm() {
-    if (!getCartSummary()) { alert('Please select products first.'); return; }
+    if (Object.keys(cart).length === 0) { alert('Please select products first.'); return; }
     document.getElementById('first-order-form').style.display = 'block';
     document.getElementById('repeat-order-form').style.display = 'none';
 }
 
 function showRepeatOrderForm() {
-    if (!getCartSummary()) { alert('Please select products first.'); return; }
+    if (Object.keys(cart).length === 0) { alert('Please select products first.'); return; }
     document.getElementById('repeat-order-form').style.display = 'block';
     document.getElementById('first-order-form').style.display = 'none';
 }
 
-// 初めての方：Telegram登録案内（別タブ版）
+// ═══════════════════════════════════════════════════════════
+// 8. ORDER LOGIC (GAS & Telegram 連携)
+// ═══════════════════════════════════════════════════════════
+function clearCart() {
+    cart = {};
+    applyFilters();
+    renderCart();
+    closeCartPanel();
+}
+
 async function submitFirstOrder() {
-    // 1. 入力内容を取得
     const storeName = document.getElementById('first-store-name')?.value.trim();
     const contactName = document.getElementById('first-contact-name')?.value.trim();
     const phone = document.getElementById('first-phone')?.value.trim();
 
-    // 2. 入力チェック
     if (!storeName || !contactName || !phone) {
         alert(currentLang === 'jp' ? "すべての項目を入力してください。" : "Please fill in all fields.");
         return;
     }
 
-    // 3. GASにデータを送信
-    const btn = document.querySelector('#first-order-form button');
+    const btn = document.querySelector('#btn-submit-first');
     try {
         if (btn) btn.disabled = true;
-
-        // 【修正点】mode: 'no-cors' を追加して確実にGASへ飛ばす
         await fetch(GAS_URL, {
             method: 'POST',
             mode: 'no-cors', 
-            body: JSON.stringify({
-                action: 'register_user',
-                phone: phone,
-                username: storeName,    // 店名
-                firstName: contactName  // 担当者名
-            })
+            body: JSON.stringify({ action: 'register_user', phone: phone, username: storeName, firstName: contactName })
         });
+    } catch (e) { console.error("Registration error:", e); }
 
-    } catch (e) {
-        console.error("Registration error:", e);
-    }
-
-    // 4. Telegramへの案内
-    const botUsername = "SAKANAYAJAPON_bot"; // ★ここをご自身のボット名（@なし）に修正！
     const message = currentLang === 'jp' 
         ? "ご入力ありがとうございます！\n\n最後に、別画面で開くTelegramで「開始 (START)」ボタンを一度だけ押して登録を完了させてください。"
-        : "Thank you!\n\nFinally, please click the 'START' button on the Telegram screen that opens in a new tab to complete your registration.";
+        : "Thank you!\n\nFinally, please click 'START' on Telegram to complete registration.";
     
     if (confirm(message)) {
-        // カートの中身を保存
         localStorage.setItem('temp_cart', JSON.stringify(cart));
-        
-        // Telegramを別タブで開く（電話番号をパラメータとして渡す）
         const cleanPhone = phone.replace(/\D/g, "");
-        window.open(`https://t.me/${botUsername}?start=${cleanPhone}`, '_blank');
-        
-        // フォームを閉じる
-        document.getElementById('first-order-form').style.display = 'none';
+        window.open(`https://t.me/${BOT_USERNAME}?start=${cleanPhone}`, '_blank');
         closeCartPanel();
     }
-    
-    // 最後にボタンを戻す（送信完了後）
     if (btn) btn.disabled = false;
 }
-// 2回目以降の方：GASへ注文送信
+
 async function submitRepeatOrder() {
-    const phoneInput = document.getElementById('repeat-phone');
-    const phone = phoneInput ? phoneInput.value.trim() : "";
-    const notesInput = document.getElementById('cart-notes');
-    const notes = notesInput ? notesInput.value.trim() : "";
+    const phone = document.getElementById('repeat-phone')?.value.trim();
+    const notes = document.getElementById('cart-notes')?.value.trim();
     const items = Object.values(cart);
 
-    // ★電話番号の必須チェック（デフォルト096...は削除済み）
     if (!phone) {
         alert(currentLang === 'jp' ? '電話番号を入力してください。' : 'Please enter your phone number.');
         return;
     }
-    if (items.length === 0) {
-        alert('Please select products first.');
-        return;
-    }
+    if (items.length === 0) { alert('Please select products first.'); return; }
 
-    let totalQty = 0;
     let message = '【New Order / Web注文】\n--------------------------\n';
-
     items.forEach(item => {
-        const productName = currentLang === 'jp' ? (item.name_jp || item.name_en) : (item.name_en || item.name_jp);
-        const variantName = currentLang === 'jp' ? (item.variant_name_jp || item.variant_name_en) : (item.variant_name_en || item.variant_name_jp);
-        message += `${item.code || 'N/A'} ${productName} (${variantName}) ${item.qty}点\n`;
-        totalQty += item.qty;
+        const pName = currentLang === 'jp' ? (item.name_jp || item.name_en) : (item.name_en || item.name_jp);
+        message += `${item.code || 'N/A'} ${pName} × ${item.qty}\n`;
     });
-
-    message += '--------------------------\n';
-    if (notes) message += `📝 Notes:\n${notes}\n--------------------------\n`;
-    message += `Total Items: ${totalQty}\n`;
+    if (notes) message += `--------------------------\n📝 Notes:\n${notes}\n`;
 
     try {
-        const response = await fetch(GAS_URL, {
+        await fetch(GAS_URL, {
             method: 'POST',
             body: JSON.stringify({ action: 'send_order', phone: phone, name: "Web User", product: message })
         });
-        alert('注文を送信しました。DN/IVの作成をお待ちください。');
+        alert(currentLang === 'jp' ? '注文を送信しました。' : 'Order sent!');
         clearCart();
-        closeCartPanel();
-    } catch (e) {
-        alert('送信に失敗しました。ネットワークを確認してください。');
-    }
+    } catch (e) { alert('送信失敗'); }
 }
 
-// ページ読み込み時に保存されたカートを復活させる
-window.addEventListener('load', () => {
-    // 他の処理が終わるのを少し待ってから実行（0.5秒）
+// ═══════════════════════════════════════════════════════════
+// 9. INITIALIZE (ページ読み込み時の処理集約)
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. 商品データ取得と初期言語設定
+    await fetchProducts();
+    setLang(currentLang);
+
+    // 2. カートの復元 (Telegramから戻ってきた時用)
     setTimeout(() => {
         const savedData = localStorage.getItem('temp_cart');
         if (savedData) {
             try {
-                // 保存されたデータを取得してカート(cart変数)に合体させる
                 const parsedCart = JSON.parse(savedData);
-                Object.assign(cart, parsedCart); 
-                
-                // 画面表示（バッジやリスト）を更新
-                if (typeof renderCart === 'function') {
-                    renderCart();
-                }
-                
-                // 復活が完了したら、保存データは削除する
+                Object.assign(cart, parsedCart);
+                renderCart();
                 localStorage.removeItem('temp_cart');
-                console.log("Cart items restored successfully!");
-            } catch (e) {
-                console.error("Cart restore failed:", e);
-            }
+                console.log("Cart items restored.");
+            } catch (e) { console.error("Restore failed:", e); }
         }
-    }, 500); 
+    }, 500);
 });
-
-// カートパネルを閉じる関数
-function closeCartPanel() {
-    const cartPanel = document.getElementById('cart-panel');
-    if (cartPanel) {
-        cartPanel.classList.remove('active'); // CSSで .active で表示を制御している場合
-        // もし style.display で制御している場合はこちら↓
-        // cartPanel.style.display = 'none';
-    }
-}
