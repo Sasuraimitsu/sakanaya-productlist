@@ -711,31 +711,6 @@ header {
 }
 
 /* ─── TOTAL BAR ─── */
-.total-bar {
-    position: fixed;
-    bottom: -420px;
-    right: 24px;
-    left: auto;
-    transform: none;
-    width: 420px;
-    max-width: calc(100vw - 48px);
-    background: white;
-    padding: 16px 18px 14px;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
-    z-index: 1000;
-    transition: bottom 0.4s ease;
-    border: 1px solid #eee;
-}
-
-.total-bar.show {
-    bottom: 0;
-}
-.total-content {
-    display: block;
-    margin-bottom: 0;
-}
-
 .order-bar-header {
     display: flex;
     justify-content: space-between;
