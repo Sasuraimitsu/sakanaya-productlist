@@ -52,6 +52,12 @@ header {
     gap: 15px;
 }
 
+.tel-inline-text {
+    color: #ffffff !important; /* 強制的に白にする */
+    font-weight: bold;
+    text-decoration: none;
+}
+
 .logo-mini { height: 50px; width: auto; object-fit: contain; }
 .title-section { flex-grow: 1; text-align: left; }
 .title-with-footer { display: flex; align-items: baseline; gap: 10px; }
