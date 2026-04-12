@@ -43,6 +43,13 @@ header {
     padding: 10px 0;
 }
 
+/* ヘッダー右側の親要素 */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* ボタン同士の間隔 */
+}
+
 .logo-mini {
     height: 50px;
     width: auto;
@@ -107,6 +114,26 @@ header {
 
 .telegram-btn-mini:hover {
     background: #007bb8;
+}
+
+/* お問い合わせボタンのスタイル */
+.header-inquiry-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #f0f0f0; /* 目立ちすぎない背景色 */
+    color: #333;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    transition: background-color 0.2s;
+}
+
+.header-inquiry-btn:hover {
+    background-color: #e0e0e0;
 }
 
 /* ─── LANGUAGE SWITCHER ─── */
@@ -959,14 +986,6 @@ header {
 
     .order-bar-actions {
         grid-template-columns: 1fr 82px;
-    }
-
-    .inquiry-floating-btn {
-        right: 12px;
-        bottom: 150px;
-        font-size: 0.82rem;
-        padding: 10px 14px;
-        z-index: 1300;
     }
 }
 
