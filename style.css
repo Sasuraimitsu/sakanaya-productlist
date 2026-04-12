@@ -73,6 +73,20 @@ header {
     font-weight: bold; transition: 0.2s; white-space: nowrap;
 }
 
+/* カートボタンとINQUIRYボタン */
+.header-inquiry-btn, 
+.cart-toggle-btn {
+    height: 38px;             /* カテゴリーボタンの高さに合わせる */
+    padding: 0 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
 /* ══════════════════════════════════════════════════════════
    3. ナビゲーション・検索・通知
    ══════════════════════════════════════════════════════════ */
@@ -136,6 +150,37 @@ header {
 .info { padding: 16px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
 .info h3 { margin: 0 0 8px; font-size: 1.1rem; color: var(--main-blue); }
 .comment-box { font-size: 0.85rem; color: #444; margin-bottom: 12px; }
+
+/* 国旗のサイズ*/
+.country-flag {
+    width: 30px !important;   /* 適度な大きさに固定 */
+    height: auto !important;
+    margin-left: 8px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* 重量計算・数量計算の枠分けと色付け */
+.calc-mini {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border: 2px solid; /* 枠線を強調 */
+}
+
+.calc-mini.weight {
+    background-color: #e3f2fd; /* 薄い青 */
+    color: #1976d2;           /* 濃い青 */
+    border-color: #1976d2;
+}
+
+.calc-mini.qty {
+    background-color: #e8f5e9; /* 薄い緑 */
+    color: #2e7d32;           /* 濃い緑 */
+    border-color: #2e7d32;
+}
 
 /* ══════════════════════════════════════════════════════════
    5. バリエーション・数量ボタン
