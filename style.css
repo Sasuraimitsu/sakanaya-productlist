@@ -895,32 +895,6 @@ header {
     z-index: 3001;
 }
 
-/* ─── MAP ─── */
-.map-section {
-    padding: 40px 20px 120px;
-    background: #fff;
-    text-align: center;
-}
-
-.map-section h3 {
-    color: var(--main-blue);
-    margin-bottom: 16px;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-}
-
-.map-container {
-    width: 100%;
-    max-width: 1000px; /* お好みの最大幅 */
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-.map-container iframe {
-    width: 100%;
-    border-radius: 8px; /* 角を丸くすると今風になります */
-}
-
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
     .header-flex-row {
