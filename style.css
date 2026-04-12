@@ -1298,3 +1298,10 @@ header {
   background: #ccc;
   border-radius: 3px;
 }
+
+/* 押せないボタンの見た目を調整 */
+.qty-btn:disabled {
+    background-color: #ccc; /* グレーにする */
+    cursor: not-allowed;    /* カーソルを禁止マークにする */
+    opacity: 0.6;           /* 少し透明にする */
+}
