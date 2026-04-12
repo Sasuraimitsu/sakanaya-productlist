@@ -206,7 +206,7 @@ function setLang(lang) {
         'cat-all': t.cat_all, 'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole,
         'cat-dr': t.cat_dr, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil,
         'cat-sake': t.cat_sake, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege,
-        'cat-waiting': t.cat_waiting, 'search-input': t.searchPlaceholder,
+        'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry,'search-input': t.searchPlaceholder,
         'btn-first-order': t.btnFirstOrder, 'btn-repeat-order': t.btnRepeatOrder,
         'order-clear-btn': t.clearBtn, 'form-first-title': t.formFirstTitle,
         'form-repeat-title': t.formRepeatTitle, 'btn-submit-first': t.btnSubmitFirst,
