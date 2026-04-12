@@ -340,7 +340,7 @@ function buildCard(p) {
                 <div class="variant-qty-wrap">
                     <button class="qty-btn" type="button" onclick="changeCartQty('${vid}', -1)">−</button>
                     <span class="variant-qty">${qty}</span>
-                    <button class="qty-btn" type="button" onclick="changeCartQty('${vid}', 1)">＋</button>
+                    <button class="qty-btn" type="button" onclick="changeCartQty('${vid}', 1)" ${toNumber(v.stock, 0) <= 0 ? 'disabled' : ''}>＋</button>
                 </div>
             </div>`;
     }).join('');
