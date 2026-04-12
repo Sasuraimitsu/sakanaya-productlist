@@ -1054,21 +1054,6 @@ header {
     margin-top: 10px;
 }
 
-/* 注文ボタン（紺色の背景） */
-.order-send-btn {
-    flex: 1;
-    padding: 12px 10px; /* 少し高さを出す */
-    border: none;
-    background: #0f2a44;
-    color: #ffffff !important; /* ★文字色を白に強制 */
-    border-radius: 8px;
-    font-weight: 900;           /* ★文字を一番太く */
-    font-size: 1rem;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-}
-
 /* クリアボタン（薄いグレーの背景） */
 .order-clear-btn {
     width: 80px;
