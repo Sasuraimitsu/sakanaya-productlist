@@ -788,20 +788,6 @@ header {
     gap: 8px;
     margin-top: 12px;
 }
-.order-clear-btn {
-    background: #f1f5f9;
-    color: var(--main-blue);
-    border: 1px solid #d5dee8;
-    padding: 14px 10px;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.order-clear-btn:hover {
-    background: #e2e8f0;
-}
 
 .total-note {
     font-size: 0.68rem;
