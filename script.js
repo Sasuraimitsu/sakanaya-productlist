@@ -233,7 +233,17 @@ function setLang(lang) {
 // ═══════════════════════════════════════════════════════════
 // 7. UI & MODAL CONTROL
 // ═══════════════════════════════════════════════════════════
-function toggleCartPanel() { document.getElementById('cart-panel')?.classList.toggle('show'); }
+function toggleCartPanel() {
+    const panel = document.getElementById('cart-panel');
+    if (panel) {
+        panel.classList.toggle('show');
+    }
+}
+
+// 閉じるボタン（×）用の関数
+function closeCartPanel() {
+    document.getElementById('cart-panel')?.classList.remove('show');
+}
 
 function closeCartPanel() {
     const cartPanel = document.getElementById('cart-panel');
