@@ -44,7 +44,7 @@ const UI_TEXT = {
         btnRepeatOrder: "Order(Repeat)", formFirstTitle: "New Registration", formRepeatTitle: "Repeat Order",
         placeholderStore: "Store", placeholderName: "Name", placeholderPhone: "Phone",
         btnSubmitFirst: "Get Guide", btnSubmitRepeat: "Send to Telegram",
-        noticeBody:\- Filter items by category.<br>- You'll receive a confirmation sheet via Telegram.\
+        noticeBody:`- Filter items by category.<br>- You'll receive a confirmation sheet via Telegram.`
     }
 };
 
