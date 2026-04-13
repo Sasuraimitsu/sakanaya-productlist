@@ -295,13 +295,25 @@ function closeCartPanel() {
 }
 
 function openModal(src) {
-    if(src) {
-        document.getElementById('modal-img').src = src;
-        document.getElementById('image-modal').style.display = 'block';
+    if (src) {
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
+        modalImg.src = src;
+        modal.style.display = 'flex'; // 'block'より'flex'の方が中央寄せしやすいため
+        document.body.style.overflow = 'hidden'; // 背後のスクロールを止める（お好みで）
     }
 }
 
-function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
+function closeModal() {
+    const modal = document.getElementById('image-modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = ''; // スクロールを再開
+}
+
+// モーダル内の画像をクリックした時に、親要素のcloseModalが発火して閉じないようにする（伝播防止）
+document.getElementById('modal-img')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+});
 
 function selectVariantImage(pid, vImg, fImg, btn) {
     const img = document.getElementById(`product-image-${pid}`);
