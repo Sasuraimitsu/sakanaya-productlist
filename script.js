@@ -169,6 +169,47 @@ function buildCard(p) {
 // ═══════════════════════════════════════════════════════════
 // 6. CART & LANGUAGE LOGIC
 // ═══════════════════════════════════════════════════════════
+function changeCartQty(vid, delta) {
+    // 全商品から該当するバリアント(種類)を探す
+    let targetVariant = null;
+    let targetProduct = null;
+
+    for (const p of allProducts) {
+        const v = p.variants.find(v => v.variant_id === vid);
+        if (v) {
+            targetVariant = v;
+            targetProduct = p;
+            break;
+        }
+    }
+
+    if (!targetVariant) return;
+
+    // カートの状態を更新
+    if (!cart[vid]) {
+        if (delta <= 0) return;
+        cart[vid] = {
+            variant_id: vid,
+            qty: 0,
+            price_usd: toNumber(targetVariant.price_usd),
+            product_name_jp: targetProduct.name_jp,
+            product_name_en: targetProduct.name_en,
+            code: targetVariant.variant_code
+        };
+    }
+
+    cart[vid].qty += delta;
+
+    // 0以下になったら削除
+    if (cart[vid].qty <= 0) {
+        delete cart[vid];
+    }
+
+    // 表示を更新（カード内の数字と右上のカートアイコン両方）
+    applyFilters(); 
+    renderCart();
+}
+
 function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
