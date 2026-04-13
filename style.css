@@ -241,53 +241,40 @@ header {
 }
 
 /* ══════════════════════════════════════════════════════════
-   7 画像ポップアップ・モーダル (Image Modal)
+   7. 画像ポップアップ・モーダル (Image Modal)
    ══════════════════════════════════════════════════════════ */
 #image-modal {
-    display: none;        /* JSで制御 */
+    display: none;
     position: fixed;
-    z-index: 9999;       /* ヘッダーやカートより上に表示 */
+    z-index: 10000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* 背景をしっかり暗く */
+    background-color: rgba(0, 0, 0, 0.7); /* 少し薄くして圧迫感を減らす */
     justify-content: center;
     align-items: center;
-    cursor: pointer;      /* 背景クリックで閉じられることを示唆 */
+    cursor: zoom-out; /* クリックで閉じられることを示すカーソル */
 }
 
-/* ポップアップされる画像本体 */
 .modal-content {
-    max-width: 90%;
-    max-height: 85%;
-    border-radius: 8px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    max-width: 95%;
+    max-height: 90%;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    background-color: #fff; /* 画像の周りに白枠を入れると見やすい */
+    padding: 5px;
+    border-radius: 4px;
 }
 
-/* 閉じるボタン */
 .close-btn {
     position: absolute;
-    top: 20px;
-    right: 25px;
+    top: 15px;
+    right: 20px;
     color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    line-height: 1;
+    font-size: 35px;
     cursor: pointer;
-    z-index: 10000;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-
-/* モバイル環境での調整 */
-@media (max-width: 480px) {
-    .modal-content {
-        max-width: 95%;
-        max-height: 70%;
-    }
-}
-
 
 /* ══════════════════════════════════════════════════════════
    8. レスポンシブ対応 (Mobile Optimization)
