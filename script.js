@@ -28,7 +28,7 @@ const UI_TEXT = {
         btnRepeatOrder: "ご注文", formFirstTitle: "初めての方 (新規登録)", formRepeatTitle: "ご注文 (リピート)",
         placeholderStore: "店名", placeholderName: "担当者名", placeholderPhone: "電話番号",
         btnSubmitFirst: "登録案内を受け取る", btnSubmitRepeat: "Telegramで注文する",
-        noticeBody:・商品はカテゴリーや名前で絞り込みが可能です。<br>・Telegramでご注文後、注文確認シートが送付されます。
+        noticeBody: `・商品はカテゴリーや名前で絞り込みが可能です。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
     },
     en: {
         cat_all: "ALL", cat_frozen: "FROZEN", cat_whole: "WHOLE", cat_dr: "SEMI DRESS",
@@ -44,7 +44,7 @@ const UI_TEXT = {
         btnRepeatOrder: "Order(Repeat)", formFirstTitle: "New Registration", formRepeatTitle: "Repeat Order",
         placeholderStore: "Store", placeholderName: "Name", placeholderPhone: "Phone",
         btnSubmitFirst: "Get Guide", btnSubmitRepeat: "Send to Telegram",
-        noticeBody:- Filter items by category.<br>- You'll receive a confirmation sheet via Telegram.`
+        noticeBody:`- Filter items by category.<br>- You'll receive a confirmation sheet via Telegram.`
     }
 };
 
