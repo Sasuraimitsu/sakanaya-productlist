@@ -299,15 +299,15 @@ function openModal(src) {
         const modal = document.getElementById('image-modal');
         const modalImg = document.getElementById('modal-img');
         modalImg.src = src;
-        modal.style.display = 'flex'; // 'block'より'flex'の方が中央寄せしやすいため
-        document.body.style.overflow = 'hidden'; // 背後のスクロールを止める（お好みで）
+        modal.style.display = 'flex'; 
+        // スクロール禁止（overflow: hidden）の行を削除しました
     }
 }
 
 function closeModal() {
     const modal = document.getElementById('image-modal');
     modal.style.display = 'none';
-    document.body.style.overflow = ''; // スクロールを再開
+    // スクロール解除の行も不要なので削除しました
 }
 
 // モーダル内の画像をクリックした時に、親要素のcloseModalが発火して閉じないようにする（伝播防止）
