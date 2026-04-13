@@ -207,7 +207,8 @@ function setLang(lang) {
         'cat-all': t.cat_all, 'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole,
         'cat-dr': t.cat_dr, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil,
         'cat-sake': t.cat_sake, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege,
-        'cat-waiting': t.cat_waiting, 'cat-inquiry': t.cat_inquiry,'search-input': t.searchPlaceholder,
+        'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry,'search-input': t.searchPlaceholder,
+        'notice-summary-text': t.noticeTitle,'notice-body-content': t.noticeBody,
         'btn-first-order': t.btnFirstOrder, 'btn-repeat-order': t.btnRepeatOrder,
         'order-clear-btn': t.clearBtn, 'form-first-title': t.formFirstTitle,
         'form-repeat-title': t.formRepeatTitle, 'btn-submit-first': t.btnSubmitFirst,
@@ -215,9 +216,15 @@ function setLang(lang) {
     };
 
     for (let id in mapping) {
-        const el = document.getElementById(id);
-        if (el) el.tagName === 'INPUT' ? el.placeholder = mapping[id] : el.textContent = mapping[id];
+    const el = document.getElementById(id);
+    if (el) {
+        if (id === 'notice-body-content') {
+            el.innerHTML = mapping[id];
+        } else {
+            el.tagName === 'INPUT' ? el.placeholder = mapping[id] : el.textContent = mapping[id];
+        }
     }
+}
 
     applyFilters();
     renderCart();
