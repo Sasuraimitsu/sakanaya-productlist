@@ -316,6 +316,22 @@ function renderCart() {
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
+function clearCart() {
+    // 1. データを完全に空にする
+    cart = {};
+    
+    // 2. フィルタ（商品一覧の＋－）とバッジをリセット
+    applyFilters();
+    const badge = document.getElementById('cart-count-badge');
+    if (badge) badge.textContent = '0';
+    
+    // 3. 最新の空の状態でカートを描き直す（これで古い表示が消える）
+    renderCart(); 
+    
+    // 4. パネルを閉じる
+    closeCartPanel();
+}
+
 function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
@@ -419,22 +435,6 @@ function showRepeatOrderForm() {
 // ═══════════════════════════════════════════════════════════
 // 8. ORDER LOGIC (GAS & Telegram 連携)
 // ═══════════════════════════════════════════════════════════
-function clearCart() {
-    // 1. データを完全に空にする
-    cart = {};
-    
-    // 2. フィルタとバッジをリセット
-    applyFilters();
-    const badge = document.getElementById('cart-count-badge');
-    if (badge) badge.textContent = '0';
-    
-    // 3. 【重要】最新の空の状態でカートを描き直す
-    renderCart(); 
-    
-    // 4. パネルを閉じる
-    closeCartPanel();
-}
-
 async function submitFirstOrder() {
     const storeName = document.getElementById('first-store-name')?.value.trim();
     const contactName = document.getElementById('first-contact-name')?.value.trim();
