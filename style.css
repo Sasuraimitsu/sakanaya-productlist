@@ -206,47 +206,64 @@ header {
 .qty-btn:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
 
 /* ══════════════════════════════════════════════════════════
-   6. カートパネル (Cart Panel)
-   ══════════════════════════════════════════════════════════ */
-/* ══════════════════════════════════════════════════════════
-   6. カートパネル (Cart Panel)
-   ══════════════════════════════════════════════════════════ */
+   6. カートパネル (Cart Panel)
+   ══════════════════════════════════════════════════════════ */
 .cart-panel {
-    position: fixed;
-    top: 0;
-    right: -320px;       /* 100%ではなく、パネルの幅分だけ外に出す */
-    width: 300px;
-    height: 100%;
-    background: #fff;
-    z-index: 2000;       /* モーダル(9999)よりは下、他よりは上 */
-    transition: right 0.3s ease, visibility 0.3s; /* visibilityもアニメーション */
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    display: flex;       /* 中身を整列させるため */
-    flex-direction: column;
-    visibility: hidden;  /* 【重要】隠れている時はブラウザに認識させない */
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 300px;
+    height: 100%;
+    background: #fff;
+    z-index: 2000;
+    transition: right 0.3s ease, visibility 0.3s;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    visibility: hidden;
+
+    /* 内部レイアウトの調整 */
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* 余白を作って文字が端に寄るのを防ぐ */
+    box-sizing: border-box; /* paddingを含めたサイズ計算にする */
 }
 
 .cart-panel.show {
-    right: 0;
-    visibility: visible; /* 【重要】表示時だけ有効にする */
+    right: 0;
+    visibility: visible;
 }
 
-/* カート内アイテム・フォーム */
-.cart-items { max-height: 260px; overflow-y: auto; margin-bottom: 10px; flex: 1; }
-.order-summary-box { white-space: pre-wrap; font-size: 13px; padding: 10px; border: 1px dashed #bbb; border-radius: 8px; background: #fff; max-height: 180px; overflow-y: auto; margin-bottom: 10px; }
-
-.order-bar-actions { display: flex; gap: 8px; margin-top: 10px; }
-
-.order-send-btn {
-    flex: 1; padding: 12px 10px; border: none; background: var(--main-blue) !important;
-    color: #ffffff !important; border-radius: 8px; font-weight: 900; font-size: 1rem; cursor: pointer;
+/* カート内のアイテム表示エリア */
+.cart-items { 
+    flex: 1; /* 余っているスペースをすべて使う */
+    overflow-y: auto; 
+    margin-bottom: 15px;
+    min-height: 100px; /* 最低限の高さを確保 */
 }
 
-.order-clear-btn {
-    width: 80px; padding: 12px 10px; border: none; background: #e5e7eb;
-    color: #333333 !important; border-radius: 8px; font-weight: bold; cursor: pointer;
+/* 各注文アイテムの1行分 */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
 }
 
+.cart-item-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* 左寄せを確実にする */
+}
+
+.cart-item-info strong {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.cart-item-actions {
+    display: flex;
+    gap: 5px;
+}
 /* ══════════════════════════════════════════════════════════
    7. 画像ポップアップ・モーダル (Image Modal)
    ══════════════════════════════════════════════════════════ */
