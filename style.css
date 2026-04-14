@@ -305,13 +305,15 @@ header {
     .comment-box { display: none !important; }
 
     /* スマホ用下出しカート */
-    @media (max-width: 768px) {
+   @media (max-width: 768px) {
     .cart-panel {
-        right: -100%; /* スマホでも最初は隠す */
-        width: 100%;  /* スマホでは全画面にするなら100% */
+        right: -100%;    /* スマホは横幅全開なので100%分外へ */
+        width: 100%;
+        visibility: hidden;
     }
     .cart-panel.show {
         right: 0;
+        visibility: visible;
     }
 }
 
