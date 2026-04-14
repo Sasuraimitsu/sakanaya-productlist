@@ -286,9 +286,11 @@ function toggleCartPanel() {
     }
 }
 
-// 閉じるボタン（×）用の関数
 function closeCartPanel() {
-    document.getElementById('cart-panel')?.classList.remove('show');
+    const panel = document.getElementById('cart-panel');
+    if (panel) {
+        panel.classList.remove('show');
+    }
 }
 
 function closeCartPanel() {
