@@ -212,16 +212,19 @@ header {
     position: fixed;
     top: 10px;
     right: 10px;
-    width: 320px;
+    width: 350px; /* 少し幅を広げて見やすくします */
     height: calc(100% - 20px);
-    background: #fff;
+    background: #ffffff;
     z-index: 2500;
-    display: none;          /* 初期は非表示 */
-    flex-direction: column; 
-    border: 1px solid #999; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    border-radius: 8px;
-    
+    display: none;
+    flex-direction: column;
+
+    /* --- 修正箇所：はっきり浮き出させる設定 --- */
+    border: 2px solid #333333;           /* 濃いめの枠線で境界を明確に */
+    box-shadow: 0 0 30px rgba(0,0,0,0.5); /* 強い影をつけて浮かせる */
+    border-radius: 12px;                  /* 角を丸く */
+    /* -------------------------------------- */
+
     padding: 20px;
     box-sizing: border-box;
 }
