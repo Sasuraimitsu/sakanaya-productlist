@@ -220,7 +220,10 @@ function renderCart() {
     
     if (!panel) return;
 
-    // 1. 【指示事項】言語によるタイトルの切り替え
+    // ★追加：今のメモを消さないための「一時保存」
+    const currentNotes = document.getElementById('cart-notes')?.value || "";
+
+    // 1. 【指示事項】言語によるタイトルの切り替え（日本語：ご注文内容 / 英語：Your Order）
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
@@ -260,25 +263,31 @@ function renderCart() {
         </div>
     `;
 
-    // 3. 【指示事項】商品の有無に関わらず、メモの下にボタンを配置
+    // フッター（ボタンエリア）を維持
     const footerHtml = `
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
             <div class="order-bar-actions" style="display:flex; gap:8px;">
-                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold;">
+                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
                     ${currentLang === 'jp' ? '初めての方' : 'First Time'}
                 </button>
-                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold;">
+                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
                     ${currentLang === 'jp' ? 'ご注文' : 'Order'}
                 </button>
-                <button class="order-clear-btn" onclick="clearCart()" style="padding:10px 10px; font-size:0.75rem;">
+                <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
                     ${currentLang === 'jp' ? 'クリア' : 'Clear'}
                 </button>
             </div>
         </div>
     `;
 
-    // 全てを結合してパネルに反映
+    // 箱全体を更新
     panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
+
+    // ★追加：一時保存していたメモの値を戻す
+    const newNotes = document.getElementById('cart-notes');
+    if (newNotes) {
+        newNotes.value = currentNotes;
+    }
     
     // バッジ更新
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
