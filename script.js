@@ -218,6 +218,8 @@ function renderCart() {
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
     const el = document.getElementById('cart-items');
+    const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
+    const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
     
     if (panel && items.length === 0) {
     panel.classList.remove('show');}
@@ -229,7 +231,7 @@ function renderCart() {
         return;
     }
     
-el.innerHTML = items.map(item => `
+const itemsHtml = items.map(item => ``
     <div class="cart-item">
         <div class="cart-item-info">
             <strong>[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
@@ -240,6 +242,16 @@ el.innerHTML = items.map(item => `
             <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
         </div>
     </div>`).join('');
+// メモ欄（Notes）のタイトル追加
+    const notesHtml = `
+        <div style="margin-top:15px;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.9rem;">${notesTitle}</label>
+            <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;"></textarea>
+        </div>
+    `;
+
+    el.innerHTML = headerHtml + itemsHtml + notesHtml;
+    
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
