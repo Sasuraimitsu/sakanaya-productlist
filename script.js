@@ -223,12 +223,13 @@ function renderCart() {
     // ★追加：今のメモを消さないための「一時保存」
     const currentNotes = document.getElementById('cart-notes')?.value || "";
 
-    // 1. 【指示事項】言語によるタイトルの切り替え（日本語：ご注文内容 / 英語：Your Order）
+    // 1. 【指示事項】言語によるタイトルの切り替え
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
-    // 商品がない場合（パネルを閉じる動作は維持）
+    // 商品がない場合（ここを少しだけ強化しました）
     if (items.length === 0) {
+        panel.innerHTML = ""; // ★ここを追加：箱の中身を空っぽにする
         panel.classList.remove('show');
         document.getElementById('cart-count-badge').textContent = '0';
         return;
@@ -263,7 +264,6 @@ function renderCart() {
         </div>
     `;
 
-    // フッター（ボタンエリア）を維持
     const footerHtml = `
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
             <div class="order-bar-actions" style="display:flex; gap:8px;">
@@ -280,16 +280,39 @@ function renderCart() {
         </div>
     `;
 
-    // 箱全体を更新
     panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
 
-    // ★追加：一時保存していたメモの値を戻す
     const newNotes = document.getElementById('cart-notes');
     if (newNotes) {
         newNotes.value = currentNotes;
     }
     
-    // バッジ更新
+    document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
+}
+
+    const footerHtml = `
+        <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
+            <div class="order-bar-actions" style="display:flex; gap:8px;">
+                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
+                    ${currentLang === 'jp' ? '初めての方' : 'First Time'}
+                </button>
+                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
+                    ${currentLang === 'jp' ? 'ご注文' : 'Order'}
+                </button>
+                <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
+                    ${currentLang === 'jp' ? 'クリア' : 'Clear'}
+                </button>
+            </div>
+        </div>
+    `;
+
+    panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
+
+    const newNotes = document.getElementById('cart-notes');
+    if (newNotes) {
+        newNotes.value = currentNotes;
+    }
+    
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
