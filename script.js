@@ -397,9 +397,18 @@ function showRepeatOrderForm() {
 // 8. ORDER LOGIC (GAS & Telegram 連携)
 // ═══════════════════════════════════════════════════════════
 function clearCart() {
+    // 1. データを完全に空にする
     cart = {};
+    
+    // 2. フィルタとバッジをリセット
     applyFilters();
-    renderCart();
+    const badge = document.getElementById('cart-count-badge');
+    if (badge) badge.textContent = '0';
+    
+    // 3. 【重要】最新の空の状態でカートを描き直す
+    renderCart(); 
+    
+    // 4. パネルを閉じる
     closeCartPanel();
 }
 
