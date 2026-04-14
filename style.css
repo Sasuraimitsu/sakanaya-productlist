@@ -208,27 +208,27 @@ header {
 /* ══════════════════════════════════════════════════════════
    6. カートパネル (Cart Panel)
    ══════════════════════════════════════════════════════════ */
+/* 6. カートパネル の基本設定 */
 .cart-panel {
     position: fixed;
-    top: 0;
-    right: 0;            /* 位置は右端に固定 */
+    top: 10px;
+    right: 10px;
     width: 320px;
-    height: 100%;
+    height: calc(100% - 20px);
     background: #fff;
-    z-index: 2000;
+    z-index: 2500;
+    display: none;          /* 初期は非表示 */
+    flex-direction: column; 
+    border: 1px solid #999; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    border-radius: 8px;
     
-    /* 以前の「横に隠す」設定ではなく「消しておく」設定に変更 */
-    display: none;       /* 初期状態は完全に非表示 */
-    
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
     padding: 20px;
     box-sizing: border-box;
 }
 
-/* JSで .show クラスがついた時だけ表示する */
 .cart-panel.show {
-    display: flex;       /* ボタンクリックで表示 */
-    flex-direction: column;
+    display: flex;
 }
 /* カート内のアイテム表示エリア */
 .cart-items { 
