@@ -208,20 +208,27 @@ header {
 /* ══════════════════════════════════════════════════════════
    6. カートパネル (Cart Panel)
    ══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   6. カートパネル (Cart Panel)
+   ══════════════════════════════════════════════════════════ */
 .cart-panel {
     position: fixed;
     top: 0;
-    right: -100%; /* 最初は画面の右外側に完全に隠す */
-    width: 300px;  /* 必要に応じて調整 */
+    right: -320px;       /* 100%ではなく、パネルの幅分だけ外に出す */
+    width: 300px;
     height: 100%;
     background: #fff;
-    z-index: 1000;
-    transition: right 0.3s ease; /* スライドして出てくるアニメーション */
-    display: block !important;    /* noneではなく、位置で隠すのがスムーズです */
+    z-index: 2000;       /* モーダル(9999)よりは下、他よりは上 */
+    transition: right 0.3s ease, visibility 0.3s; /* visibilityもアニメーション */
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    display: flex;       /* 中身を整列させるため */
+    flex-direction: column;
+    visibility: hidden;  /* 【重要】隠れている時はブラウザに認識させない */
 }
 
 .cart-panel.show {
     right: 0;
+    visibility: visible; /* 【重要】表示時だけ有効にする */
 }
 
 /* カート内アイテム・フォーム */
