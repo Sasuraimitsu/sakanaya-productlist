@@ -213,6 +213,19 @@ function changeCartQty(vid, delta) {
     renderCart();
 }
 
+// ═══════════════════════════════════════════════════════════
+// 8. ORDER LOGIC (GAS & Telegram 連携)
+// ═══════════════════════════════════════════════════════════
+
+function clearCart() {
+    cart = {};
+    if (typeof applyFilters === 'function') applyFilters();
+    const badge = document.getElementById('cart-count-badge');
+    if (badge) badge.textContent = '0';
+    renderCart(); 
+    closeCartPanel();
+}
+
 function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
@@ -220,22 +233,23 @@ function renderCart() {
     
     if (!panel) return;
 
-    // ★追加：今のメモを消さないための「一時保存」
+    // メモを一時保存
     const currentNotes = document.getElementById('cart-notes')?.value || "";
 
-    // 1. 【指示事項】言語によるタイトルの切り替え
+    // 1. 言語によるタイトルの切り替え
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
-    // 商品がない場合（ここを少しだけ強化しました）
+    // 商品がない場合：中身を完全にクリアして閉じる
     if (items.length === 0) {
-        panel.innerHTML = ""; // ★ここを追加：箱の中身を空っぽにする
+        panel.innerHTML = ""; 
         panel.classList.remove('show');
-        document.getElementById('cart-count-badge').textContent = '0';
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) badge.textContent = '0';
         return;
     }
 
-    // 2. 【指示事項】ヘッダー、商品リスト、メモ、ボタンを一つの箱として構成
+    // 2. ヘッダー
     const headerHtml = `
         <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
@@ -243,6 +257,7 @@ function renderCart() {
         </div>
     `;
 
+    // 3. 商品リスト ＋ メモ欄
     const itemsHtml = `
         <div style="flex:1; overflow-y:auto; padding:15px;">
             ${items.map(item => `
@@ -264,6 +279,7 @@ function renderCart() {
         </div>
     `;
 
+    // 4. フッター（ボタンエリア）
     const footerHtml = `
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
             <div class="order-bar-actions" style="display:flex; gap:8px;">
@@ -280,56 +296,16 @@ function renderCart() {
         </div>
     `;
 
+    // 全てをパネルの中へ
     panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
 
+    // メモを戻す
     const newNotes = document.getElementById('cart-notes');
-    if (newNotes) {
-        newNotes.value = currentNotes;
-    }
+    if (newNotes) newNotes.value = currentNotes;
     
-    document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
-}
-
-    const footerHtml = `
-        <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
-            <div class="order-bar-actions" style="display:flex; gap:8px;">
-                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
-                    ${currentLang === 'jp' ? '初めての方' : 'First Time'}
-                </button>
-                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
-                    ${currentLang === 'jp' ? 'ご注文' : 'Order'}
-                </button>
-                <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
-                    ${currentLang === 'jp' ? 'クリア' : 'Clear'}
-                </button>
-            </div>
-        </div>
-    `;
-
-    panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
-
-    const newNotes = document.getElementById('cart-notes');
-    if (newNotes) {
-        newNotes.value = currentNotes;
-    }
-    
-    document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
-}
-
-function clearCart() {
-    // 1. データを完全に空にする
-    cart = {};
-    
-    // 2. フィルタ（商品一覧の＋－）とバッジをリセット
-    applyFilters();
+    // バッジ更新
     const badge = document.getElementById('cart-count-badge');
-    if (badge) badge.textContent = '0';
-    
-    // 3. 最新の空の状態でカートを描き直す（これで古い表示が消える）
-    renderCart(); 
-    
-    // 4. パネルを閉じる
-    closeCartPanel();
+    if (badge) badge.textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
 function setLang(lang) {
