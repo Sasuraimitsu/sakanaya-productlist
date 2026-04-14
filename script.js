@@ -218,43 +218,60 @@ function renderCart() {
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
     const el = document.getElementById('cart-items');
+    
+    // 1. タイトルと言語設定
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
-    
-    if (panel && items.length === 0) {
-    panel.classList.remove('show');}
-    if (!el) return;
 
+    if (!panel) return;
+
+    // カートが空の場合
     if (items.length === 0) {
-        el.innerHTML = `<p class="cart-empty">${t.emptyCart}</p>`;
+        panel.classList.remove('show');
         document.getElementById('cart-count-badge').textContent = '0';
         return;
     }
-    
-const itemsHtml = items.map(item => ``
-    <div class="cart-item">
-        <div class="cart-item-info">
-            <strong>[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
-            <span> × ${item.qty}</span>
-        </div>
-        <div class="cart-item-actions">
-            <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
-            <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
-        </div>
-    </div>`).join('');
-// メモ欄（Notes）のタイトル追加
-    const notesHtml = `
-        <div style="margin-top:15px;">
-            <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.9rem;">${notesTitle}</label>
-            <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;"></textarea>
+
+    // 2. 「一つの箱」の中身を組み立てる
+    // ヘッダー（タイトル + 閉じるボタン）
+    const headerHtml = `
+        <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
+            <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
+            <button onclick="closeCartPanel()" style="color:#fff; border:none; background:none; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
         </div>
     `;
 
-    el.innerHTML = headerHtml + itemsHtml + notesHtml;
+    // 商品リスト
+    const itemsHtml = `
+        <div style="flex:1; overflow-y:auto; padding:15px;">
+            ${items.map(item => `
+                <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
+                    <div style="flex:1;">
+                        <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
+                        <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
+                    </div>
+                    <div class="cart-item-actions" style="display:flex; gap:5px;">
+                        <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
+                        <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
+                    </div>
+                </div>`).join('')}
+            
+            <div style="margin-top:15px;">
+                <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.85rem;">${notesTitle}</label>
+                <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;"></textarea>
+            </div>
+        </div>
+    `;
+
+    // 4. まるごとパネルの中（箱の中）に流し込む
+    // ボタンエリア（初めての方・ご注文・クリア）はHTML側に元々ある場合は、ここには含めず「el」のみを更新します。
+    // もしボタンも一緒に箱に入れたい場合は、ここに追加します。
     
+    panel.innerHTML = headerHtml + itemsHtml; 
+    
+    // バッジ更新
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
-
 function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
