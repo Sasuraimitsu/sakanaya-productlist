@@ -206,31 +206,44 @@ header {
 .qty-btn:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
 
 /* ══════════════════════════════════════════════════════════
-   6. カートパネル (Cart Panel)
-   ══════════════════════════════════════════════════════════ */
+   6. カートパネル (一つの箱として統合)
+   ══════════════════════════════════════════════════════════ */
 .cart-panel {
     position: fixed;
-    top: 10px;
-    right: 10px;
-    width: 350px; /* 少し幅を広げて見やすくします */
-    height: calc(100% - 20px);
-    background: #ffffff;
-    z-index: 2500;
-    display: none;
+    top: 20px;
+    right: 20px;
+    width: 350px;
+    /* 箱の最大高さを指定し、中身が増えても突き抜けないようにする */
+    max-height: calc(100vh - 40px); 
+    background: #ffffff !important; /* 背景を確実に白に */
+    z-index: 9999; /* 何よりも上に表示 */
+    display: none; 
     flex-direction: column;
 
-    /* --- 修正箇所：はっきり浮き出させる設定 --- */
-    border: 2px solid #333333;           /* 濃いめの枠線で境界を明確に */
-    box-shadow: 0 0 30px rgba(0,0,0,0.5); /* 強い影をつけて浮かせる */
-    border-radius: 12px;                  /* 角を丸く */
-    /* -------------------------------------- */
-
-    padding: 20px;
-    box-sizing: border-box;
+    /* --- 指示通りの「しっかり囲われた状況」を作る設定 --- */
+    border: 2px solid #333;           /* 濃い黒の太枠 */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4); /* 強い影で浮き出させる */
+    border-radius: 12px;              /* 角を丸く */
+    padding: 0;                       /* 内部の余白を一旦リセット */
+    overflow: hidden;                 /* 中身が箱からはみ出ないように */
 }
 
 .cart-panel.show {
     display: flex;
+}
+
+/* カート内のスクロールエリア（商品が増えた時用） */
+.cart-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* 下部のボタンエリアを箱の中に固定 */
+.cart-footer {
+    padding: 15px;
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
 }
 /* カート内のアイテム表示エリア */
 .cart-items { 
