@@ -152,18 +152,21 @@ function buildCard(p) {
             </div>`;
     }).join('');
 
-    return `
-        <div class="card" data-category="${esc(getCategoryValue(p))}">
-            <div class="img-wrapper">
-                ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
-                ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
+return `
+    <div class="card" data-category="${esc(getCategoryValue(p))}">
+        <div class="img-wrapper">
+            ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
+            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
+        </div>
+        <div class="info">
+            <h3>[${esc(p.code || '---')}] ${name}</h3> 
+            <div class="size-calc-row">
+                <p class="size-detail">${esc(p.size || '')}</p>
+                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span>
             </div>
-            <div class="info">
-                <h3>${name}</h3>
-                <div class="size-calc-row"><p class="size-detail">${esc(p.size || '')}</p><span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span></div>
-                <div class="variant-list">${vsHTML}</div>
-            </div>
-        </div>`;
+            <div class="variant-list">${vsHTML}</div>
+        </div>
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -226,15 +229,17 @@ function renderCart() {
         return;
     }
     
-    el.innerHTML = items.map(item => `
-        <div class="cart-item">
-            <div class="cart-item-info"><strong>${esc(currentLang==='jp'?item.product_name_jp:item.product_name_en)}</strong>
-            <span>${item.qty} × $${item.price_usd}</span></div>
-            <div class="cart-item-actions">
-                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
-                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
-            </div>
-        </div>`).join('');
+el.innerHTML = items.map(item => `
+    <div class="cart-item">
+        <div class="cart-item-info">
+            <strong>[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
+            <span> × ${item.qty}</span>
+        </div>
+        <div class="cart-item-actions">
+            <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
+            <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
+        </div>
+    </div>`).join('');
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
