@@ -218,20 +218,20 @@ function renderCart() {
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
     
-    // 1. タイトルと言語設定
+    if (!panel) return;
+
+    // 1. 【指示事項】言語によるタイトルの切り替え
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
-    if (!panel) return;
-
-    // カートが空の場合（パネルを閉じる）
+    // 商品がない場合（パネルを閉じる動作は維持）
     if (items.length === 0) {
         panel.classList.remove('show');
         document.getElementById('cart-count-badge').textContent = '0';
         return;
     }
 
-    // 2. ヘッダー（黒いタイトルバー）
+    // 2. 【指示事項】ヘッダー、商品リスト、メモ、ボタンを一つの箱として構成
     const headerHtml = `
         <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
@@ -239,7 +239,6 @@ function renderCart() {
         </div>
     `;
 
-    // 3. 商品リスト ＋ メモ欄
     const itemsHtml = `
         <div style="flex:1; overflow-y:auto; padding:15px;">
             ${items.map(item => `
@@ -261,7 +260,7 @@ function renderCart() {
         </div>
     `;
 
-    // 4. ボタンエリア（ここに戻しました）
+    // 3. 【指示事項】商品の有無に関わらず、メモの下にボタンを配置
     const footerHtml = `
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
             <div class="order-bar-actions" style="display:flex; gap:8px;">
@@ -278,10 +277,10 @@ function renderCart() {
         </div>
     `;
 
-    // 最後にすべてを結合して「一つの箱」に流し込む
+    // 全てを結合してパネルに反映
     panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
     
-    // カートバッジ更新
+    // バッジ更新
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
