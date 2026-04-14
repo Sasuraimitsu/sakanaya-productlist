@@ -231,35 +231,32 @@ header {
 }
 /* カート内のアイテム表示エリア */
 .cart-items { 
-    flex: 1; /* 余っているスペースをすべて使う */
-    overflow-y: auto; 
-    margin-bottom: 15px;
-    min-height: 100px; /* 最低限の高さを確保 */
+    flex: 1;
+    overflow-y: auto; 
+    margin-bottom: 15px;
+    min-height: 100px;
+    /* 追記：リスト全体に左右の余白を少し入れると読みやすくなります */
+    padding: 0 5px; 
 }
 
 /* 各注文アイテムの1行分 */
 .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.cart-item-info {
-    display: flex;
-    flex-direction: column;
-    text-align: left; /* 左寄せを確実にする */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: **15px 0**; /* 10pxから15pxに広げて、1行ずつの間隔を確保 */
+    border-bottom: 1px solid **#ddd**; /* #eeeより少し濃い線にして区切りを明確に */
 }
 
 .cart-item-info strong {
-    color: #333;
-    font-size: 0.9rem;
+    color: #333;
+    font-size: **0.95rem**; /* 0.9remから少しだけ大きくして、文字を読みやすく */
+    **line-height: 1.5;** /* 行間を広げて、2行になっても重ならないように */
 }
 
 .cart-item-actions {
-    display: flex;
-    gap: 5px;
+    display: flex;
+    gap: **10px**; /* 5pxから10pxに広げて、ボタンを押しやすく */
 }
 /* ══════════════════════════════════════════════════════════
    7. 画像ポップアップ・モーダル (Image Modal)
