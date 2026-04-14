@@ -286,29 +286,15 @@ header {
 /* ══════════════════════════════════════════════════════════
    8. レスポンシブ対応 (Mobile Optimization)
    ══════════════════════════════════════════════════════════ */
+/* --- タブレット・スマホ共通 (768px以下) --- */
 @media (max-width: 768px) {
     .header-flex-row { flex-wrap: wrap; justify-content: center; }
     .title-section { text-align: center; width: 100%; order: -1; }
-}
 
-@media (max-width: 480px) {
-    /* 商品2列表示 */
-    .container {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important; padding: 10px !important;
-    }
-
-    .img-wrapper { height: 120px !important; }
-    .info { padding: 8px !important; }
-    .info h3 { font-size: 0.85rem !important; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-    .comment-box { display: none !important; }
-
-    /* スマホ用下出しカート */
-   @media (max-width: 768px) {
+    /* カートパネルの挙動を統一 */
     .cart-panel {
-        right: -100%;    /* スマホは横幅全開なので100%分外へ */
-        width: 100%;
+        right: -100%;    /* 横幅分を外に出す */
+        width: 100%;     /* スマホ・タブレットでは全幅表示 */
         visibility: hidden;
     }
     .cart-panel.show {
@@ -317,6 +303,29 @@ header {
     }
 }
 
+/* --- スマホ専用 (480px以下) --- */
+@media (max-width: 480px) {
+    /* 商品2列表示 */
+    .container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important; 
+        padding: 10px !important;
+    }
+
+    .img-wrapper { height: 120px !important; }
+    .info { padding: 8px !important; }
+    .info h3 { 
+        font-size: 0.85rem !important; 
+        height: 2.4em; 
+        overflow: hidden; 
+        display: -webkit-box; 
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical; 
+    }
+    .comment-box { display: none !important; }
+
+    /* バリエーションとボタンの微調整 */
     .variant-row { grid-template-columns: 1fr; gap: 5px; }
     .qty-btn { width: 28px; height: 28px; }
 }
