@@ -209,29 +209,27 @@ header {
    6. カートパネル (Cart Panel)
    ══════════════════════════════════════════════════════════ */
 .cart-panel {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    width: 300px;
-    height: 100%;
-    background: #fff;
-    z-index: 2000;
-    transition: right 0.3s ease, visibility 0.3s;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-    visibility: hidden;
-
-    /* 内部レイアウトの調整 */
-    display: flex;
-    flex-direction: column;
-    padding: 20px; /* 余白を作って文字が端に寄るのを防ぐ */
-    box-sizing: border-box; /* paddingを含めたサイズ計算にする */
+    position: fixed;
+    top: 0;
+    right: 0;            /* 位置は右端に固定 */
+    width: 320px;
+    height: 100%;
+    background: #fff;
+    z-index: 2000;
+    
+    /* 以前の「横に隠す」設定ではなく「消しておく」設定に変更 */
+    display: none;       /* 初期状態は完全に非表示 */
+    
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* JSで .show クラスがついた時だけ表示する */
 .cart-panel.show {
-    right: 0;
-    visibility: visible;
+    display: flex;       /* ボタンクリックで表示 */
+    flex-direction: column;
 }
-
 /* カート内のアイテム表示エリア */
 .cart-items { 
     flex: 1; /* 余っているスペースをすべて使う */
@@ -309,11 +307,11 @@ header {
     .title-section { text-align: center; width: 100%; order: -1; }
 
     /* カートパネルの挙動を統一 */
+    @media (max-width: 768px) {
     .cart-panel {
-        right: -100%;    /* 横幅分を外に出す */
-        width: 100%;     /* スマホ・タブレットでは全幅表示 */
-        visibility: hidden;
+        width: 100%;
     }
+}
     .cart-panel.show {
         right: 0;
         visibility: visible;
