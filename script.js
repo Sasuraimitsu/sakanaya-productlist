@@ -217,7 +217,6 @@ function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
-    const el = document.getElementById('cart-items');
     
     // 1. タイトルと言語設定
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
@@ -225,15 +224,14 @@ function renderCart() {
 
     if (!panel) return;
 
-    // カートが空の場合
+    // カートが空の場合（パネルを閉じる）
     if (items.length === 0) {
         panel.classList.remove('show');
         document.getElementById('cart-count-badge').textContent = '0';
         return;
     }
 
-    // 2. 「一つの箱」の中身を組み立てる
-    // ヘッダー（タイトル + 閉じるボタン）
+    // 2. ヘッダー（黒いタイトルバー）
     const headerHtml = `
         <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
@@ -241,37 +239,52 @@ function renderCart() {
         </div>
     `;
 
-    // 商品リスト
+    // 3. 商品リスト ＋ メモ欄
     const itemsHtml = `
         <div style="flex:1; overflow-y:auto; padding:15px;">
             ${items.map(item => `
                 <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
-                    <div style="flex:1;">
+                    <div style="flex:1; text-align:left;">
                         <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
                         <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
                     </div>
-                    <div class="cart-item-actions" style="display:flex; gap:5px;">
+                    <div style="display:flex; gap:5px;">
                         <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
                         <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
                     </div>
                 </div>`).join('')}
             
-            <div style="margin-top:15px;">
+            <div style="margin-top:15px; text-align:left;">
                 <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.85rem;">${notesTitle}</label>
                 <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;"></textarea>
             </div>
         </div>
     `;
 
-    // 4. まるごとパネルの中（箱の中）に流し込む
-    // ボタンエリア（初めての方・ご注文・クリア）はHTML側に元々ある場合は、ここには含めず「el」のみを更新します。
-    // もしボタンも一緒に箱に入れたい場合は、ここに追加します。
+    // 4. ボタンエリア（ここに戻しました）
+    const footerHtml = `
+        <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
+            <div class="order-bar-actions" style="display:flex; gap:8px;">
+                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold;">
+                    ${currentLang === 'jp' ? '初めての方' : 'First Time'}
+                </button>
+                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold;">
+                    ${currentLang === 'jp' ? 'ご注文' : 'Order'}
+                </button>
+                <button class="order-clear-btn" onclick="clearCart()" style="padding:10px 10px; font-size:0.75rem;">
+                    ${currentLang === 'jp' ? 'クリア' : 'Clear'}
+                </button>
+            </div>
+        </div>
+    `;
+
+    // 最後にすべてを結合して「一つの箱」に流し込む
+    panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
     
-    panel.innerHTML = headerHtml + itemsHtml; 
-    
-    // バッジ更新
+    // カートバッジ更新
     document.getElementById('cart-count-badge').textContent = items.reduce((s, i) => s + i.qty, 0);
 }
+
 function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
