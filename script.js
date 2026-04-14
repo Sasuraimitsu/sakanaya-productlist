@@ -369,7 +369,13 @@ async function submitFirstOrder() {
         await fetch(GAS_URL, {
             method: 'POST',
             mode: 'no-cors', 
-            body: JSON.stringify({ action: 'register_user', phone: phone, username: storeName, firstName: contactName })
+            body: JSON.stringify({ 
+                action: 'register_user', 
+                spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', // IDを追加
+                phone: phone, 
+                username: storeName, 
+                firstName: contactName 
+            })
         });
     } catch (e) { console.error("Registration error:", e); }
 
@@ -380,7 +386,8 @@ async function submitFirstOrder() {
     if (confirm(message)) {
         localStorage.setItem('temp_cart', JSON.stringify(cart));
         const cleanPhone = phone.replace(/\D/g, "");
-        window.open(`https://t.me/${BOT_USERNAME}?start=${cleanPhone}`, '_blank');
+        // BOT_USERNAME を SAKANAYAJAPON に固定
+        window.open(`https://t.me/SAKANAYAJAPON?start=${cleanPhone}`, '_blank');
         closeCartPanel();
     }
     if (btn) btn.disabled = false;
@@ -399,15 +406,23 @@ async function submitRepeatOrder() {
 
     let message = '【New Order / Web注文】\n--------------------------\n';
     items.forEach(item => {
-        const pName = currentLang === 'jp' ? (item.name_jp || item.name_en) : (item.name_en || item.name_jp);
-        message += `${item.code || 'N/A'} ${pName} × ${item.qty}\n`;
+        // [コード] 商品名 × 数量 の形式に統一
+        const pName = currentLang === 'jp' ? (item.product_name_jp || item.product_name_en) : (item.product_name_en || item.product_name_jp);
+        message += `[${item.code || 'N/A'}] ${pName} × ${item.qty}\n`;
     });
     if (notes) message += `--------------------------\n📝 Notes:\n${notes}\n`;
 
     try {
         await fetch(GAS_URL, {
             method: 'POST',
-            body: JSON.stringify({ action: 'send_order', phone: phone, name: "Web User", product: message })
+            body: JSON.stringify({ 
+                action: 'send_order', 
+                spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', // IDを追加
+                targetGroupId: '-4710396177', // グループIDを追加
+                phone: phone, 
+                name: "Web User", 
+                product: message 
+            })
         });
         alert(currentLang === 'jp' ? '注文を送信しました。' : 'Order sent!');
         clearCart();
