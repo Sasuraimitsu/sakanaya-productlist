@@ -25,7 +25,7 @@ const UI_TEXT = {
         weightCalc: '重量計算', qtyCalc: '数量計算', labelNotes: 'メモ',
         btnFirstOrder: "初めての方", btnRepeatOrder: "ご注文",
         btnSubmitFirst: "登録案内を受け取る", btnSubmitRepeat: "注文する",
-        noticeBody:`・商品はカテゴリーや名前で絞り込みが可能です。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
+        noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
     },
     en: {
         cat_all: "ALL", cat_frozen: "FROZEN", cat_whole: "WHOLE", cat_dr: "SEMI DRESS",
@@ -38,7 +38,7 @@ const UI_TEXT = {
         weightCalc: 'Weight', qtyCalc: 'Quantity', labelNotes: 'Notes',
         btnFirstOrder: "First Time", btnRepeatOrder: "Order",
         btnSubmitFirst: "Get Guide", btnSubmitRepeat: "Order",
-        noticeBody:`- Filter items by category.<br>- You'll receive a confirmation sheet via Telegram.`
+        noticeBody:`- For your first order, please make sure to register via the "First Time" button.<br>- You'll receive a confirmation sheet via Telegram.`
     }
 };
 
