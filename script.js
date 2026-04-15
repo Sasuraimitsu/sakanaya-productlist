@@ -424,7 +424,8 @@ async function processFirstTimeRegistration() {
             // ポップアップを閉じる
             closeFirstTimeModal();
             // Telegramを開く
-            window.open(`https://t.me/SAKANAYAJAPON?start=${phone.replace(/\D/g, "")}`, '_blank');
+            const botUsername = "sakanaya_bot"; // @は含めない
+window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_blank');
         }
     } catch (e) { 
         console.error(e);
