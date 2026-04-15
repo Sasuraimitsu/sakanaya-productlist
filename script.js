@@ -356,10 +356,22 @@ function selectVariantImage(pid, vImg, fImg, btn) {
 // ═══════════════════════════════════════════════════════════
 // 8. ORDER LOGIC
 // ═══════════════════════════════════════════════════════════
-async function submitFirstOrder() {
-    const phone = document.getElementById('first-phone')?.value.trim();
-    const store = document.getElementById('first-store-name')?.value.trim();
-    const name = document.getElementById('first-contact-name')?.value.trim();
+// ① カートのボタンを押した時：ポップアップを開くだけ
+function submitFirstOrder() {
+    document.getElementById('first-time-modal').style.display = 'flex';
+}
+
+// ポップアップを閉じる
+function closeFirstTimeModal() {
+    document.getElementById('first-time-modal').style.display = 'none';
+}
+
+// ② ポップアップ内の「登録」ボタンを押した時：実際にデータを送る
+async function processFirstTimeRegistration() {
+    // 新しいポップアップ内のIDから値を取得
+    const store = document.getElementById('reg-shop-name')?.value.trim();
+    const name = document.getElementById('reg-staff-name')?.value.trim();
+    const phone = document.getElementById('reg-phone')?.value.trim();
 
     if (!phone || !store || !name) {
         alert(currentLang === 'jp' ? "入力項目が不足しています" : "Please fill in all fields.");
@@ -367,21 +379,33 @@ async function submitFirstOrder() {
     }
 
     try {
+        // GASへデータを送信
         await fetch(GAS_URL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify({
                 action: 'register_user',
                 spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
-                phone: phone, username: store, firstName: name
+                phone: phone, 
+                username: store, 
+                firstName: name
             })
         });
+
         const msg = currentLang === 'jp' ? "登録案内を送信しました。Telegramで開始ボタンを押してください。" : "Guide sent. Press START on Telegram.";
+        
         if (confirm(msg)) {
+            // カートを一時保存
             localStorage.setItem('temp_cart', JSON.stringify(cart));
+            // ポップアップを閉じる
+            closeFirstTimeModal();
+            // Telegramを開く
             window.open(`https://t.me/SAKANAYAJAPON?start=${phone.replace(/\D/g, "")}`, '_blank');
         }
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e);
+        alert("エラーが発生しました。");
+    }
 }
 
 async function submitRepeatOrder() {
