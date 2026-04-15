@@ -88,21 +88,36 @@ function filterCategory(cat, btn) {
 
 function applyFilters() {
     const search = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+    
     const filtered = allProducts.filter(p => {
+        // 1. 在庫の合計を計算（空文字やエラー値を確実に 0 に変換）
         const totalStock = (p.variants || []).reduce((sum, v) => {
-    const s = String(v.stock || '').trim();
-    return sum + (s === '' ? 0 : Number(s));
-}, 0);
+            const val = Number(v.stock);
+            return sum + (isNaN(val) ? 0 : val);
+        }, 0);
+
         let matchesCat = false;
+        
+        // 2. タブごとの表示条件
         if (currentCategory === 'OUT_OF_STOCK') {
-            matchesCat = (totalStock === 0);
+            // 「入荷待ち」タブ：在庫が 0 以下の商品だけを表示
+            matchesCat = (totalStock <= 0);
         } else {
+            // その他のタブ（ALL含む）：
+            // カテゴリーが一致し、かつ「在庫がある(>0)」商品だけを表示
             const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory);
             matchesCat = catMatch && (totalStock > 0);
         }
-        const matchesSearch = !search || getProductName(p).toLowerCase().includes(search) || getProductComment(p).toLowerCase().includes(search);
+
+        // 3. 検索キーワードとの照合
+        const matchesSearch = !search || 
+            getProductName(p).toLowerCase().includes(search) || 
+            getProductComment(p).toLowerCase().includes(search);
+
         return matchesCat && matchesSearch;
     });
+
+    // 4. 絞り込んだ結果を画面に送る
     displayProducts(filtered);
 }
 
