@@ -89,7 +89,10 @@ function filterCategory(cat, btn) {
 function applyFilters() {
     const search = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
     const filtered = allProducts.filter(p => {
-        const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
+        const totalStock = (p.variants || []).reduce((sum, v) => {
+    const s = String(v.stock || '').trim();
+    return sum + (s === '' ? 0 : Number(s));
+}, 0);
         let matchesCat = false;
         if (currentCategory === 'OUT_OF_STOCK') {
             matchesCat = (totalStock === 0);
