@@ -197,59 +197,75 @@ function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
+    
     if (!panel) return;
 
+    // メモを一時保存
     const currentNotes = document.getElementById('cart-notes')?.value || "";
+
+    // 1. 言語によるタイトルの切り替え
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
-    const notesTitle = UI_TEXT[currentLang].labelNotes;
+    const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
-    if (items.length === 0) {
-        panel.innerHTML = ""; 
-        panel.classList.remove('show');
-        const badge = document.getElementById('cart-count-badge');
-        if (badge) badge.textContent = '0';
-        return;
-    }
-
+    // 2. 固定ヘッダー（黒いバー）
     const headerHtml = `
         <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
             <button onclick="closeCartPanel()" style="color:#fff; border:none; background:none; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
-        </div>`;
+        </div>
+    `;
 
-    const itemsHtml = `
-        <div style="flex:1; overflow-y:auto; padding:15px;">
-            ${items.map(item => `
-                <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
-                    <div style="flex:1; text-align:left;">
-                        <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
-                        <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
-                    </div>
-                    <div style="display:flex; gap:5px;">
-                        <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
-                        <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
-                    </div>
-                </div>`).join('')}
-            <div style="margin-top:15px; text-align:left;">
+    // 3. 商品リスト部分（空の時とある時で中身を分岐）
+    let listContent = '';
+    if (items.length === 0) {
+        // 空の時はメッセージを表示
+        listContent = `<p style="text-align:center; padding:30px; color:#999; margin:0;">${t.emptyCart}</p>`;
+    } else {
+        // 商品がある時はリストを表示
+        listContent = items.map(item => `
+            <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
+                <div style="flex:1; text-align:left;">
+                    <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
+                    <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
+                </div>
+                <div style="display:flex; gap:5px;">
+                    <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
+                    <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
+                </div>
+            </div>`).join('');
+    }
+
+    // 4. 商品リスト・メモ・フッターを合体
+    const bodyHtml = `
+        <div style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column;">
+            ${listContent}
+            
+            <div style="margin-top:auto; padding-top:15px; text-align:left;">
                 <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.85rem;">${notesTitle}</label>
                 <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;">${esc(currentNotes)}</textarea>
             </div>
-        </div>`;
-
-    const footerHtml = `
+        </div>
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
             <div class="order-bar-actions" style="display:flex; gap:8px;">
-                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">${UI_TEXT[currentLang].btnFirstOrder}</button>
-                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:10px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">${UI_TEXT[currentLang].btnRepeatOrder}</button>
-                <button class="order-clear-btn" onclick="clearCart()" style="padding:10px 10px; font-size:0.75rem; border-radius:6px;">${UI_TEXT[currentLang].clearBtn}</button>
+                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
+                    ${currentLang === 'jp' ? '初めての方' : 'First Time'}
+                </button>
+                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
+                    ${currentLang === 'jp' ? 'ご注文' : 'Order'}
+                </button>
+                <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
+                    ${currentLang === 'jp' ? 'クリア' : 'Clear'}
+                </button>
             </div>
-        </div>`;
+        </div>
+    `;
 
-    panel.innerHTML = headerHtml + itemsHtml + footerHtml; 
+    panel.innerHTML = headerHtml + bodyHtml; 
+    
+    // バッジ更新
     const badge = document.getElementById('cart-count-badge');
     if (badge) badge.textContent = items.reduce((s, i) => s + i.qty, 0);
 }
-
 function clearCart() {
     cart = {};
     applyFilters();
