@@ -213,8 +213,8 @@ header {
     top: 20px;
     right: 20px;
     width: 350px;
-    height: 500px; 
-    max-height: 500px;
+    height: 450px; 
+    max-height: 450px;
     background: #ffffff !important; /* 背景を確実に白に */
     z-index: 9999; /* 何よりも上に表示 */
     display: none; 
