@@ -358,6 +358,18 @@ function selectVariantImage(pid, vImg, fImg, btn) {
 // ═══════════════════════════════════════════════════════════
 // ① カートのボタンを押した時：ポップアップを開くだけ
 function submitFirstOrder() {
+    // 現在の言語を取得
+    const isJp = (currentLang === 'jp');
+
+    // 各要素のテキストを書き換える
+    document.getElementById('modal-title').textContent = isJp ? "新規登録" : "Registration";
+    document.getElementById('label-shop').textContent = isJp ? "店名" : "Shop Name";
+    document.getElementById('label-staff').textContent = isJp ? "担当者名" : "Contact Person";
+    document.getElementById('label-phone').textContent = isJp ? "電話番号" : "Phone Number";
+    document.getElementById('btn-cancel').textContent = isJp ? "キャンセル" : "Cancel";
+    document.getElementById('btn-submit').textContent = isJp ? "登録" : "Register";
+
+    // ポップアップを表示
     document.getElementById('first-time-modal').style.display = 'flex';
 }
 
