@@ -213,6 +213,9 @@ header {
     top: 20px;
     right: 20px;
     width: 350px;
+    height: calc(100vh - 40px);       /* 高さを画面いっぱい（上下に20pxずつ余白）に固定します */
+    display: none; 
+    flex-direction: column;           /* 中身を「縦並び」に強制し、ボタンを下に固定します */
     /* 箱の最大高さを指定し、中身が増えても突き抜けないようにする */
     max-height: calc(100vh - 40px); 
     background: #ffffff !important; /* 背景を確実に白に */
