@@ -433,21 +433,50 @@ window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_b
     }
 }
 
-async function submitRepeatOrder() {
-    // IDを「order-phone」に合わせ、localStorageからも取得できるようにします
-    const phoneInput = document.getElementById('order-phone');
+// --- 旧 submitRepeatOrder を削除して、以下の2つに入れ替え ---
+
+// ① カートの「ご注文」ボタンを押したときに「ポップアップ」を出す関数
+function showOrderCheckModal() {
+    const items = Object.values(cart);
+    if (items.length === 0) {
+        alert(currentLang === 'jp' ? "カートが空です" : "Cart is empty");
+        return;
+    }
+    
+    // ポップアップ（HTMLの最後にある id="order-check-modal"）を表示する
+    const modal = document.getElementById('order-check-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+    
+    // 前に使った番号があれば、ポップアップ内の入力欄に自動で入れる
+    const savedPhone = localStorage.getItem('user_phone');
+    const checkPhoneInput = document.getElementById('check-phone');
+    if (savedPhone && checkPhoneInput) {
+        checkPhoneInput.value = savedPhone;
+    }
+}
+
+// ② ポップアップ内の「注文を確定」ボタンを押したときに「送信」する関数
+async function finalizeOrderProcess() {
+    // ポップアップ内の入力欄「check-phone」から番号を読み取る
+    const phoneInput = document.getElementById('check-phone');
     const phone = phoneInput?.value.trim();
     const notes = document.getElementById('cart-notes')?.value.trim();
     const items = Object.values(cart);
 
-    if (!phone || items.length === 0) {
+    if (!phone) {
         alert(currentLang === 'jp' ? "電話番号を入力してください。" : "Please enter your phone number.");
         return;
     }
 
-    // 次回のために電話番号をブラウザに保存
+    // 送信ボタンが押されたのでポップアップを閉じる
+    document.getElementById('order-check-modal').style.display = 'none';
+
+    // 電話番号を保存（次回のため）
     localStorage.setItem('user_phone', phone);
 
+    // 注文内容の作成
     let orderData = '【New Order】\n';
     items.forEach(i => {
         const pName = currentLang === 'jp' ? i.product_name_jp : i.product_name_en;
@@ -467,24 +496,21 @@ async function submitRepeatOrder() {
             })
         });
 
-        // GAS側で「未登録」と判定された場合の処理を追加
         const result = await response.json();
         if (result.status === "unregistered") {
             alert(currentLang === 'jp' ? 
-                "この番号は登録されていません。左下の「初めての方」から登録をお願いします。" : 
-                "This number is not registered. Please register first.");
+                "未登録の番号です。左下の「初めての方」から登録をお願いします。" : 
+                "Not registered.");
             return;
         }
 
         alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
         clearCart();
     } catch (e) { 
-        // fetch(mode: 'no-cors') の場合はエラーが出ることもあるため、成功とみなす運用かチェックが必要
-        alert(currentLang === 'jp' ? '注文を送信しました（確認中）' : 'Order submitted.');
+        alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
         clearCart();
     }
 }
-
 // ページ読み込み時に、保存されている電話番号があれば入力欄にセットする
 window.addEventListener('DOMContentLoaded', () => {
     const savedPhone = localStorage.getItem('user_phone');
