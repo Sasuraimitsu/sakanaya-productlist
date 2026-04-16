@@ -139,5 +139,16 @@
         </div>
     </div>
 </div>
+    <div id="order-check-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10001; justify-content:center; align-items:center;">
+    <div style="background:#fff; width:85%; max-width:350px; padding:20px; border-radius:12px; text-align:center;">
+        <h3 style="margin-bottom:15px;">注文確認 / Order</h3>
+        <p style="font-size:0.9rem;">登録済みの電話番号を入力してください。</p>
+        <input type="tel" id="check-phone" placeholder="0123456789" style="width:100%; padding:10px; margin:15px 0; border:1px solid #ccc; border-radius:4px;">
+        <div style="display:flex; gap:10px;">
+            <button onclick="document.getElementById('order-check-modal').style.display='none'" style="flex:1; padding:10px; background:#eee; border:none; border-radius:6px;">戻る</button>
+            <button onclick="finalizeOrderProcess()" style="flex:1; padding:10px; background:#333; color:#fff; border:none; border-radius:6px;">注文を確定</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
