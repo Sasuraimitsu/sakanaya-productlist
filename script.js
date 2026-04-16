@@ -485,6 +485,15 @@ async function submitRepeatOrder() {
     }
 }
 
+// ページ読み込み時に、保存されている電話番号があれば入力欄にセットする
+window.addEventListener('DOMContentLoaded', () => {
+    const savedPhone = localStorage.getItem('user_phone');
+    if (savedPhone) {
+        const phoneInput = document.getElementById('order-phone');
+        if (phoneInput) phoneInput.value = savedPhone;
+    }
+});
+
 // ═══════════════════════════════════════════════════════════
 // 9. INITIALIZE
 // ═══════════════════════════════════════════════════════════
