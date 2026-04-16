@@ -53,21 +53,28 @@
                     <button class="cart-close-btn" onclick="closeCartPanel()">×</button>
                 </div>
 
-                <div id="cart-items" class="cart-items">
-                    <p class="cart-empty">No items selected.</p>
-                </div>
+                <div id="cart-items" class="cart-items"></div>
 
-                <div class="cart-notes-wrapper" style="padding: 10px 15px; border-top: 1px solid #eee;">
-                    <label id="label-notes" style="display: block; font-size: 12px; color: #888; margin-bottom: 5px; font-weight: bold;"></label>
-                    <textarea id="cart-notes" class="order-input" style="width: 100%; height: 50px; resize: none; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; padding: 8px; box-sizing: border-box;" placeholder=""></textarea>
-                </div>
-
-<div class="order-bar-actions">
-    <button onclick="showFirstOrderForm()" class="order-send-btn" id="btn-first-order"></button>
-    <button onclick="showRepeatOrderForm()" class="order-send-btn" id="btn-repeat-order"></button>
-    <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn"></button>
+<div style="margin: 10px 15px; padding: 12px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd;">
+    <label style="font-size: 11px; font-weight: bold; color: #555; display: block; margin-bottom: 5px;">
+        登録済みの電話番号 / Registered Phone
+    </label>
+    <input type="tel" id="order-phone" placeholder="0123456789" 
+           style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box;">
 </div>
 
+<div class="cart-notes-wrapper" style="padding: 10px 15px;">
+    <textarea id="cart-notes" style="width: 100%; height: 50px; border: 1px solid #ccc; border-radius: 4px; padding: 8px; box-sizing: border-box;" placeholder="メモ (Notes)..."></textarea>
+</div>
+
+<div class="order-bar-actions" style="padding: 10px 15px; display: flex; flex-direction: column; gap: 10px;">
+    <button onclick="submitRepeatOrder()" style="width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 16px;">ご注文 / Order</button>
+    
+    <div style="display: flex; gap: 10px;">
+        <button onclick="submitFirstOrder()" style="flex: 1; padding: 10px; background: #666; color: #fff; border: none; border-radius: 6px; font-size: 13px;">初めての方</button>
+        <button onclick="clearCart()" style="flex: 1; padding: 10px; background: #eee; color: #333; border: 1px solid #ccc; border-radius: 6px; font-size: 13px;">クリア</button>
+    </div>
+</div>
                 <div id="first-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
                 <h4 id="form-first-title"></h4>
                 <input id="first-store-name" type="text" class="order-input">
