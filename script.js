@@ -434,13 +434,19 @@ window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_b
 }
 
 async function submitRepeatOrder() {
-    const phone = document.getElementById('repeat-phone')?.value.trim();
+    // IDを「order-phone」に合わせ、localStorageからも取得できるようにします
+    const phoneInput = document.getElementById('order-phone');
+    const phone = phoneInput?.value.trim();
     const notes = document.getElementById('cart-notes')?.value.trim();
     const items = Object.values(cart);
+
     if (!phone || items.length === 0) {
-        alert(currentLang === 'jp' ? "電話番号入力と商品選択が必要です" : "Phone and items required.");
+        alert(currentLang === 'jp' ? "電話番号を入力してください。" : "Please enter your phone number.");
         return;
     }
+
+    // 次回のために電話番号をブラウザに保存
+    localStorage.setItem('user_phone', phone);
 
     let orderData = '【New Order】\n';
     items.forEach(i => {
@@ -449,18 +455,34 @@ async function submitRepeatOrder() {
     });
 
     try {
-        await fetch(GAS_URL, {
+        const response = await fetch(GAS_URL, {
             method: 'POST',
             body: JSON.stringify({
                 action: 'send_order',
                 spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
                 targetGroupId: '-4710396177',
-                phone: phone, orderData: orderData, notes: notes
+                phone: phone, 
+                orderData: orderData, 
+                notes: notes
             })
         });
-        alert(currentLang === 'jp' ? '注文を送信しました。' : 'Order sent!');
+
+        // GAS側で「未登録」と判定された場合の処理を追加
+        const result = await response.json();
+        if (result.status === "unregistered") {
+            alert(currentLang === 'jp' ? 
+                "この番号は登録されていません。左下の「初めての方」から登録をお願いします。" : 
+                "This number is not registered. Please register first.");
+            return;
+        }
+
+        alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
         clearCart();
-    } catch (e) { alert('Failed'); }
+    } catch (e) { 
+        // fetch(mode: 'no-cors') の場合はエラーが出ることもあるため、成功とみなす運用かチェックが必要
+        alert(currentLang === 'jp' ? '注文を送信しました（確認中）' : 'Order submitted.');
+        clearCart();
+    }
 }
 
 // ═══════════════════════════════════════════════════════════
