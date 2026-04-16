@@ -57,21 +57,16 @@
     <p class="cart-empty">No items selected.</p>
 </div>
 
-<div style="margin: 10px 15px; padding: 12px; background: #f4f4f4; border-radius: 8px;">
-    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 5px;" id="label-order-phone">登録済みの電話番号 / Phone Number</label>
-    <input type="tel" id="order-phone" placeholder="0123456789" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-</div>
-
 <div class="cart-notes-wrapper" style="padding: 10px 15px; border-top: 1px solid #eee;">
     <textarea id="cart-notes" style="width: 100%; height: 50px; resize: none; border: 1px solid #ccc; border-radius: 4px; padding: 8px; box-sizing: border-box;" placeholder="メモ (Notes)..."></textarea>
 </div>
 
 <div class="order-bar-actions" style="padding: 10px 15px; display: flex; flex-direction: column; gap: 10px;">
-    <button onclick="submitRepeatOrder()" class="order-send-btn" id="btn-repeat-order" style="width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold;">ご注文 / Order</button>
+    <button onclick="showOrderCheckModal()" class="order-send-btn" style="width: 100%; padding: 15px; background: #333; color: #fff; border: none; border-radius: 6px; font-weight: bold;">ご注文 / Order</button>
     
     <div style="display: flex; gap: 8px;">
-        <button onclick="submitFirstOrder()" class="order-send-btn" id="btn-first-order" style="flex: 1; background: #666; font-size: 13px;">初めての方</button>
-        <button onclick="clearCart()" class="order-clear-btn" id="order-clear-btn" style="flex: 1; font-size: 13px;">クリア</button>
+        <button onclick="document.getElementById('first-time-modal').style.display='flex'" class="order-send-btn" style="flex: 1; background: #666; font-size: 13px;">初めての方</button>
+        <button onclick="clearCart()" class="order-clear-btn" style="flex: 1; font-size: 13px;">クリア</button>
     </div>
 </div>
                 <div id="first-order-form" class="telegram-order-form" style="display:none; margin-top:12px;">
