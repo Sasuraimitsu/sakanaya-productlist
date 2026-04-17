@@ -257,8 +257,9 @@ function renderCart() {
         listContent = items.map(item => `
             <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
                 <div style="flex:1; text-align:left;">
-                    <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
-                    <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
+                     <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
+                     <span style="font-size:0.85rem; color:#555; display:block;">${esc(currentLang === 'jp' ? item.variant_name_jp : item.variant_name_en)}</span>
+                     <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
                 </div>
                 <div style="display:flex; gap:5px;">
                     <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
