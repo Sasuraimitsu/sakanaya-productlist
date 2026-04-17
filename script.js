@@ -472,10 +472,11 @@ async function finalizeOrderProcess() {
 
     // 注文内容の作成
     let orderData = '【New Order】\n';
-    items.forEach(i => {
-        const pName = currentLang === 'jp' ? i.product_name_jp : i.product_name_en;
-        orderData += `[${i.code || '---'}] ${pName} x ${i.qty}\n`;
-    });
+items.forEach(i => {
+    const pName = currentLang === 'jp' ? i.product_name_jp : i.product_name_en;
+    const vName = currentLang === 'jp' ? (i.variant_name_jp || '') : (i.variant_name_en || '');
+    orderData += `${i.code || '---'} ${pName} ${vName} x ${i.qty}\n`;
+});
 
     try {
         const response = await fetch(GAS_URL, {
