@@ -280,7 +280,7 @@ function renderCart() {
                 <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
                     ${currentLang === 'jp' ? '初めての方' : 'First Time'}
                 </button>
-                <button class="order-send-btn" onclick="submitRepeatOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
+                <button class="order-send-btn" onclick="showOrderCheckModal()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
                     ${currentLang === 'jp' ? 'ご注文' : 'Order'}
                 </button>
                 <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
