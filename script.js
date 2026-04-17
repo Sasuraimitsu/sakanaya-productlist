@@ -475,7 +475,7 @@ async function finalizeOrderProcess() {
 items.forEach(i => {
     const pName = currentLang === 'jp' ? i.product_name_jp : i.product_name_en;
     const vName = currentLang === 'jp' ? (i.variant_name_jp || '') : (i.variant_name_en || '');
-    orderData += `${i.code || '---'} ${pName} ${vName} x ${i.qty}\n`;
+    orderData += `${i.code || '---'} ${pName} ${vName} x ${i.qty}点\n`;
 });
 
     try {
