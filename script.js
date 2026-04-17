@@ -394,8 +394,8 @@ function closeFirstTimeModal() {
 }
 
 // ② ポップアップ内の「登録」ボタンを押した時：実際にデータを送る
+// ② ポップアップ内の「登録」ボタンを押した時：実際にデータを送る
 async function processFirstTimeRegistration() {
-    // 新しいポップアップ内のIDから値を取得
     const store = document.getElementById('reg-shop-name')?.value.trim();
     const name = document.getElementById('reg-staff-name')?.value.trim();
     const phone = document.getElementById('reg-phone')?.value.trim();
@@ -405,38 +405,29 @@ async function processFirstTimeRegistration() {
         return;
     }
 
-    try {
-        // GASへデータを送信
-        await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify({
-                action: 'register_user',
-                spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
-                phone: phone, 
-                username: store, 
-                firstName: name
-            })
-        });
+    // GASへの送信はawaitせずに並行実行（速度改善）
+    fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+            action: 'register_user',
+            spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
+            phone: phone,
+            username: store,
+            firstName: name
+        })
+    });
 
-        const msg = currentLang === 'jp' ? "登録案内を送信しました。Telegramで開始ボタンを押してください。" : "Guide sent. Press START on Telegram.";
-        
-        if (confirm(msg)) {
-            // カートを一時保存
-            localStorage.setItem('temp_cart', JSON.stringify(cart));
-            // ポップアップを閉じる
-            closeFirstTimeModal();
-            // Telegramを開く
-            const botUsername = "sakanaya_bot"; // @は含めない
-window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_blank');
-        }
-    } catch (e) { 
-        console.error(e);
-        alert("エラーが発生しました。");
-    }
+    // カートを一時保存
+    localStorage.setItem('temp_cart', JSON.stringify(cart));
+
+    // ポップアップを閉じる
+    closeFirstTimeModal();
+
+    // すぐにTelegramへ遷移
+    const botUsername = "sakanaya_bot";
+    window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_blank');
 }
-
-// --- 旧 submitRepeatOrder を削除して、以下の2つに入れ替え ---
 
 // ① カートの「ご注文」ボタンを押したときに「ポップアップ」を出す関数
 function showOrderCheckModal() {
