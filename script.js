@@ -213,6 +213,8 @@ function changeCartQty(vid, delta) {
             price_usd: toNumber(targetVariant.price_usd),
             product_name_jp: targetProduct.name_jp,
             product_name_en: targetProduct.name_en,
+            variant_name_jp: targetVariant.variant_name_jp || "",
+            variant_name_en: targetVariant.variant_name_en || "",
             code: targetVariant.variant_code || targetProduct.code
         };
     }
