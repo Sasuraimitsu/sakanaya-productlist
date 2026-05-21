@@ -155,28 +155,48 @@ function buildCard(p) {
     const t = UI_TEXT[currentLang];
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
-    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
+
+    // 🚩 1. 産地と国旗の判定ロジック (追加)
+    let originHTML = '';
+    const origin = String(p.origin || '').trim(); // スプレッドシートの origin 列を参照
     
-    // 👇 ここから修正：.filter() を追加して在庫があるもの（または「入荷待ち」タブなら在庫なしのもの）だけを抽出します
+    if (origin === 'カンボジア' || origin === 'Cambodia') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">カンボジア産</span>
+                <img src="images/kh-flag.png" class="country-flag" alt="KH">
+            </div>`;
+    } else if (origin === '日本' || origin === 'Japan') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">日本産</span>
+                <img src="images/jp-flag.png" class="country-flag" alt="JP">
+            </div>`;
+    }
+
+    // 📦 2. 在庫の合計計算
+    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0); [cite: 13, 31, 51]
+
+    // 🔍 3. バリエーションのフィルタリング (在庫切れ非表示ロジック)
     const vsHTML = (p.variants || [])
         .filter(v => {
-            const stockNum = toNumber(v.stock, 0);
+            const stockNum = toNumber(v.stock, 0); [cite: 13, 31, 51]
             if (currentCategory === 'OUT_OF_STOCK') {
-                // 「入荷待ち」タブの場合は、在庫が 0 以下のものだけを表示
+                // 「入荷待ち」タブ：在庫が 0 以下のものだけ表示 [cite: 8]
                 return stockNum <= 0;
             } else {
-                // 通常のカテゴリー（ALL含む）では、在庫が 0 より大きいものだけを表示
+                // 通常タブ：在庫が 0 より大きいものだけ表示 [cite: 13]
                 return stockNum > 0;
             }
         })
         .map(v => {
             const vid = esc(v.variant_id);
             const qty = cart[vid]?.qty || 0;
-            const isOut = toNumber(v.stock, 0) <= 0;
+            const isOut = toNumber(v.stock, 0) <= 0; [cite: 31, 50, 61]
             return `
                 <div class="variant-row">
                     <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
-                        ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
+                        ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)} [cite: 14, 17, 19]
                     </button>
                     <div class="variant-qty-wrap">
                         <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
@@ -186,17 +206,22 @@ function buildCard(p) {
                 </div>`;
         }).join('');
 
+    // 🖼️ 4. HTMLの組み立て
     return `
     <div class="card" data-category="${esc(getCategoryValue(p))}">
         <div class="img-wrapper">
             ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
-            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
+            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''} [cite: 13, 31, 51]
         </div>
         <div class="info">
-            <h3>[${esc(p.code || '---')}] ${name}</h3> 
+            <div class="product-title-row">
+                <h3>[${esc(p.code || '---')}] ${name}</h3> [cite: 10, 28, 42, 64]
+                ${originHTML}
+            </div>
+            
             <div class="size-calc-row">
-                <p class="size-detail">${esc(p.size || '')}</p>
-                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span>
+                <p class="size-detail">${esc(p.size || '')}</p> [cite: 14, 17, 19, 35]
+                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span> [cite: 12, 30, 45, 66]
             </div>
             <div class="variant-list">${vsHTML}</div>
         </div>
