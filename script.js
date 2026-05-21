@@ -157,22 +157,34 @@ function buildCard(p) {
     const name = esc(getProductName(p));
     const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
     
-    const vsHTML = (p.variants || []).map(v => {
-        const vid = esc(v.variant_id);
-        const qty = cart[vid]?.qty || 0;
-        const isOut = toNumber(v.stock, 0) <= 0;
-        return `
-            <div class="variant-row">
-                <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
-                    ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
-                </button>
-                <div class="variant-qty-wrap">
-                    <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
-                    <span class="variant-qty">${qty}</span>
-                    <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${isOut ? 'disabled' : ''}>＋</button>
-                </div>
-            </div>`;
-    }).join('');
+    // 👇 ここから修正：.filter() を追加して在庫があるもの（または「入荷待ち」タブなら在庫なしのもの）だけを抽出します
+    const vsHTML = (p.variants || [])
+        .filter(v => {
+            const stockNum = toNumber(v.stock, 0);
+            if (currentCategory === 'OUT_OF_STOCK') {
+                // 「入荷待ち」タブの場合は、在庫が 0 以下のものだけを表示
+                return stockNum <= 0;
+            } else {
+                // 通常のカテゴリー（ALL含む）では、在庫が 0 より大きいものだけを表示
+                return stockNum > 0;
+            }
+        })
+        .map(v => {
+            const vid = esc(v.variant_id);
+            const qty = cart[vid]?.qty || 0;
+            const isOut = toNumber(v.stock, 0) <= 0;
+            return `
+                <div class="variant-row">
+                    <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
+                        ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
+                    </button>
+                    <div class="variant-qty-wrap">
+                        <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
+                        <span class="variant-qty">${qty}</span>
+                        <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${isOut ? 'disabled' : ''}>＋</button>
+                    </div>
+                </div>`;
+        }).join('');
 
     return `
     <div class="card" data-category="${esc(getCategoryValue(p))}">
