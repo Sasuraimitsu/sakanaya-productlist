@@ -175,7 +175,10 @@ function buildCard(p) {
     }
 
     // 📦 2. 在庫の合計計算
-    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0); [cite: 13, 31, 51]
+    const totalStock = (p.variants || []).reduce((sum, v) => {
+        const val = Number(v.stock);
+        return sum + (isNaN(val) ? 0 : val);
+    }, 0);
 
     // 🔍 3. バリエーションのフィルタリング (在庫切れ非表示ロジック)
     const vsHTML = (p.variants || [])
