@@ -153,9 +153,38 @@ header {
 .stock-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; }
 
 /* 商品情報 */
+.product-title-row {
+    display: flex;
+    justify-content: space-between; /* 名前を左、産地を右に */
+    align-items: flex-start;        /* 商品名が2行になっても産地は上に固定 */
+    gap: 8px;
+    margin-bottom: 8px;             /* タイトル行の下の余白 */
+}
+
 .info { padding: 16px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
-.info h3 { margin: 0 0 8px; font-size: 1.1rem; color: var(--main-blue); }
+.info h3 {
+    margin: 0 !important;           /* row側で余白を管理するため0にする */
+    font-size: 1.1rem;
+    color: var(--main-blue);
+    flex: 1;                        /* 長い名前が産地を押し潰さないように */
+    line-height: 1.3;
+}
 .comment-box { font-size: 0.85rem; color: #444; margin-bottom: 12px; }
+
+.origin-tag {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.04); /* 控えめな背景色 */
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;             /* 「日本産」が途中で改行されないように */
+}
+
+.origin-text {
+    font-size: 0.65rem;             /* 小さく控えめに */
+    color: #666;
+    font-weight: bold;
+}
 
 /* 国旗のサイズ*/
 .country-flag {
