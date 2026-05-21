@@ -159,11 +159,11 @@ header {
 
 /* 国旗のサイズ*/
 .country-flag {
-    width: 30px !important;   /* 適度な大きさに固定 */
+    width: 24px !important;         /* 30pxだと少し大きいかもしれないので、24px程度を推奨 */
     height: auto !important;
-    margin-left: 8px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
+    margin-left: 5px !important;    /* テキストとの間隔 */
+    border: 1px solid #eee;
+    border-radius: 2px;
 }
 
 /* 重量計算・数量計算の枠分けと色付け */
