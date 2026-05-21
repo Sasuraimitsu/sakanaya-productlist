@@ -152,69 +152,62 @@ header {
 
 .stock-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; }
 
-/* 商品情報 */
+/* --- 商品タイトル行の改善 --- */
 .product-title-row {
     display: flex;
-    justify-content: space-between; /* 名前を左、産地を右に */
-    align-items: flex-start;        /* 商品名が2行になっても産地は上に固定 */
+    justify-content: space-between;
+    align-items: flex-start;
     gap: 8px;
-    margin-bottom: 8px;             /* タイトル行の下の余白 */
+    margin-bottom: 8px;
 }
 
-.info { padding: 16px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
 .info h3 {
-    margin: 0 !important;           /* row側で余白を管理するため0にする */
+    margin: 0; /* !importantを除去するために構造で管理 */
     font-size: 1.1rem;
     color: var(--main-blue);
-    flex: 1;                        /* 長い名前が産地を押し潰さないように */
+    flex: 1;
+    min-width: 0; /* 長いテキストでのレイアウト崩れ防止 */
     line-height: 1.3;
+    word-wrap: break-word; /* 長い英単語などの突き抜け防止 */
 }
-.comment-box { font-size: 0.85rem; color: #444; margin-bottom: 12px; }
 
+/* --- 産地タグの視認性向上 --- */
 .origin-tag {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.04); /* 控えめな背景色 */
-    padding: 2px 6px;
+    background: #f0f2f5; /* 少し濃くして視認性を確保 */
+    border: 1px solid #e1e4e8; /* 枠線を追加して「タグ」らしく */
+    padding: 1px 6px;
     border-radius: 4px;
-    white-space: nowrap;             /* 「日本産」が途中で改行されないように */
+    white-space: nowrap;
+    flex-shrink: 0; /* 産地タグが潰されるのを防ぐ */
 }
 
 .origin-text {
-    font-size: 0.65rem;             /* 小さく控えめに */
-    color: #666;
+    font-size: 0.65rem;
+    color: #555;
     font-weight: bold;
 }
 
-/* 国旗のサイズ*/
 .country-flag {
-    width: 24px !important;         /* 30pxだと少し大きいかもしれないので、24px程度を推奨 */
-    height: auto !important;
-    margin-left: 5px !important;    /* テキストとの間隔 */
-    border: 1px solid #eee;
-    border-radius: 2px;
+    width: 22px; /* 少し小さめに */
+    height: auto;
+    margin-left: 4px;
+    border: 1px solid #ddd;
+    border-radius: 1px;
+    vertical-align: middle;
 }
 
-/* 重量計算・数量計算の枠分けと色付け */
-.calc-mini {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    border: 2px solid; /* 枠線を強調 */
-}
-
-.calc-mini.weight {
-    background-color: #e3f2fd; /* 薄い青 */
-    color: #1976d2;           /* 濃い青 */
-    border-color: #1976d2;
-}
-
-.calc-mini.qty {
-    background-color: #e8f5e9; /* 薄い緑 */
-    color: #2e7d32;           /* 濃い緑 */
-    border-color: #2e7d32;
+/* --- モバイル対応（追記推奨） --- */
+@media (max-width: 480px) {
+    .product-title-row {
+        flex-direction: column; /* スマホでは上下に並べる */
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .origin-tag {
+        align-self: flex-start; /* 左寄せ */
+    }
 }
 
 /* ══════════════════════════════════════════════════════════
