@@ -130,6 +130,7 @@ function displayProducts(products) {
 }
 
 function buildCard(p) {
+    console.log("商品データ確認:", p);
     const t = UI_TEXT[currentLang];
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
