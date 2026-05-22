@@ -207,18 +207,17 @@ function buildCard(p) {
         }).join('');
     
     return `
-    <div class="card" data-category="${esc(getCategoryValue(p))}">
-        <div class="img-wrapper">
-            ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
-            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
-        </div>
+    return `
+    <div class="card">
+        <div class="img-wrapper"> ... </div>
         <div class="info">
-            <h3>[${esc(p.code || '---')}] ${name}</h3> 
-            <div class="size-calc-row">
-                <p class="size-detail">${esc(p.size || '')}</p>
-                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span>
-            </div>
-            <div class="variant-list">${vsHTML}</div>
+            
+            <div class="product-title-row">
+                <h3>[${esc(p.code)}] ${name}</h3>
+                ${originHTML}  </div>
+            
+            <div class="size-calc-row"> ... </div>
+            <div class="variant-list"> ... </div>
         </div>
     </div>`;
 }
