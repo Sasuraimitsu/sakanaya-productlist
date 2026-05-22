@@ -255,24 +255,23 @@ header {
     padding: 0 5px; 
 }
 
-/* 各注文アイテムの1行分 */
 .cart-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: **15px 0**; /* 10pxから15pxに広げて、1行ずつの間隔を確保 */
-    border-bottom: 1px solid **#ddd**; /* #eeeより少し濃い線にして区切りを明確に */
+    padding: 15px 0; /* ** を削除 */
+    border-bottom: 1px solid #ddd; /* ** を削除 */
 }
 
 .cart-item-info strong {
     color: #333;
-    font-size: **0.95rem**; /* 0.9remから少しだけ大きくして、文字を読みやすく */
-    **line-height: 1.5;** /* 行間を広げて、2行になっても重ならないように */
+    font-size: 0.95rem; /* ** を削除 */
+    line-height: 1.5; /* ** を削除 */
 }
 
 .cart-item-actions {
     display: flex;
-    gap: **10px**; /* 5pxから10pxに広げて、ボタンを押しやすく */
+    gap: 10px; /* ** を削除 */
 }
 /* ══════════════════════════════════════════════════════════
    7. 画像ポップアップ・モーダル (Image Modal)
