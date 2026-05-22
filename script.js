@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════
 // 1. CONFIG & STATE
-// ═══════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzMWG2Fx-77aWzZmHMWXbNOZQe3K-cSIAkzsc3-aADBt7_csJ0r8h93AuOLxq7tHE0t/exec';
 const TELEGRAM_API_URL = 'https://telegram-bot-729928920450.asia-northeast1.run.app/';
 const TELEGRAM_LINK = 'https://t.me/SAKANAYAJAPON';
@@ -10,9 +8,7 @@ let currentCategory = 'ALL';
 let allProducts = [];
 let cart = {};
 
-// ═══════════════════════════════════════════════════════════
-// 2. UI TEXT (辞書)
-// ═══════════════════════════════════════════════════════════
+// 2. UI TEXT
 const UI_TEXT = {
     jp: {
         cat_all: "すべて", cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
@@ -52,9 +48,7 @@ const UI_TEXT = {
     }
 };
 
-// ═══════════════════════════════════════════════════════════
 // 3. HELPERS
-// ═══════════════════════════════════════════════════════════
 function esc(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function getProductName(p) { return currentLang === 'jp' ? (p.name_jp || p.name_en || '') : (p.name_en || p.name_jp || ''); }
 function getProductComment(p) { return currentLang === 'jp' ? (p.comment_jp || p.comment_en || '') : (p.comment_en || p.comment_jp || ''); }
@@ -64,9 +58,7 @@ function toNumber(v, f = 0) { const n = Number(v); return Number.isFinite(n) ? n
 function getCalcClass(p) { return (p.variants || []).some(v => String(v.price_unit).toLowerCase() === 'kg') ? 'weight' : 'qty'; }
 function getCalcLabel(p) { return getCalcClass(p) === 'weight' ? UI_TEXT[currentLang].weightCalc : UI_TEXT[currentLang].qtyCalc; }
 
-// ═══════════════════════════════════════════════════════════
-// 4. CORE FUNCTIONS (Fetch & Filter)
-// ═══════════════════════════════════════════════════════════
+// 4. CORE FUNCTIONS
 async function fetchProducts() {
     try {
         const res = await fetch(GAS_URL);
@@ -98,42 +90,28 @@ function filterCategory(cat, btn) {
 
 function applyFilters() {
     const search = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
-    
     const filtered = allProducts.filter(p => {
-        // 1. 在庫の合計を計算（空文字やエラー値を確実に 0 に変換）
         const totalStock = (p.variants || []).reduce((sum, v) => {
             const val = Number(v.stock);
             return sum + (isNaN(val) ? 0 : val);
         }, 0);
 
         let matchesCat = false;
-        
-        // 2. タブごとの表示条件
         if (currentCategory === 'OUT_OF_STOCK') {
-            // 「入荷待ち」タブ：在庫が 0 以下の商品だけを表示
             matchesCat = (totalStock <= 0);
         } else {
-            // その他のタブ（ALL含む）：
-            // カテゴリーが一致し、かつ「在庫がある(>0)」商品だけを表示
             const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory);
             matchesCat = catMatch && (totalStock > 0);
         }
-
-        // 3. 検索キーワードとの照合
         const matchesSearch = !search || 
             getProductName(p).toLowerCase().includes(search) || 
             getProductComment(p).toLowerCase().includes(search);
-
         return matchesCat && matchesSearch;
     });
-
-    // 4. 絞り込んだ結果を画面に送る
     displayProducts(filtered);
 }
 
-// ═══════════════════════════════════════════════════════════
 // 5. DISPLAY & RENDER
-// ═══════════════════════════════════════════════════════════
 function displayProducts(products) {
     const pc = document.getElementById('product-container');
     const rs = document.getElementById('recommend-section');
@@ -156,38 +134,20 @@ function buildCard(p) {
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
 
-    // 🚩 1. 産地と国旗の判定ロジック
     let originHTML = '';
-    const origin = String(p.origin || '').trim(); // スプレッドシートの origin 列を参照
-    
+    const origin = String(p.origin || '').trim(); 
     if (origin === 'カンボジア' || origin === 'Cambodia') {
-        originHTML = `
-            <div class="origin-tag">
-                <span class="origin-text">カンボジア産</span>
-                <img src="images/kh-flag.png" class="country-flag" alt="KH">
-            </div>`;
+        originHTML = `<div class="origin-tag"><span class="origin-text">カンボジア産</span><img src="images/kh-flag.png" class="country-flag" alt="KH"></div>`;
     } else if (origin === '日本' || origin === 'Japan') {
-        originHTML = `
-            <div class="origin-tag">
-                <span class="origin-text">日本産</span>
-                <img src="images/jp-flag.png" class="country-flag" alt="JP">
-            </div>`;
+        originHTML = `<div class="origin-tag"><span class="origin-text">日本産</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
     }
 
-    // 📦 2. 在庫の合計計算
     const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
 
-    // 🔍 3. バリエーションのフィルタリング (在庫切れ非表示ロジック)
     const vsHTML = (p.variants || [])
         .filter(v => {
             const stockNum = toNumber(v.stock, 0);
-            if (currentCategory === 'OUT_OF_STOCK') {
-                // 入荷待ちタブ：在庫が0以下のものだけ表示
-                return stockNum <= 0;
-            } else {
-                // 通常タブ：在庫が0より大きいものだけ表示
-                return stockNum > 0;
-            }
+            return currentCategory === 'OUT_OF_STOCK' ? stockNum <= 0 : stockNum > 0;
         })
         .map(v => {
             const vid = esc(v.variant_id);
@@ -205,51 +165,41 @@ function buildCard(p) {
                     </div>
                 </div>`;
         }).join('');
-    
+
     return `
-    return `
-    <div class="card">
-        <div class="img-wrapper"> ... </div>
+    <div class="card" data-category="${esc(getCategoryValue(p))}">
+        <div class="img-wrapper">
+            ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
+            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
+        </div>
         <div class="info">
-            
             <div class="product-title-row">
-                <h3>[${esc(p.code)}] ${name}</h3>
-                ${originHTML}  </div>
-            
-            <div class="size-calc-row"> ... </div>
-            <div class="variant-list"> ... </div>
+                <h3>[${esc(p.code || '---')}] ${name}</h3>
+                ${originHTML}
+            </div>
+            <div class="size-calc-row">
+                <p class="size-detail">${esc(p.size || '')}</p>
+                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span>
+            </div>
+            <div class="variant-list">${vsHTML}</div>
         </div>
     </div>`;
 }
 
-// ═══════════════════════════════════════════════════════════
-// 6. CART & UI LOGIC
-// ═══════════════════════════════════════════════════════════
+// 6. CART LOGIC
 function changeCartQty(vid, delta) {
-    let targetVariant = null;
-    let targetProduct = null;
+    let targetVariant = null, targetProduct = null;
     for (const p of allProducts) {
         const v = p.variants.find(v => v.variant_id === vid);
         if (v) { targetVariant = v; targetProduct = p; break; }
     }
     if (!targetVariant) return;
-
     if (!cart[vid]) {
         if (delta <= 0) return;
-        cart[vid] = {
-            variant_id: vid,
-            qty: 0,
-            price_usd: toNumber(targetVariant.price_usd),
-            product_name_jp: targetProduct.name_jp,
-            product_name_en: targetProduct.name_en,
-            variant_name_jp: targetVariant.variant_name_jp || "",
-            variant_name_en: targetVariant.variant_name_en || "",
-            code: targetVariant.variant_code || targetProduct.code
-        };
+        cart[vid] = { variant_id: vid, qty: 0, price_usd: toNumber(targetVariant.price_usd), product_name_jp: targetProduct.name_jp, product_name_en: targetProduct.name_en, variant_name_jp: targetVariant.variant_name_jp || "", variant_name_en: targetVariant.variant_name_en || "", code: targetVariant.variant_code || targetProduct.code };
     }
     cart[vid].qty += delta;
     if (cart[vid].qty <= 0) delete cart[vid];
-
     applyFilters(); 
     renderCart();
 }
@@ -258,97 +208,54 @@ function renderCart() {
     const t = UI_TEXT[currentLang];
     const items = Object.values(cart);
     const panel = document.getElementById('cart-panel');
-    
     if (!panel) return;
-
-    // メモを一時保存
     const currentNotes = document.getElementById('cart-notes')?.value || "";
-
-    // 1. 言語によるタイトルの切り替え
     const cartTitle = currentLang === 'jp' ? "ご注文内容" : "Your Order";
     const notesTitle = currentLang === 'jp' ? "メモ" : "Notes";
 
-    // 2. 固定ヘッダー（黒いバー）
-    const headerHtml = `
+    let listContent = items.length === 0 ? `<p style="text-align:center; padding:30px; color:#999; margin:0;">${t.emptyCart}</p>` : items.map(item => `
+        <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
+            <div style="flex:1; text-align:left;">
+                 <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
+                 <span style="font-size:0.85rem; color:#555; display:block;">${esc(currentLang === 'jp' ? item.variant_name_jp : item.variant_name_en)}</span>
+                 <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
+            </div>
+            <div style="display:flex; gap:5px;">
+                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
+                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
+            </div>
+        </div>`).join('');
+
+    panel.innerHTML = `
         <div style="background:#333; color:#fff; padding:12px 15px; display:flex; justify-content:space-between; align-items:center;">
             <h2 style="margin:0; font-size:1rem; color:#fff;">🛒 ${cartTitle}</h2>
             <button onclick="closeCartPanel()" style="color:#fff; border:none; background:none; font-size:1.5rem; cursor:pointer; line-height:1;">×</button>
         </div>
-    `;
-
-    // 3. 商品リスト部分（空の時とある時で中身を分岐）
-    let listContent = '';
-    if (items.length === 0) {
-        // 空の時はメッセージを表示
-        listContent = `<p style="text-align:center; padding:30px; color:#999; margin:0;">${t.emptyCart}</p>`;
-    } else {
-        // 商品がある時はリストを表示
-        listContent = items.map(item => `
-            <div class="cart-item" style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #eee;">
-                <div style="flex:1; text-align:left;">
-                     <strong style="font-size:0.9rem; display:block;">[${esc(item.code || '---')}] ${esc(currentLang === 'jp' ? item.product_name_jp : item.product_name_en)}</strong>
-                     <span style="font-size:0.85rem; color:#555; display:block;">${esc(currentLang === 'jp' ? item.variant_name_jp : item.variant_name_en)}</span>
-                     <span style="font-size:0.85rem; color:#666;"> × ${item.qty}</span>
-                </div>
-                <div style="display:flex; gap:5px;">
-                    <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
-                    <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
-                </div>
-            </div>`).join('');
-    }
-
-    // 4. 商品リスト・メモ・フッターを合体
-    const bodyHtml = `
         <div style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column;">
             ${listContent}
-            
             <div style="margin-top:auto; padding-top:15px; text-align:left;">
                 <label style="display:block; font-weight:bold; margin-bottom:5px; font-size:0.85rem;">${notesTitle}</label>
                 <textarea id="cart-notes" style="width:100%; height:60px; border:1px solid #ccc; border-radius:4px; padding:5px; box-sizing:border-box;">${esc(currentNotes)}</textarea>
             </div>
         </div>
         <div style="padding:15px; background:#f9f9f9; border-top:1px solid #ddd;">
-            <div class="order-bar-actions" style="display:flex; gap:8px;">
-                <button class="order-send-btn" id="btn-submit-first" onclick="submitFirstOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
-                    ${currentLang === 'jp' ? '初めての方' : 'First Time'}
-                </button>
-                <button class="order-send-btn" onclick="showOrderCheckModal()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px;">
-                    ${currentLang === 'jp' ? 'ご注文' : 'Order'}
-                </button>
-                <button class="order-clear-btn" onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px;">
-                    ${currentLang === 'jp' ? 'クリア' : 'Clear'}
-                </button>
+            <div style="display:flex; gap:8px;">
+                <button onclick="submitFirstOrder()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px; background:#666; color:#fff; border:none;">${currentLang === 'jp' ? '初めての方' : 'First Time'}</button>
+                <button onclick="showOrderCheckModal()" style="flex:1; padding:12px 5px; font-size:0.75rem; font-weight:bold; border-radius:6px; background:#333; color:#fff; border:none;">${currentLang === 'jp' ? 'ご注文' : 'Order'}</button>
+                <button onclick="clearCart()" style="padding:12px 10px; font-size:0.75rem; border-radius:6px; background:#eee; border:none;">${currentLang === 'jp' ? 'クリア' : 'Clear'}</button>
             </div>
-        </div>
-    `;
-
-    panel.innerHTML = headerHtml + bodyHtml; 
-    
-    // バッジ更新
+        </div>`;
     const badge = document.getElementById('cart-count-badge');
     if (badge) badge.textContent = items.reduce((s, i) => s + i.qty, 0);
 }
-function clearCart() {
-    cart = {};
-    applyFilters();
-    renderCart();
-    closeCartPanel();
-}
+
+function clearCart() { cart = {}; applyFilters(); renderCart(); closeCartPanel(); }
 
 function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'lang-' + lang));
-
-    const mapping = {
-        'cat-all': t.cat_all, 'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole,
-        'cat-dr': t.cat_dr, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil,
-        'cat-sake': t.cat_sake, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege,
-        'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder,
-        'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody,
-        'btn-first-order': t.btnFirstOrder, 'btn-repeat-order': t.btnRepeatOrder
-    };
-
+    const mapping = { 'cat-all': t.cat_all, 'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody };
     for (let id in mapping) {
         const el = document.getElementById(id);
         if (el) {
@@ -357,198 +264,66 @@ function setLang(lang) {
             else el.textContent = mapping[id];
         }
     }
-    applyFilters();
-    renderCart();
+    applyFilters(); renderCart();
 }
 
-// ═══════════════════════════════════════════════════════════
 // 7. UI CONTROL
-// ═══════════════════════════════════════════════════════════
-function toggleCartPanel() {
-    const panel = document.getElementById('cart-panel');
-    if (panel) panel.classList.toggle('show');
-}
-
-function closeCartPanel() {
-    const panel = document.getElementById('cart-panel');
-    if (panel) panel.classList.remove('show');
-}
-
-function openModal(src) {
-    const modal = document.getElementById('image-modal');
-    const modalImg = document.getElementById('modal-img');
-    if (modal && modalImg) {
-        modalImg.src = src;
-        modal.style.display = 'flex';
-    }
-}
-
-function closeModal() {
-    const modal = document.getElementById('image-modal');
-    if (modal) modal.style.display = 'none';
-}
-
+function toggleCartPanel() { document.getElementById('cart-panel')?.classList.toggle('show'); }
+function closeCartPanel() { document.getElementById('cart-panel')?.classList.remove('show'); }
+function openModal(src) { const m = document.getElementById('image-modal'), i = document.getElementById('modal-img'); if (m && i) { i.src = src; m.style.display = 'flex'; } }
+function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
 function selectVariantImage(pid, vImg, fImg, btn) {
     const img = document.getElementById(`product-image-${pid}`);
     if (img) img.src = vImg && vImg.trim() !== '' ? vImg : fImg;
-    if (btn) {
-        btn.closest('.variant-list').querySelectorAll('.variant-select-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
+    if (btn) { btn.closest('.variant-list').querySelectorAll('.variant-select-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
 }
 
-// ═══════════════════════════════════════════════════════════
 // 8. ORDER LOGIC
-// ═══════════════════════════════════════════════════════════
-// ① カートのボタンを押した時：ポップアップを開くだけ
 function submitFirstOrder() {
-    // 現在の言語に応じた辞書を取得
     const t = UI_TEXT[currentLang];
-
-    // 辞書の文字をHTMLに流し込む
     document.getElementById('modal-title').textContent = t.modalTitle;
     document.getElementById('label-shop').textContent = t.labelShop;
     document.getElementById('label-staff').textContent = t.labelStaff;
     document.getElementById('label-phone').textContent = t.labelPhone;
     document.getElementById('btn-cancel').textContent = t.btnCancel;
     document.getElementById('btn-submit').textContent = t.btnRegister;
-
-    // ポップアップを表示
     document.getElementById('first-time-modal').style.display = 'flex';
 }
-
-// ポップアップを閉じる
-function closeFirstTimeModal() {
-    document.getElementById('first-time-modal').style.display = 'none';
-}
-
-// ② ポップアップ内の「登録」ボタンを押した時：実際にデータを送る
-// ② ポップアップ内の「登録」ボタンを押した時：実際にデータを送る
+function closeFirstTimeModal() { document.getElementById('first-time-modal').style.display = 'none'; }
 async function processFirstTimeRegistration() {
-    const store = document.getElementById('reg-shop-name')?.value.trim();
-    const name = document.getElementById('reg-staff-name')?.value.trim();
-    const phone = document.getElementById('reg-phone')?.value.trim();
-
-    if (!phone || !store || !name) {
-        alert(currentLang === 'jp' ? "入力項目が不足しています" : "Please fill in all fields.");
-        return;
-    }
-
-    // GASへの送信はawaitせずに並行実行（速度改善）
-    fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({
-            action: 'register_user',
-            spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
-            phone: phone,
-            username: store,
-            firstName: name
-        })
-    });
-
-    // カートを一時保存
+    const s = document.getElementById('reg-shop-name')?.value.trim(), n = document.getElementById('reg-staff-name')?.value.trim(), p = document.getElementById('reg-phone')?.value.trim();
+    if (!p || !s || !n) { alert(currentLang === 'jp' ? "入力項目が不足しています" : "Please fill in all fields."); return; }
+    fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'register_user', spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', phone: p, username: s, firstName: n })});
     localStorage.setItem('temp_cart', JSON.stringify(cart));
-
-    // ポップアップを閉じる
     closeFirstTimeModal();
-
-    // すぐにTelegramへ遷移
-    const botUsername = "sakanaya_bot";
-    window.open(`https://t.me/${botUsername}?start=${phone.replace(/\D/g, "")}`, '_blank');
+    window.open(`https://t.me/sakanaya_bot?start=${p.replace(/\D/g, "")}`, '_blank');
 }
-
-// ① カートの「ご注文」ボタンを押したときに「ポップアップ」を出す関数
 function showOrderCheckModal() {
-    const items = Object.values(cart);
-    if (items.length === 0) {
-        alert(currentLang === 'jp' ? "カートが空です" : "Cart is empty");
-        return;
-    }
-    
-    // ポップアップ（HTMLの最後にある id="order-check-modal"）を表示する
-    const modal = document.getElementById('order-check-modal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
-    
-    // 前に使った番号があれば、ポップアップ内の入力欄に自動で入れる
-    const savedPhone = localStorage.getItem('user_phone');
-    const checkPhoneInput = document.getElementById('check-phone');
-    if (savedPhone && checkPhoneInput) {
-        checkPhoneInput.value = savedPhone;
-    }
+    if (Object.values(cart).length === 0) { alert(currentLang === 'jp' ? "カートが空です" : "Cart is empty"); return; }
+    document.getElementById('order-check-modal').style.display = 'flex';
+    const saved = localStorage.getItem('user_phone');
+    if (saved) document.getElementById('check-phone').value = saved;
 }
-
-// ② ポップアップ内の「注文を確定」ボタンを押したときに「送信」する関数
 async function finalizeOrderProcess() {
-    // ポップアップ内の入力欄「check-phone」から番号を読み取る
-    const phoneInput = document.getElementById('check-phone');
-    const phone = phoneInput?.value.trim();
-    const notes = document.getElementById('cart-notes')?.value.trim();
-    const items = Object.values(cart);
-
-    if (!phone) {
-        alert(currentLang === 'jp' ? "電話番号を入力してください。" : "Please enter your phone number.");
-        return;
-    }
-
-    // 送信ボタンが押されたのでポップアップを閉じる
+    const p = document.getElementById('check-phone')?.value.trim(), n = document.getElementById('cart-notes')?.value.trim(), items = Object.values(cart);
+    if (!p) { alert(currentLang === 'jp' ? "電話番号を入力してください。" : "Please enter your phone number."); return; }
     document.getElementById('order-check-modal').style.display = 'none';
-
-    // 電話番号を保存（次回のため）
-    localStorage.setItem('user_phone', phone);
-
-    // 注文内容の作成
+    localStorage.setItem('user_phone', p);
     let orderData = '【New Order】\n';
-items.forEach(i => {
-    const pName = currentLang === 'jp' ? i.product_name_jp : i.product_name_en;
-    const vName = currentLang === 'jp' ? (i.variant_name_jp || '') : (i.variant_name_en || '');
-    orderData += `${i.code || '---'} ${pName} ${vName} x ${i.qty}点\n`;
-});
-
+    items.forEach(i => { orderData += `${i.code || '---'} ${currentLang === 'jp' ? i.product_name_jp : i.product_name_en} ${currentLang === 'jp' ? i.variant_name_jp : i.variant_name_en} x ${i.qty}点\n`; });
     try {
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'send_order',
-                spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs',
-                targetGroupId: '-4710396177',
-                phone: phone, 
-                orderData: orderData, 
-                notes: notes
-            })
-        });
-
-        const result = await response.json();
-        if (result.status === "unregistered") {
-            alert(currentLang === 'jp' ? 
-                "未登録の番号です。左下の「初めての方」から登録をお願いします。" : 
-                "Not registered.");
-            return;
-        }
-
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', targetGroupId: '-4710396177', phone: p, orderData: orderData, notes: n })});
+        const result = await res.json();
+        if (result.status === "unregistered") { alert(currentLang === 'jp' ? "未登録の番号です。初めての方ボタンから登録をお願いします。" : "Not registered."); return; }
         alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
         clearCart();
-    } catch (e) { 
-        alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
-        clearCart();
-    }
+    } catch (e) { alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!'); clearCart(); }
 }
 
-// ═══════════════════════════════════════════════════════════
 // 9. INITIALIZE
-// ═══════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchProducts();
     setLang(currentLang);
-    
-    const savedData = localStorage.getItem('temp_cart');
-    if (savedData) {
-        try {
-            Object.assign(cart, JSON.parse(savedData));
-            renderCart();
-            localStorage.removeItem('temp_cart');
-        } catch (e) { console.error(e); }
-    }
+    const saved = localStorage.getItem('temp_cart');
+    if (saved) { try { Object.assign(cart, JSON.parse(saved)); renderCart(); localStorage.removeItem('temp_cart'); } catch (e) {} }
 });
