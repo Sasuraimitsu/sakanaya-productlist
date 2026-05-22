@@ -359,9 +359,8 @@ header {
     }
 }
 
-/* --- スマホ専用 (480px以下) --- */
 @media (max-width: 480px) {
-    /* 商品2列表示 */
+    /* 商品2列表示の維持 */
     .container {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
@@ -371,14 +370,39 @@ header {
 
     .img-wrapper { height: 120px !important; }
     .info { padding: 8px !important; }
+
+    /* ✅ 追加：商品名と産地を縦並びに変更 */
+    .product-title-row {
+        flex-direction: column !important; /* 横並びから縦並びに */
+        align-items: flex-start !important;
+        gap: 4px !important;
+        margin-bottom: 6px !important;
+    }
+
     .info h3 { 
         font-size: 0.85rem !important; 
+        /* 2行まで表示して残りを隠す設定を維持 [cite: 10, 28, 42, 64] */
         height: 2.4em; 
         overflow: hidden; 
         display: -webkit-box; 
         -webkit-line-clamp: 2; 
         -webkit-box-orient: vertical; 
+        line-height: 1.2 !important;
     }
+
+    /* ✅ 追加：産地タグをスマホ用にさらに小さく調整 */
+    .origin-tag {
+        align-self: flex-start !important;
+        padding: 1px 4px !important;
+        border: none !important; /* スマホでは枠線を消してスッキリさせる */
+        background: rgba(0,0,0,0.05) !important;
+    }
+    .origin-text { font-size: 0.6rem !important; }
+    .country-flag { 
+        width: 18px !important; 
+        margin-left: 2px !important; 
+    }
+
     .comment-box { display: none !important; }
 
     /* バリエーションとボタンの微調整 */
