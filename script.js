@@ -174,28 +174,25 @@ function buildCard(p) {
             </div>`;
     }
 
-    // 📦 2. 在庫の合計計算
-    const totalStock = (p.variants || []).reduce((sum, v) => {
-        const val = Number(v.stock);
-        return sum + (isNaN(val) ? 0 : val);
-    }, 0);
+    // 📦 2. 在庫の合計計算 
+    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
 
     // 🔍 3. バリエーションのフィルタリング (在庫切れ非表示ロジック)
     const vsHTML = (p.variants || [])
         .filter(v => {
-            const stockNum = toNumber(v.stock, 0);
+            const stockNum = toNumber(v.stock, 0); [cite: 13, 31, 51]
             if (currentCategory === 'OUT_OF_STOCK') {
-                // 入荷待ちタブ：在庫が0以下のものだけ表示
+                // 入荷待ちタブ：在庫が0以下のものだけ表示 
                 return stockNum <= 0;
             } else {
-                // 通常タブ：在庫が0より大きいものだけ表示
+                // 通常タブ：在庫が0より大きいものだけ表示 [cite: 13, 51]
                 return stockNum > 0;
             }
         })
         .map(v => {
             const vid = esc(v.variant_id);
             const qty = cart[vid]?.qty || 0;
-            const isOut = toNumber(v.stock, 0) <= 0;
+            const isOut = toNumber(v.stock, 0) <= 0; [cite: 31, 50, 61]
             return `
                 <div class="variant-row">
                     <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
@@ -218,13 +215,13 @@ function buildCard(p) {
         </div>
         <div class="info">
             <div class="product-title-row">
-                <h3>[${esc(p.code || '---')}] ${name}</h3>
+                <h3>[${esc(p.code || '---')}] ${name}</h3> [cite: 10, 28, 42, 64]
                 ${originHTML}
             </div>
             
             <div class="size-calc-row">
-                <p class="size-detail">${esc(p.size || '')}</p>
-                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span>
+                <p class="size-detail">${esc(p.size || '')}</p> [cite: 14, 17, 19, 35]
+                <span class="calc-mini ${getCalcClass(p)}">${getCalcLabel(p)}</span> [cite: 12, 30, 45, 66]
             </div>
             <div class="variant-list">${vsHTML}</div>
         </div>
