@@ -155,25 +155,57 @@ function buildCard(p) {
     const t = UI_TEXT[currentLang];
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
-    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
-    
-    const vsHTML = (p.variants || []).map(v => {
-        const vid = esc(v.variant_id);
-        const qty = cart[vid]?.qty || 0;
-        const isOut = toNumber(v.stock, 0) <= 0;
-        return `
-            <div class="variant-row">
-                <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
-                    ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
-                </button>
-                <div class="variant-qty-wrap">
-                    <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
-                    <span class="variant-qty">${qty}</span>
-                    <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${isOut ? 'disabled' : ''}>＋</button>
-                </div>
-            </div>`;
-    }).join('');
 
+    // 🚩 1. 産地と国旗の判定ロジック
+    let originHTML = '';
+    const origin = String(p.origin || '').trim(); // スプレッドシートの origin 列を参照
+    
+    if (origin === 'カンボジア' || origin === 'Cambodia') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">カンボジア産</span>
+                <img src="images/kh-flag.png" class="country-flag" alt="KH">
+            </div>`;
+    } else if (origin === '日本' || origin === 'Japan') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">日本産</span>
+                <img src="images/jp-flag.png" class="country-flag" alt="JP">
+            </div>`;
+    }
+
+    // 📦 2. 在庫の合計計算
+    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
+
+    // 🔍 3. バリエーションのフィルタリング (在庫切れ非表示ロジック)
+    const vsHTML = (p.variants || [])
+        .filter(v => {
+            const stockNum = toNumber(v.stock, 0);
+            if (currentCategory === 'OUT_OF_STOCK') {
+                // 入荷待ちタブ：在庫が0以下のものだけ表示
+                return stockNum <= 0;
+            } else {
+                // 通常タブ：在庫が0より大きいものだけ表示
+                return stockNum > 0;
+            }
+        })
+        .map(v => {
+            const vid = esc(v.variant_id);
+            const qty = cart[vid]?.qty || 0;
+            const isOut = toNumber(v.stock, 0) <= 0;
+            return `
+                <div class="variant-row">
+                    <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
+                        ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
+                    </button>
+                    <div class="variant-qty-wrap">
+                        <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
+                        <span class="variant-qty">${qty}</span>
+                        <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${isOut ? 'disabled' : ''}>＋</button>
+                    </div>
+                </div>`;
+        }).join('');
+    
     return `
     <div class="card" data-category="${esc(getCategoryValue(p))}">
         <div class="img-wrapper">
