@@ -153,17 +153,47 @@ header {
 .stock-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; }
 
 /* 商品情報 */
-.info { padding: 16px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
-.info h3 { margin: 0 0 8px; font-size: 1.1rem; color: var(--main-blue); }
-.comment-box { font-size: 0.85rem; color: #444; margin-bottom: 12px; }
+.product-title-row {
+    display: flex;
+    justify-content: space-between; /* 商品名を左、産地を右に */
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+}
 
-/* 国旗のサイズ*/
+.info h3 {
+    margin: 0 !important; /* title-row側で余白を制御するため0にする */
+    font-size: 1.1rem;
+    color: var(--main-blue);
+    flex: 1; /* 長い名前でも産地タグを押し潰さない */
+    min-width: 0;
+}
+
+/* 産地タグと国旗のデザイン */
+.origin-tag {
+    display: flex;
+    align-items: center;
+    background: #f0f2f5; /* 視認性のための薄いグレー */
+    border: 1px solid #e1e4e8;
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap; /* 改行防止 */
+    flex-shrink: 0;
+}
+
+.origin-text {
+    font-size: 0.65rem;
+    color: #555;
+    font-weight: bold;
+}
+
+/* 既存の .country-flag を微調整 */
 .country-flag {
-    width: 30px !important;   /* 適度な大きさに固定 */
+    width: 22px !important; /* 既存の30pxから少し小さくするとバランスが良いです */
     height: auto !important;
-    margin-left: 8px;
+    margin-left: 4px !important;
     border: 1px solid #ddd;
-    vertical-align: middle;
+    border-radius: 2px;
 }
 
 /* 重量計算・数量計算の枠分けと色付け */
