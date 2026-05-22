@@ -135,14 +135,16 @@ function buildCard(p) {
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
 
-    let originHTML = '';
-    const origin = String(p.origin || '').trim(); 
-    if (origin === 'カンボジア' || origin === 'Cambodia') {
-        originHTML = `<div class="origin-tag"><span class="origin-text">カンボジア産</span><img src="images/kh-flag.png" class="country-flag" alt="KH"></div>`;
-    } else if (origin === '日本' || origin === 'Japan') {
-        originHTML = `<div class="origin-tag"><span class="origin-text">日本産</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
-    }
+    // 🚩 1. 産地と国旗の判定ロジック（修正版）
+let originHTML = '';
+// p.origin ではなく p.country を参照し、大文字で比較します
+const country = String(p.country || '').trim().toUpperCase(); 
 
+if (country === 'カンボジア' || country === 'CAMBODIA') {
+    originHTML = `<div class="origin-tag"><span class="origin-text">カンボジア産</span><img src="images/kh-flag.png" class="country-flag" alt="KH"></div>`;
+} else if (country === '日本' || country === 'JAPAN') {
+    originHTML = `<div class="origin-tag"><span class="origin-text">日本産</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
+}
     const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
 
     const vsHTML = (p.variants || [])
