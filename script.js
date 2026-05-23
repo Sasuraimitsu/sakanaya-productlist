@@ -11,7 +11,7 @@ let cart = {};
 // 2. UI TEXT
 const UI_TEXT = {
     jp: {
-        cat_all: "すべて", cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
+        cat_all: "すべて", cat_kh: "🇰🇭 カンボジア産", cat_jp: "🇯🇵 日本産", cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
         cat_fillet: "鮮魚フィレ・セミドレス・ドレス", cat_oil: "調味料・油", cat_kitchen: "厨房用品", cat_vege: "野菜", cat_waiting: "入荷待ち", inquiry: "問い合わせ",
         searchPlaceholder: "商品名で検索...", noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         orderBarLabel: "📋 ご注文内容", orderNote: "* 最終的な数量・重量は納品時に確定いたします",
@@ -29,7 +29,7 @@ const UI_TEXT = {
         noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
     },
     en: {
-        cat_all: "ALL", cat_frozen: "FROZEN", cat_whole: "WHOLE", 
+        cat_all: "ALL", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", cat_frozen: "FROZEN", cat_whole: "WHOLE", 
         cat_fillet: "FILLET/DR/SD", cat_oil: "OIL & SEASONING", cat_kitchen: "KITCHEN", cat_vege: "VEGETABLES", cat_waiting: "OUT OF STOCK", inquiry: "INQUIRY",
         searchPlaceholder: "Search...", noticeTitle: "【 NOTICE 】 Click for details",
         orderBarLabel: "📋 Your Order", orderNote: "* Final price confirmed upon delivery",
@@ -99,6 +99,12 @@ function applyFilters() {
         let matchesCat = false;
         if (currentCategory === 'OUT_OF_STOCK') {
             matchesCat = (totalStock <= 0);
+        } else if (currentCategory === 'COUNTRY_KH') {
+            // カテゴリー「カンボジア」選択時
+            matchesCat = (countryVal === 'CAMBODIA' && totalStock > 0);
+        } else if (currentCategory === 'COUNTRY_JP') {
+            // カテゴリー「日本」選択時
+            matchesCat = (countryVal === 'JAPAN' && totalStock > 0);
         } else {
             const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory);
             matchesCat = catMatch && (totalStock > 0);
