@@ -130,21 +130,28 @@ function displayProducts(products) {
 }
 
 function buildCard(p) {
-    console.log("商品データ確認:", p);
     const t = UI_TEXT[currentLang];
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
 
-    // 🚩 1. 産地と国旗の判定ロジック（修正版）
-let originHTML = '';
-// p.origin ではなく p.country を参照し、大文字で比較します
-const country = String(p.country || '').trim().toUpperCase(); 
-
-if (country === 'カンボジア' || country === 'CAMBODIA') {
-    originHTML = `<div class="origin-tag"><span class="origin-text">カンボジア産</span><img src="images/kh-flag.png" class="country-flag" alt="KH"></div>`;
-} else if (country === '日本' || country === 'JAPAN') {
-    originHTML = `<div class="origin-tag"><span class="origin-text">日本産</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
-}
+    // 🚩 修正：p.origin ではなく p.country を参照します
+    // GAS側で .toUpperCase() されているため、比較は「大文字」で行います
+    let originHTML = '';
+    const countryVal = String(p.country || '').trim().toUpperCase(); 
+    
+    if (countryVal === 'カンボジア' || countryVal === 'CAMBODIA') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">カンボジア産</span>
+                <img src="images/kh-flag.png" class="country-flag" alt="KH">
+            </div>`;
+    } else if (countryVal === '日本' || countryVal === 'JAPAN') {
+        originHTML = `
+            <div class="origin-tag">
+                <span class="origin-text">日本産</span>
+                <img src="images/jp-flag.png" class="country-flag" alt="JP">
+            </div>`;
+    }
     const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
 
     const vsHTML = (p.variants || [])
