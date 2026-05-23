@@ -96,14 +96,14 @@ function applyFilters() {
             return sum + (isNaN(val) ? 0 : val);
         }, 0);
 
+        const countryVal = String(p.country || '').trim().toUpperCase();
+
         let matchesCat = false;
         if (currentCategory === 'OUT_OF_STOCK') {
             matchesCat = (totalStock <= 0);
         } else if (currentCategory === 'COUNTRY_KH') {
-            // カテゴリー「カンボジア」選択時
             matchesCat = (countryVal === 'CAMBODIA' && totalStock > 0);
         } else if (currentCategory === 'COUNTRY_JP') {
-            // カテゴリー「日本」選択時
             matchesCat = (countryVal === 'JAPAN' && totalStock > 0);
         } else {
             const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory);
