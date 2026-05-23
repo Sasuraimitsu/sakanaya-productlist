@@ -140,24 +140,14 @@ function buildCard(p) {
     const pid = esc(p.product_id);
     const name = esc(getProductName(p));
 
-    // 🚩 修正：p.origin ではなく p.country を参照します
-    // GAS側で .toUpperCase() されているため、比較は「大文字」で行います
     let originHTML = '';
     const countryVal = String(p.country || '').trim().toUpperCase(); 
-    
-    if (countryVal === 'カンボジア' || countryVal === 'CAMBODIA') {
-        originHTML = `
-            <div class="origin-tag">
-                <span class="origin-text">カンボジア産</span>
-                <img src="images/kh-flag.png" class="country-flag" alt="KH">
-            </div>`;
-    } else if (countryVal === '日本' || countryVal === 'JAPAN') {
-        originHTML = `
-            <div class="origin-tag">
-                <span class="origin-text">日本産</span>
-                <img src="images/jp-flag.png" class="country-flag" alt="JP">
-            </div>`;
+    if (countryVal === 'CAMBODIA') {
+        originHTML = `<div class="origin-tag"><span class="origin-text">${t.origin_kh}</span><img src="images/kh-flag.png" class="country-flag" alt="KH"></div>`;
+    } else if (countryVal === 'JAPAN') {
+        originHTML = `<div class="origin-tag"><span class="origin-text">${t.origin_jp}</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
     }
+    
     const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
 
     const vsHTML = (p.variants || [])
