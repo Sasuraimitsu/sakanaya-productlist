@@ -261,7 +261,7 @@ function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'lang-' + lang));
-    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody };
+    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody, 'recommend-title': t.recommendTitle };
     for (let id in mapping) {
         const el = document.getElementById(id);
         if (el) {
