@@ -409,3 +409,39 @@ header {
     .variant-row { grid-template-columns: 1fr; gap: 5px; }
     .qty-btn { width: 28px; height: 28px; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   9. 本日のおすすめ セクション (Recommend Section)
+   ══════════════════════════════════════════════════════════ */
+/* 見出し・枠の左端を本体グリッドの「1枚目の商品写真の左端」に揃える
+   (.container と同じ箱モデル: max-width 1200 / margin auto / padding 20 / content-box) */
+#recommend-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px 0;
+    box-sizing: content-box;
+}
+#recommend-section .section-header h3 {
+    margin: 0 0 12px;
+    font-size: 1.2rem;
+    color: var(--accent-red);
+}
+/* おすすめ枠: 横幅は1列分(固定)・商品数に応じて縦のみ伸びる枠 */
+#recommend-container.recommend-container {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 15px !important;
+    width: min(330px, 100%);
+    margin: 0 !important;
+    padding: 15px !important;
+    border: 2px solid var(--accent-red);
+    border-radius: 12px;
+    background: #fff5f5;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.12);
+    box-sizing: border-box;
+}
+/* モバイルは本体グリッドの padding(10px) に合わせて左端を揃える */
+@media (max-width: 480px) {
+    #recommend-section { padding-left: 10px; padding-right: 10px; }
+}
