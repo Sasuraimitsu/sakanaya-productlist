@@ -424,22 +424,29 @@ header {
 #recommend-section .section-header h3 {
     margin: 0 0 12px;
     font-size: 1.2rem;
-    color: var(--accent-red);
+    color: #b08a4e;
 }
-/* おすすめ枠: 横幅は1列分(固定)・商品数に応じて縦のみ伸びる枠 */
+/* おすすめ枠: 商品は横並び。少数なら商品数に合わせて枠が縮み、増えると折り返して下へ伸びる */
 #recommend-container.recommend-container {
     display: flex !important;
-    flex-direction: column !important;
-    grid-template-columns: none !important;
-    gap: 15px !important;
-    width: min(330px, 100%);
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 18px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
     margin: 0 !important;
-    padding: 15px !important;
-    border: 2px solid var(--accent-red);
-    border-radius: 12px;
-    background: #fff5f5;
-    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.12);
+    padding: 16px !important;
+    border: 2px solid #d9c39c;
+    border-radius: 14px;
+    background: #faf5ec;
+    box-shadow: 0 4px 14px rgba(170, 140, 80, 0.10);
     box-sizing: border-box;
+}
+/* おすすめカードは300px基準・狭い画面では縮小して横はみ出しを防ぐ */
+#recommend-container.recommend-container .card {
+    flex: 0 1 300px;
+    min-width: 0;
+    max-width: 100%;
 }
 /* モバイルは本体グリッドの padding(10px) に合わせて左端を揃える */
 @media (max-width: 480px) {
