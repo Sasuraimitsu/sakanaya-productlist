@@ -1,5 +1,5 @@
 // 1. CONFIG & STATE
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzMWG2Fx-77aWzZmHMWXbNOZQe3K-cSIAkzsc3-aADBt7_csJ0r8h93AuOLxq7tHE0t/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwgE8fOWPyXkr2WTZNIvH5G30ptWzQIK6DCO7kVK9x4b6RgSlHBY2wgmNwc42aA_WUOKA/exec'; // 2026-07-06 新ブック移行：新GASの/execに切替
 const TELEGRAM_API_URL = 'https://telegram-bot-729928920450.asia-northeast1.run.app/';
 const TELEGRAM_LINK = 'https://t.me/SAKANAYAJAPON';
 
@@ -319,11 +319,19 @@ async function finalizeOrderProcess() {
     items.forEach(i => { orderData += `${i.code || '---'} ${currentLang === 'jp' ? i.product_name_jp : i.product_name_en} ${currentLang === 'jp' ? i.variant_name_jp : i.variant_name_en} x ${i.qty}点\n`; });
     try {
         const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', targetGroupId: '-4710396177', phone: p, orderData: orderData, notes: n })});
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const result = await res.json();
         if (result.status === "unregistered") { alert(currentLang === 'jp' ? "未登録の番号です。初めての方ボタンから登録をお願いします。" : "Not registered."); return; }
         alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
         clearCart();
-    } catch (e) { alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!'); clearCart(); }
+    } catch (e) {
+        // H-1修正: 通信失敗時に偽の成功表示をせず、エラーを伝えてカートを保持する
+        alert(currentLang === 'jp'
+            ? '⚠️ 注文の送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。ご注文内容（カート）はそのまま残っています。'
+            : '⚠️ Failed to send your order. Please check your connection and try again. Your cart has been kept.');
+        // 再試行しやすいよう確認モーダルを再表示（clearCart は呼ばない）
+        document.getElementById('order-check-modal').style.display = 'flex';
+    }
 }
 
 // 9. INITIALIZE
