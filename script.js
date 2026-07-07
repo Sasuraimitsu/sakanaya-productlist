@@ -326,15 +326,16 @@ async function processFirstTimeRegistration() {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const result = await res.json();
         if (!result || result.status !== 'ok') throw new Error((result && result.message) || 'register failed');
-        // 成功：受付を伝えてから Telegram を開く（ディープリンクは不変・設計§7 1-6）
+        // 成功：Telegramへは飛ばさず、選んだカートへ戻って注文を続けてもらう（導線A・2026-07-08）。
+        // Telegram連携は注文完了モーダルのボタンから（アプリ内ブラウザでカートが空に見える問題の解消）。
         setRegStatus(currentLang === 'jp'
-            ? '✅ ご登録を受け付けました！\nTelegramを開いて「電話番号を共有」すると登録が完了します📱'
-            : '✅ Registration received!\nOpening Telegram — tap "Share phone number" to finish 📱', '#2e7d32');
-        localStorage.setItem('temp_cart', JSON.stringify(cart));
+            ? '✅ ご登録を受け付けました！\nこのままご注文いただけます🛒（Telegram通知はご注文後にご案内します）'
+            : '✅ Registration received!\nYou can order right away 🛒 (We\'ll set up Telegram notifications after your order)', '#2e7d32');
+        localStorage.setItem('user_phone', p); // 注文確認と注文後のTelegram連携ボタンで再利用
         setTimeout(() => {
             closeFirstTimeModal();
-            window.open(`https://t.me/sakanaya_bot?start=${p.replace(/\D/g, "")}`, '_blank');
-        }, 800);
+            document.getElementById('cart-panel')?.classList.add('show'); // 選んだカートに戻す
+        }, 1500);
     } catch (e) {
         // 失敗：入力値を保持し再試行可能に（カートも保持）
         setRegStatus(currentLang === 'jp'
@@ -428,15 +429,19 @@ function showOrderResult(kind, orderNo) {
         secondary.style.display = 'none';
         primary.textContent = jp ? '閉じる' : 'Close';
         primary.onclick = closeOrderResult; // カートは受付完了時に破棄済み（M-3）
-    } else { // unregistered（拒否しない：受付完了＋次回の登録案内）
+    } else { // unregistered（拒否しない：受付完了＋Telegram連携はここから・導線A 2026-07-08）
         body.textContent = jp
-            ? 'ご注文はしっかりお受けしました✅\n\n📱 はじめての方へ：ご登録いただくと、次回からTelegramでご注文確認を受け取れてスムーズです。今回のご注文はこのまま進みます。'
-            : 'Your order has been received ✅\n\n📱 First time here? Register to receive order confirmations on Telegram and check out faster next time. This order is already being processed.';
+            ? 'ご注文はしっかりお受けしました✅\n\n📱 下のボタンからTelegramを開くと、ご注文の確認メッセージをTelegramで受け取れるようになります（今回のご注文はこのまま進みます）。'
+            : 'Your order has been received ✅\n\n📱 Tap below to open Telegram and get your order confirmations there (this order is already being processed).';
         secondary.style.display = '';
         secondary.textContent = jp ? '閉じる' : 'Close';
         secondary.onclick = closeOrderResult; // カートは受付完了時に破棄済み（M-3）
-        primary.textContent = jp ? '登録する' : 'Register';
-        primary.onclick = () => { closeOrderResult(); submitFirstOrder(); }; // カートと無関係に登録モーダルを開くだけ（M-3）
+        primary.textContent = jp ? '📱 Telegramで確認を受け取る' : '📱 Get updates on Telegram';
+        primary.onclick = () => { // 注文受付済み＝カート破棄済みなのでページを離れても安全（M-3）
+            const ph = (localStorage.getItem('user_phone') || '').replace(/\D/g, '');
+            closeOrderResult();
+            window.open(ph ? `https://t.me/sakanaya_bot?start=${ph}` : 'https://t.me/sakanaya_bot', '_blank');
+        };
     }
     document.getElementById('order-result-modal').style.display = 'flex';
 }
