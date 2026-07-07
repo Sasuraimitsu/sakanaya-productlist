@@ -100,7 +100,7 @@
         <img class="modal-content" id="modal-img" alt="Product Image">
     </div>
 
-    <script src="script.js?v=20260706"></script>
+    <script src="script.js?v=20260708"></script>
 
     <div id="first-time-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10000; justify-content:center; align-items:center;">
     <div style="background:#fff; width:90%; max-width:400px; padding:25px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.3); position:relative;">
@@ -117,7 +117,10 @@
             <label id="label-phone" style="display:block; font-size:0.8rem; font-weight:bold;">電話番号</label>
             <input type="tel" id="reg-phone" placeholder="0123456789" style="width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:4px;">
         </div>
-        
+
+        <!-- H-5: 登録の成否をインライン表示する状態行（processFirstTimeRegistration が更新） -->
+        <p id="reg-status-msg" style="min-height:1.2em; font-size:0.85rem; margin:0 0 10px; white-space:pre-line;"></p>
+
         <div style="display:flex; gap:10px;">
             <button id="btn-cancel" onclick="closeFirstTimeModal()" style="flex:1; padding:12px; background:#eee; border:none; border-radius:6px; cursor:pointer;">キャンセル</button>
             <button id="btn-submit" onclick="processFirstTimeRegistration()" style="flex:2; padding:12px; background:#333; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">登録</button>
@@ -126,14 +129,33 @@
 </div>
     <div id="order-check-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:10001; justify-content:center; align-items:center;">
     <div style="background:#fff; width:85%; max-width:350px; padding:20px; border-radius:12px; text-align:center;">
-        <h3 style="margin-bottom:15px;">注文確認 / Order</h3>
-        <p style="font-size:0.9rem;">登録済みの電話番号を入力してください。</p>
+        <h3 id="check-title" style="margin-bottom:15px;"></h3>
+        <p id="check-lead" style="font-size:0.85rem; color:#555;"></p>
+        <div style="text-align:left; font-weight:bold; font-size:0.85rem; margin:8px 0 4px;">
+            <span id="check-items-label"></span>
+        </div>
+        <div id="check-order-summary" style="text-align:left; max-height:34vh; overflow-y:auto; background:#f9f9f9; border:1px solid #eee; border-radius:6px; padding:10px; font-size:0.85rem;"></div>
+        <label id="check-phone-label" style="display:block; text-align:left; font-weight:bold; font-size:0.85rem; margin-top:12px;"></label>
         <input type="tel" id="check-phone" placeholder="0123456789" style="width:100%; padding:10px; margin:15px 0; border:1px solid #ccc; border-radius:4px;">
-        <div style="display:flex; gap:10px;">
-            <button onclick="document.getElementById('order-check-modal').style.display='none'" style="flex:1; padding:10px; background:#eee; border:none; border-radius:6px;">戻る</button>
-            <button onclick="finalizeOrderProcess()" style="flex:1; padding:10px; background:#333; color:#fff; border:none; border-radius:6px;">注文を確定</button>
+        <p id="check-phone-note" style="text-align:left; font-size:0.75rem; color:#666; margin:4px 0 0;"></p>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <button id="check-btn-back" onclick="document.getElementById('order-check-modal').style.display='none'" style="flex:1; padding:10px; background:#eee; border:none; border-radius:6px;"></button>
+            <button id="check-btn-confirm" onclick="finalizeOrderProcess()" style="flex:1; padding:10px; background:#333; color:#fff; border:none; border-radius:6px;"></button>
         </div>
     </div>
 </div>
+    <!-- 注文結果モーダル（成功/未登録/失敗を1枚で切替・showOrderResult が制御） -->
+    <div id="order-result-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10002; justify-content:center; align-items:center;">
+        <div style="background:#fff; width:85%; max-width:360px; padding:24px; border-radius:12px; text-align:center;">
+            <div id="result-icon" style="font-size:2.4rem; margin-bottom:6px;">✅</div>
+            <h3 id="result-title" style="margin:0 0 6px;"></h3>
+            <p id="result-orderno" style="font-size:1.1rem; font-weight:bold; letter-spacing:.03em; margin:6px 0;"></p>
+            <p id="result-body" style="font-size:0.9rem; color:#555; white-space:pre-line; line-height:1.6; margin:6px 0 0;"></p>
+            <div style="display:flex; gap:10px; margin-top:18px;">
+                <button id="result-btn-secondary" style="flex:1; padding:11px; background:#eee; border:none; border-radius:6px;"></button>
+                <button id="result-btn-primary"   style="flex:1; padding:11px; background:#333; color:#fff; border:none; border-radius:6px; font-weight:bold;"></button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

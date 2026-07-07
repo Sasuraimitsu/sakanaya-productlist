@@ -7,6 +7,7 @@ let currentLang = (navigator.language || navigator.userLanguage || 'ja').startsW
 let currentCategory = 'ALL';
 let allProducts = [];
 let cart = {};
+let currentClientOrderId = ''; // send_order の冪等キー（確認モーダルで採番→成功で破棄・設計§5-1）
 
 // 2. UI TEXT
 const UI_TEXT = {
@@ -255,7 +256,7 @@ function renderCart() {
     if (badge) badge.textContent = items.reduce((s, i) => s + i.qty, 0);
 }
 
-function clearCart() { cart = {}; applyFilters(); renderCart(); closeCartPanel(); }
+function clearCart() { cart = {}; currentClientOrderId = ''; applyFilters(); renderCart(); closeCartPanel(); }
 
 function setLang(lang) {
     currentLang = lang;
@@ -293,44 +294,178 @@ function submitFirstOrder() {
     document.getElementById('label-phone').textContent = t.labelPhone;
     document.getElementById('btn-cancel').textContent = t.btnCancel;
     document.getElementById('btn-submit').textContent = t.btnRegister;
+    setRegStatus('', '#666'); // 前回の成否メッセージを消してから開く
     document.getElementById('first-time-modal').style.display = 'flex';
 }
 function closeFirstTimeModal() { document.getElementById('first-time-modal').style.display = 'none'; }
+
+// 登録モーダルのインライン状態行（#reg-status-msg）を色付きで更新（H-5・デザイン§4-3）
+function setRegStatus(msg, color) {
+    const el = document.getElementById('reg-status-msg');
+    if (!el) return;
+    el.textContent = msg || '';
+    el.style.color = color || '#666';
+}
+
 async function processFirstTimeRegistration() {
     const s = document.getElementById('reg-shop-name')?.value.trim(), n = document.getElementById('reg-staff-name')?.value.trim(), p = document.getElementById('reg-phone')?.value.trim();
-    if (!p || !s || !n) { alert(currentLang === 'jp' ? "入力項目が不足しています" : "Please fill in all fields."); return; }
-    fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'register_user', spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', phone: p, username: s, firstName: n })});
-    localStorage.setItem('temp_cart', JSON.stringify(cart));
-    closeFirstTimeModal();
-    window.open(`https://t.me/sakanaya_bot?start=${p.replace(/\D/g, "")}`, '_blank');
+    const submitBtn = document.getElementById('btn-submit');
+    // 入力不足：状態行に案内してモーダル保持（デザイン§3-4）
+    if (!p || !s || !n) {
+        setRegStatus(currentLang === 'jp'
+            ? '⚠️ 店名・担当者名・電話番号をすべてご入力ください。'
+            : '⚠️ Please fill in shop name, contact person, and phone number.', '#c62828');
+        return;
+    }
+    // 送信中表示＋二重送信防止
+    setRegStatus(currentLang === 'jp' ? '送信中です…📡' : 'Sending… 📡', '#666');
+    if (submitBtn) submitBtn.disabled = true;
+    try {
+        // H-5: no-cors廃止→通常fetchで応答検証。Content-Type は付けない（preflight回避・設計§3-2）
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'register_user', phone: p, username: s, firstName: n })});
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const result = await res.json();
+        if (!result || result.status !== 'ok') throw new Error((result && result.message) || 'register failed');
+        // 成功：受付を伝えてから Telegram を開く（ディープリンクは不変・設計§7 1-6）
+        setRegStatus(currentLang === 'jp'
+            ? '✅ ご登録を受け付けました！\nTelegramを開いて「電話番号を共有」すると登録が完了します📱'
+            : '✅ Registration received!\nOpening Telegram — tap "Share phone number" to finish 📱', '#2e7d32');
+        localStorage.setItem('temp_cart', JSON.stringify(cart));
+        setTimeout(() => {
+            closeFirstTimeModal();
+            window.open(`https://t.me/sakanaya_bot?start=${p.replace(/\D/g, "")}`, '_blank');
+        }, 800);
+    } catch (e) {
+        // 失敗：入力値を保持し再試行可能に（カートも保持）
+        setRegStatus(currentLang === 'jp'
+            ? '⚠️ ご登録に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
+            : '⚠️ Registration failed. Please check your connection and try again.', '#c62828');
+    } finally {
+        if (submitBtn) submitBtn.disabled = false;
+    }
 }
+
+// send_order の冪等キー生成（UUID優先・非対応環境は nonce にフォールバック・設計§5-1）
+function genClientOrderId() {
+    if (window.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    return 'w-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+}
+
 function showOrderCheckModal() {
-    if (Object.values(cart).length === 0) { alert(currentLang === 'jp' ? "カートが空です" : "Cart is empty"); return; }
+    const items = Object.values(cart);
+    if (items.length === 0) { alert(currentLang === 'jp' ? "カートが空です" : "Cart is empty"); return; }
+    const jp = currentLang === 'jp';
+    // 確認セッションの冪等キーを採番（未採番時のみ＝再試行では同一キーを維持し二重起票を防ぐ）
+    if (!currentClientOrderId) currentClientOrderId = genClientOrderId();
+    // 見出し・リード文・ラベル・補助文・ボタン（デザイン§3-1）
+    document.getElementById('check-title').textContent = jp ? 'ご注文内容の確認' : 'Confirm Your Order';
+    document.getElementById('check-lead').textContent = jp
+        ? '以下の内容で承ります。よろしければ「確定する」を押してください🐟'
+        : 'Please review your order below, then tap "Confirm" 🐟';
+    document.getElementById('check-items-label').textContent = jp ? '🛒 ご注文品' : '🛒 Your Items';
+    document.getElementById('check-phone-label').textContent = jp ? '📱 ご連絡先（電話番号）' : '📱 Phone Number';
+    document.getElementById('check-phone-note').textContent = jp
+        ? '未登録でもご注文いただけます。ご登録済みの方は同じ番号をご入力ください。'
+        : "Orders are accepted even if you're not registered yet. If registered, use the same number.";
+    document.getElementById('check-btn-back').textContent = jp ? '戻る' : 'Back';
+    document.getElementById('check-btn-confirm').textContent = jp ? '確定する' : 'Confirm';
+    // ご注文品の明細（カート各品を反復・明細表記はデザイン§3-1）
+    document.getElementById('check-order-summary').innerHTML = items.map(item => {
+        const nm = esc(jp ? item.product_name_jp : item.product_name_en);
+        const vn = esc(jp ? item.variant_name_jp : item.variant_name_en);
+        const qtyText = jp ? `× ${item.qty}点` : `× ${item.qty}`;
+        return `<div style="padding:4px 0; border-bottom:1px solid #eee;">[${esc(item.code || '---')}] ${nm} ${vn} ${qtyText}</div>`;
+    }).join('');
     document.getElementById('order-check-modal').style.display = 'flex';
     const saved = localStorage.getItem('user_phone');
     if (saved) document.getElementById('check-phone').value = saved;
 }
+
+// 注文結果モーダルを構成（成功=登録済み/未登録・失敗を1枚で切替・デザイン§3-2/§3-3）
+function showOrderResult(kind, orderNo) {
+    const jp = currentLang === 'jp';
+    const icon = document.getElementById('result-icon');
+    const title = document.getElementById('result-title');
+    const noEl = document.getElementById('result-orderno');
+    const body = document.getElementById('result-body');
+    const primary = document.getElementById('result-btn-primary');
+    const secondary = document.getElementById('result-btn-secondary');
+    const hasNo = !!(orderNo && String(orderNo).trim());
+
+    // 送信失敗（⚠️は本物の失敗のみ・番号非表示・カート保持）
+    if (kind === 'failed') {
+        icon.textContent = '⚠️';
+        title.textContent = jp ? '送信できませんでした' : "Couldn't Send";
+        noEl.textContent = ''; noEl.style.display = 'none';
+        body.textContent = jp
+            ? '通信環境をご確認のうえ、もう一度お試しください。\nご注文内容（カート）はそのまま残っています🛒'
+            : 'Please check your connection and try again.\nYour cart has been kept 🛒';
+        secondary.style.display = '';
+        secondary.textContent = jp ? '閉じる' : 'Close';
+        secondary.onclick = closeOrderResult; // 閉じるのみ（カート保持）
+        primary.textContent = jp ? 'もう一度試す' : 'Retry';
+        primary.onclick = () => { closeOrderResult(); document.getElementById('order-check-modal').style.display = 'flex'; };
+        document.getElementById('order-result-modal').style.display = 'flex';
+        return;
+    }
+
+    // 受付完了（登録済み/未登録とも ✅・拒否面にしない・デザイン§3-2）
+    icon.textContent = '✅';
+    title.textContent = jp ? 'ご注文を承りました' : 'Order Received';
+    noEl.textContent = hasNo ? (jp ? `ご注文番号：${orderNo}` : `Order No.: ${orderNo}`) : '';
+    noEl.style.display = hasNo ? '' : 'none';
+
+    if (!hasNo) {
+        // orderNo 欠落（万一 GAS 旧版）：W番号なしの汎用成功にフォールバック（設計§3-1）
+        body.textContent = jp ? 'ご注文を承りました。' : 'Your order has been received.';
+        secondary.style.display = 'none';
+        primary.textContent = jp ? '閉じる' : 'Close';
+        primary.onclick = closeOrderResult; // カートは受付完了時に破棄済み（M-3）
+    } else if (kind === 'registered') {
+        body.textContent = jp
+            ? 'Telegramに確認メッセージをお送りしました📩\n担当者が内容を確認し、追ってご連絡いたします🐟'
+            : "We've sent a confirmation to your Telegram 📩\nOur staff will review it and get back to you 🐟";
+        secondary.style.display = 'none';
+        primary.textContent = jp ? '閉じる' : 'Close';
+        primary.onclick = closeOrderResult; // カートは受付完了時に破棄済み（M-3）
+    } else { // unregistered（拒否しない：受付完了＋次回の登録案内）
+        body.textContent = jp
+            ? 'ご注文はしっかりお受けしました✅\n\n📱 はじめての方へ：ご登録いただくと、次回からTelegramでご注文確認を受け取れてスムーズです。今回のご注文はこのまま進みます。'
+            : 'Your order has been received ✅\n\n📱 First time here? Register to receive order confirmations on Telegram and check out faster next time. This order is already being processed.';
+        secondary.style.display = '';
+        secondary.textContent = jp ? '閉じる' : 'Close';
+        secondary.onclick = closeOrderResult; // カートは受付完了時に破棄済み（M-3）
+        primary.textContent = jp ? '登録する' : 'Register';
+        primary.onclick = () => { closeOrderResult(); submitFirstOrder(); }; // カートと無関係に登録モーダルを開くだけ（M-3）
+    }
+    document.getElementById('order-result-modal').style.display = 'flex';
+}
+function closeOrderResult() { document.getElementById('order-result-modal').style.display = 'none'; }
+
 async function finalizeOrderProcess() {
     const p = document.getElementById('check-phone')?.value.trim(), n = document.getElementById('cart-notes')?.value.trim(), items = Object.values(cart);
     if (!p) { alert(currentLang === 'jp' ? "電話番号を入力してください。" : "Please enter your phone number."); return; }
     document.getElementById('order-check-modal').style.display = 'none';
     localStorage.setItem('user_phone', p);
+    // 冪等キー：確認モーダルで採番済みを使う（未採番なら生成）＝再送の二重起票防止（設計§5-1）
+    if (!currentClientOrderId) currentClientOrderId = genClientOrderId();
     let orderData = '【New Order】\n';
     items.forEach(i => { orderData += `${i.code || '---'} ${currentLang === 'jp' ? i.product_name_jp : i.product_name_en} ${currentLang === 'jp' ? i.variant_name_jp : i.variant_name_en} x ${i.qty}点\n`; });
     try {
-        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', spreadsheetId: '1DLqtzAX3Hb9_lSRccB6ywB0SGnjUHLbSnHo_Vgu7KCs', targetGroupId: '-4710396177', phone: p, orderData: orderData, notes: n })});
+        // spreadsheetId/targetGroupId は送らない（0-5/0-6クローズ）。Content-Type 未指定で preflight 回避（設計§3-2）
+        const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ action: 'send_order', phone: p, orderData: orderData, notes: n, clientOrderId: currentClientOrderId })});
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const result = await res.json();
-        if (result.status === "unregistered") { alert(currentLang === 'jp' ? "未登録の番号です。初めての方ボタンから登録をお願いします。" : "Not registered."); return; }
-        alert(currentLang === 'jp' ? '注文を送信しました！' : 'Order sent!');
+        // status==="error" のみ失敗扱い。旧応答 status==="unregistered" は拒否せず受付完了へ倒す（拒否アラート廃止）
+        if (result && result.status === 'error') throw new Error(result.message || 'server error');
+        // 新応答 {status:"ok", orderNo, registered}。registered!==true は未登録として案内付き受付完了に
+        const registered = !!(result && result.registered === true);
+        showOrderResult(registered ? 'registered' : 'unregistered', result && result.orderNo);
+        // 受付完了した時点でカート・冪等キーを破棄＝登録有無に関わらず別W行の二重注文を防ぐ（M-3・clearCart が currentClientOrderId も空に）
         clearCart();
     } catch (e) {
-        // H-1修正: 通信失敗時に偽の成功表示をせず、エラーを伝えてカートを保持する
-        alert(currentLang === 'jp'
-            ? '⚠️ 注文の送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。ご注文内容（カート）はそのまま残っています。'
-            : '⚠️ Failed to send your order. Please check your connection and try again. Your cart has been kept.');
-        // 再試行しやすいよう確認モーダルを再表示（clearCart は呼ばない）
-        document.getElementById('order-check-modal').style.display = 'flex';
+        // 通信失敗/サーバエラー：偽の成功を出さずカート保持で失敗モーダル（H-1・デザイン§3-3）
+        showOrderResult('failed', '');
     }
 }
 
