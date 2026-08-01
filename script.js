@@ -30,7 +30,7 @@ const UI_TEXT = {
         btnRegister: "登録",
         btnFirstOrder: "初めての方", btnRepeatOrder: "ご注文",
         btnSubmitFirst: "登録案内を受け取る", btnSubmitRepeat: "注文する",
-        noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
+        noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。<br>・写真をクリックしていただきますと商品説明も見ていただけます。`,
     },
     en: {
         cat_all: "ALL of Stock", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", origin_kh: "CAMBODIA", origin_jp: "JAPAN", size_selectable: "Size Selection Available", noProducts: 'No products', cat_frozen: "FROZEN", cat_whole: "WHOLE", 
@@ -49,7 +49,7 @@ const UI_TEXT = {
         btnRegister: "Register",
         btnFirstOrder: "First Time", btnRepeatOrder: "Order",
         btnSubmitFirst: "Get Guide", btnSubmitRepeat: "Order",
-        noticeBody:`- For your first order, please make sure to register via the "First Time" button.<br>- You'll receive a confirmation sheet via Telegram.`
+        noticeBody:`- For your first order, please make sure to register via the "First Time" button.<br>- You'll receive a confirmation sheet via Telegram.<br>- Click a product photo to see its description.`
     }
 };
 
@@ -182,7 +182,7 @@ function buildCard(p) {
     return `
     <div class="card" data-category="${esc(getCategoryValue(p))}">
         <div class="img-wrapper">
-            ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src)">` : `<div class="img-placeholder">🐟</div>`}
+            ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src, '${pid}')">` : `<div class="img-placeholder">🐟</div>`}
             ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
         </div>
         <div class="info">
@@ -283,7 +283,20 @@ function setLang(lang) {
 // 7. UI CONTROL
 function toggleCartPanel() { document.getElementById('cart-panel')?.classList.toggle('show'); }
 function closeCartPanel() { document.getElementById('cart-panel')?.classList.remove('show'); }
-function openModal(src) { const m = document.getElementById('image-modal'), i = document.getElementById('modal-img'); if (m && i) { i.src = src; m.style.display = 'flex'; } }
+// 写真ポップアップ。pid があれば商品説明（comment_jp/en・表示中の言語）を写真の下に表示（2026-08-01）
+function openModal(src, pid) {
+    const m = document.getElementById('image-modal'), i = document.getElementById('modal-img');
+    if (!m || !i) return;
+    i.src = src;
+    const cap = document.getElementById('modal-caption');
+    if (cap) {
+        const p = pid ? allProducts.find(x => String(x.product_id) === String(pid)) : null;
+        const text = p ? getProductComment(p) : '';
+        cap.textContent = text;
+        cap.style.display = text ? '' : 'none'; // 説明なしの商品は従来どおり写真のみ
+    }
+    m.style.display = 'flex';
+}
 function closeModal() { document.getElementById('image-modal').style.display = 'none'; }
 function selectVariantImage(pid, vImg, fImg, btn) {
     const img = document.getElementById(`product-image-${pid}`);
