@@ -8,14 +8,17 @@ let currentCategory = 'ALL';
 let allProducts = [];
 let cart = {};
 let currentClientOrderId = ''; // send_order の冪等キー（確認モーダルで採番→成功で破棄・設計§5-1）
+let lastFiltered = []; // 直近の絞り込み結果（Excelダウンロード「表示中」用）
+let catalogUpdateDate = ''; // カタログの更新日（ダウンロードファイル名用）
 
 // 2. UI TEXT
 const UI_TEXT = {
     jp: {
-        cat_all: "すべて", cat_kh: "🇰🇭 カンボジア産", cat_jp: "🇯🇵 日本産", origin_kh: "カンボジア産", origin_jp: "日本産", size_selectable: "サイズ選択可", noProducts: '該当商品なし', cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
+        cat_all: "全在庫商品", cat_kh: "🇰🇭 カンボジア産", cat_jp: "🇯🇵 日本産", origin_kh: "カンボジア産", origin_jp: "日本産", size_selectable: "サイズ選択可", noProducts: '該当商品なし', cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
         cat_fillet: "鮮魚フィレ・セミドレス・ドレス", cat_oil: "調味料・油", cat_kitchen: "厨房用品", cat_vege: "野菜", cat_waiting: "入荷待ち", inquiry: "問い合わせ",
         searchPlaceholder: "商品名で検索...", noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         orderBarLabel: "📋 ご注文内容", orderNote: "* 最終的な数量・重量は納品時に確定いたします",
+        exportCurrent: "⬇ 表示中をExcelへ", exportAll: "⬇ 全商品をExcelへ",
         clearBtn: 'クリア', recommendTitle: "🔥 本日のおすすめ", noProducts: '該当商品なし',
         stock: 'STOCK', size: 'サイズ', emptyCart: '商品が選択されていません。',
         weightCalc: '重量計算', qtyCalc: '数量計算', labelNotes: 'メモ',
@@ -30,10 +33,11 @@ const UI_TEXT = {
         noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。`,
     },
     en: {
-        cat_all: "ALL", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", origin_kh: "CAMBODIA", origin_jp: "JAPAN", size_selectable: "Size Selection Available", noProducts: 'No products', cat_frozen: "FROZEN", cat_whole: "WHOLE", 
+        cat_all: "ALL of Stock", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", origin_kh: "CAMBODIA", origin_jp: "JAPAN", size_selectable: "Size Selection Available", noProducts: 'No products', cat_frozen: "FROZEN", cat_whole: "WHOLE", 
         cat_fillet: "FILLET/DR/SD", cat_oil: "OIL & SEASONING", cat_kitchen: "KITCHEN", cat_vege: "VEGETABLES", cat_waiting: "OUT OF STOCK", inquiry: "INQUIRY",
         searchPlaceholder: "Search...", noticeTitle: "【 NOTICE 】 Click for details",
         orderBarLabel: "📋 Your Order", orderNote: "* Final price confirmed upon delivery",
+        exportCurrent: "⬇ This view to Excel", exportAll: "⬇ All items to Excel",
         clearBtn: 'Clear', recommendTitle: "🔥 Recommendation", noProducts: 'No products',
         stock: 'STOCK', size: 'Size', emptyCart: 'Cart is empty.',
         weightCalc: 'Weight', qtyCalc: 'Quantity', labelNotes: 'Notes',
@@ -64,6 +68,7 @@ async function fetchProducts() {
     try {
         const res = await fetch(GAS_URL);
         const data = await res.json();
+        catalogUpdateDate = data.updateDate || '';
         if (data.updateDate && document.getElementById('update-date')) {
             document.getElementById('update-date').textContent = 'UPDATE: ' + data.updateDate;
         }
@@ -115,6 +120,7 @@ function applyFilters() {
             getProductComment(p).toLowerCase().includes(search);
         return matchesCat && matchesSearch;
     });
+    lastFiltered = filtered; // Excelダウンロード「表示中」が参照する
     displayProducts(filtered);
 }
 
@@ -262,7 +268,7 @@ function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'lang-' + lang));
-    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody, 'recommend-title': t.recommendTitle };
+    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody, 'recommend-title': t.recommendTitle, 'export-current-btn': t.exportCurrent, 'export-all-btn': t.exportAll };
     for (let id in mapping) {
         const el = document.getElementById(id);
         if (el) {
@@ -474,7 +480,77 @@ async function finalizeOrderProcess() {
     }
 }
 
-// 9. INITIALIZE
+// 9. CATALOG EXPORT（商品リストのExcel(CSV)ダウンロード・クライアント側のみ）
+// CSVセル1つをExcel互換にエスケープ（カンマ・改行・"を含む値は""で囲み、内部の"は重ねる）
+function csvCell(v) {
+    const s = String(v == null ? '' : v);
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+// Excel数式解釈ガード（テキスト列のみに適用・2026-08-01 光信さん裁定）
+// 先頭が = + - @ TAB CR だとExcelが数式扱いし #NAME? 化け・数式実行の恐れ → ' を前置して文字列固定
+function csvGuard(v) {
+    const s = String(v == null ? '' : v);
+    return /^[=+\-@\t\r]/.test(s) ? "'" + s : s;
+}
+
+// 商品配列 → CSVの行配列（見出し＋規格ごとに1行）。表示中の言語で出力（設計裁定）
+function buildCatalogRows(products, includeOutOfStock) {
+    const jp = currentLang === 'jp';
+    const header = jp
+        ? ['コード', '商品名', '原産国', 'サイズ', '規格', '価格(USD)', '単位', '在庫']
+        : ['Code', 'Product Name', 'Origin', 'Size', 'Variant', 'Price(USD)', 'Unit', 'Stock'];
+    const rows = [header];
+    products.forEach(p => {
+        const name = getProductName(p);
+        const cc = String(p.country || '').trim().toUpperCase();
+        const origin = cc === 'CAMBODIA' ? (jp ? 'カンボジア産' : 'CAMBODIA')
+                     : cc === 'JAPAN' ? (jp ? '日本産' : 'JAPAN') : '';
+        (p.variants || [])
+            .filter(v => includeOutOfStock ? toNumber(v.stock, 0) <= 0 : toNumber(v.stock, 0) > 0)
+            .forEach(v => {
+                // テキスト6列はcsvGuardで数式解釈を防止。価格・在庫は数値生成のため対象外（数値性を保つ）
+                rows.push([
+                    csvGuard(p.code || ''),
+                    csvGuard(name),
+                    csvGuard(origin),
+                    csvGuard(p.size || ''),
+                    csvGuard(getVariantName(v)),
+                    toNumber(v.price_usd).toFixed(2),
+                    csvGuard(v.price_unit || ''),
+                    toNumber(v.stock, 0)
+                ]);
+            });
+    });
+    return rows;
+}
+
+// scope: 'current'=表示中の絞り込み結果 / 'all'=在庫のある全商品。BOM付きCSVをダウンロード（Excelで直接開ける）
+function exportCatalog(scope) {
+    const outOfStockView = (scope === 'current' && currentCategory === 'OUT_OF_STOCK');
+    const products = (scope === 'all')
+        ? allProducts.filter(p => (p.variants || []).reduce((s, v) => s + toNumber(v.stock, 0), 0) > 0)
+        : lastFiltered;
+    const rows = buildCatalogRows(products, outOfStockView);
+    if (rows.length <= 1) {
+        alert(currentLang === 'jp' ? '出力できる商品がありません。' : 'No products to export.');
+        return;
+    }
+    const csv = rows.map(r => r.map(csvCell).join(',')).join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const datePart = (catalogUpdateDate || '').replace(/[^0-9A-Za-z]/g, '') || 'latest';
+    const fname = `SAKANAYA_PRODUCTLIST_${datePart}.csv`;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fname;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// 10. INITIALIZE
 document.addEventListener('DOMContentLoaded', async () => {
     await fetchProducts();
     setLang(currentLang);
