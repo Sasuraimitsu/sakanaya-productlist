@@ -426,7 +426,8 @@ header {
     font-size: 1.2rem;
     color: #b08a4e;
 }
-/* おすすめ枠: 商品は横並び。少数なら商品数に合わせて枠が縮み、増えると折り返して下へ伸びる */
+/* おすすめ枠: 990px未満はflex横並び（枠は内容にフィットし、入り切らなければ折り返す）。
+   PC(990px以上)は下方の3列グリッド指定が優先される */
 #recommend-container.recommend-container {
     display: flex !important;
     flex-direction: row !important;
@@ -447,6 +448,16 @@ header {
     flex: 0 1 300px;
     min-width: 0;
     max-width: 100%;
+}
+/* PC（本体グリッドが3列になる幅域）ではおすすめも1行3商品の固定3列グリッドに切替。
+   flex×fit-content は内在幅の過小計算で実データ時に折り返す（3件→2+1、2件→縦積み）ため、
+   本体 .container と左右端を揃えた3列グリッドで構造的に保証する (2026-08-03) */
+@media (min-width: 990px) {
+    #recommend-container.recommend-container {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: auto !important;
+    }
 }
 /* モバイルは本体グリッドの padding(10px) に合わせて左端を揃える */
 @media (max-width: 480px) {
