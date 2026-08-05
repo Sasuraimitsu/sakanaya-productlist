@@ -14,8 +14,8 @@ let catalogUpdateDate = ''; // カタログの更新日（ダウンロードフ�
 // 2. UI TEXT
 const UI_TEXT = {
     jp: {
-        cat_all: "全在庫商品", cat_kh: "🇰🇭 カンボジア産", cat_jp: "🇯🇵 日本産", origin_kh: "カンボジア産", origin_jp: "日本産", size_selectable: "サイズ選択可", noProducts: '該当商品なし', cat_frozen: "冷凍品", cat_whole: "鮮魚一匹", 
-        cat_fillet: "鮮魚フィレ・セミドレス・ドレス", cat_oil: "調味料・油", cat_kitchen: "厨房用品", cat_vege: "野菜", cat_waiting: "入荷待ち", inquiry: "問い合わせ",
+        cat_all: "全在庫商品", cat_kh: "🇰🇭 カンボジア産", cat_jp: "🇯🇵 日本産", origin_kh: "カンボジア産", origin_jp: "日本産", size_selectable: "サイズ選択可", noProducts: '該当商品なし', cat_frozen: "冷凍品",
+        cat_fillet: "鮮魚フィレ・セミドレス・ドレス・ホール", cat_oil: "調味料・油", cat_kitchen: "厨房用品", cat_vege: "野菜", cat_waiting: "入荷待ち", inquiry: "問い合わせ",
         searchPlaceholder: "商品名で検索...", noticeTitle: "【 お知らせ 】 クリックで詳細を表示",
         orderBarLabel: "📋 ご注文内容", orderNote: "* 最終的な数量・重量は納品時に確定いたします",
         exportCurrent: "⬇ 表示中をExcelへ", exportAll: "⬇ 全商品をExcelへ",
@@ -33,8 +33,8 @@ const UI_TEXT = {
         noticeBody:`・初めてのご注文の際には、必ず「初めての方」のボタンからご登録お願い致します。<br>・Telegramでご注文後、注文確認シートが送付されます。<br>・写真をクリックしていただきますと商品説明も見ていただけます。`,
     },
     en: {
-        cat_all: "ALL of Stock", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", origin_kh: "CAMBODIA", origin_jp: "JAPAN", size_selectable: "Size Selection Available", noProducts: 'No products', cat_frozen: "FROZEN", cat_whole: "WHOLE", 
-        cat_fillet: "FILLET/DR/SD", cat_oil: "OIL & SEASONING", cat_kitchen: "KITCHEN", cat_vege: "VEGETABLES", cat_waiting: "OUT OF STOCK", inquiry: "INQUIRY",
+        cat_all: "ALL of Stock", cat_kh: "🇰🇭 CAMBODIA", cat_jp: "🇯🇵 JAPAN", origin_kh: "CAMBODIA", origin_jp: "JAPAN", size_selectable: "Size Selection Available", noProducts: 'No products', cat_frozen: "FROZEN",
+        cat_fillet: "FILLET/DR/SD/WHOLE", cat_oil: "OIL & SEASONING", cat_kitchen: "KITCHEN", cat_vege: "VEGETABLES", cat_waiting: "OUT OF STOCK", inquiry: "INQUIRY",
         searchPlaceholder: "Search...", noticeTitle: "【 NOTICE 】 Click for details",
         orderBarLabel: "📋 Your Order", orderNote: "* Final price confirmed upon delivery",
         exportCurrent: "⬇ This view to Excel", exportAll: "⬇ All items to Excel",
@@ -112,7 +112,9 @@ function applyFilters() {
         } else if (currentCategory === 'COUNTRY_JP') {
             matchesCat = (countryVal === 'JAPAN' && totalStock > 0);
         } else {
-            const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory);
+            // 鮮魚一匹（FRESH-WHOLE）はフィレ系カテゴリへ統合表示（2026-08-05）。データ側のカテゴリ値は変更しない
+            const catMatch = (currentCategory === 'ALL' || getCategoryValue(p) === currentCategory ||
+                (currentCategory === 'FRESH-FILLET/DR/SD' && getCategoryValue(p) === 'FRESH-WHOLE'));
             matchesCat = catMatch && (totalStock > 0);
         }
         const matchesSearch = !search || 
@@ -278,7 +280,7 @@ function setLang(lang) {
     currentLang = lang;
     const t = UI_TEXT[lang];
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.id === 'lang-' + lang));
-    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-whole': t.cat_whole, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody, 'recommend-title': t.recommendTitle, 'export-current-btn': t.exportCurrent, 'export-all-btn': t.exportAll };
+    const mapping = { 'cat-all': t.cat_all, 'cat-kh': t.cat_kh, 'cat-jp': t.cat_jp,'cat-frozen': t.cat_frozen, 'cat-fillet': t.cat_fillet, 'cat-oil': t.cat_oil, 'cat-kitchen': t.cat_kitchen, 'cat-vege': t.cat_vege, 'cat-waiting': t.cat_waiting, 'inquiry-text': t.inquiry, 'search-input': t.searchPlaceholder, 'notice-summary-text': t.noticeTitle, 'notice-body-content': t.noticeBody, 'recommend-title': t.recommendTitle, 'export-current-btn': t.exportCurrent, 'export-all-btn': t.exportAll };
     for (let id in mapping) {
         const el = document.getElementById(id);
         if (el) {
