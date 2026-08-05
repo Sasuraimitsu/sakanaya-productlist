@@ -168,10 +168,13 @@ function buildCard(p) {
             const stockNum = toNumber(v.stock, 0);
             const isOut = stockNum <= 0;
             const atMax = qty + 1 > stockNum; // 次の＋でストック超過なら無効化（端数在庫でもガード判定と一致・2026-08-05）
+            // 表記: 「名称：$価格/kg|/pic」（区切りは：・単位はバリアントのprice_unit基準で kg→/kg・それ以外→/pic）
+            const unitSuffix = String(v.price_unit).toLowerCase() === 'kg' ? '/kg' : '/pic';
+            const sep = currentLang === 'jp' ? '：' : ': ';
             return `
                 <div class="variant-row">
                     <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
-                        ${esc(getVariantName(v))} / $${toNumber(v.price_usd).toFixed(2)}
+                        ${esc(getVariantName(v))}${sep}$${toNumber(v.price_usd).toFixed(2)}${unitSuffix}
                     </button>
                     <div class="variant-qty-wrap">
                         <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
