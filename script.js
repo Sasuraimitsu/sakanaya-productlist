@@ -155,8 +155,6 @@ function buildCard(p) {
         originHTML = `<div class="origin-tag"><span class="origin-text">${t.origin_jp}</span><img src="images/jp-flag.png" class="country-flag" alt="JP"></div>`;
     }
     
-    const totalStock = (p.variants || []).reduce((sum, v) => sum + toNumber(v.stock, 0), 0);
-
     const vsHTML = (p.variants || [])
         .filter(v => {
             const stockNum = toNumber(v.stock, 0);
@@ -186,7 +184,6 @@ function buildCard(p) {
     <div class="card" data-category="${esc(getCategoryValue(p))}">
         <div class="img-wrapper">
             ${p.image_main ? `<img id="product-image-${pid}" src="${esc(p.image_main)}" alt="${name}" onclick="openModal(this.src, '${pid}')">` : `<div class="img-placeholder">🐟</div>`}
-            ${totalStock > 0 ? `<span class="stock-badge">${t.stock}: ${totalStock}</span>` : ''}
         </div>
         <div class="info">
             <div class="product-title-row">

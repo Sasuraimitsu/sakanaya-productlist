@@ -150,7 +150,6 @@ header {
 .category-tag.FROZEN { border-left: 5px solid var(--frozen-blue); }
 .category-tag.SAKE { border-left: 5px solid var(--sake-gold); }
 
-.stock-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.75); color: #fff; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; }
 
 /* 商品情報 */
 .product-title-row {
