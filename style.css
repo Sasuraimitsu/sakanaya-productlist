@@ -234,6 +234,7 @@ header {
     font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
 }
 .qty-btn:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
+.variant-stock { font-size: 0.78rem; color: #8a97a5; margin-left: 4px; white-space: nowrap; }
 
 /* ══════════════════════════════════════════════════════════
    6. カートパネル (一つの箱として統合)

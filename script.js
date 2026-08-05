@@ -20,7 +20,7 @@ const UI_TEXT = {
         orderBarLabel: "📋 ご注文内容", orderNote: "* 最終的な数量・重量は納品時に確定いたします",
         exportCurrent: "⬇ 表示中をExcelへ", exportAll: "⬇ 全商品をExcelへ",
         clearBtn: 'クリア', recommendTitle: "🔥 本日のおすすめ", noProducts: '該当商品なし',
-        stock: 'STOCK', size: 'サイズ', emptyCart: '商品が選択されていません。',
+        stock: 'STOCK', stockLeft: '残り', size: 'サイズ', emptyCart: '商品が選択されていません。',
         weightCalc: '重量計算', qtyCalc: '数量計算', labelNotes: 'メモ',
         modalTitle: "新規登録",
         labelShop: "店名",
@@ -39,7 +39,7 @@ const UI_TEXT = {
         orderBarLabel: "📋 Your Order", orderNote: "* Final price confirmed upon delivery",
         exportCurrent: "⬇ This view to Excel", exportAll: "⬇ All items to Excel",
         clearBtn: 'Clear', recommendTitle: "🔥 Recommendation", noProducts: 'No products',
-        stock: 'STOCK', size: 'Size', emptyCart: 'Cart is empty.',
+        stock: 'STOCK', stockLeft: 'Stock ', size: 'Size', emptyCart: 'Cart is empty.',
         weightCalc: 'Weight', qtyCalc: 'Quantity', labelNotes: 'Notes',
         modalTitle: "Registration",
         labelShop: "Shop Name",
@@ -165,7 +165,9 @@ function buildCard(p) {
         .map(v => {
             const vid = esc(v.variant_id);
             const qty = cart[vid]?.qty || 0;
-            const isOut = toNumber(v.stock, 0) <= 0;
+            const stockNum = toNumber(v.stock, 0);
+            const isOut = stockNum <= 0;
+            const atMax = qty + 1 > stockNum; // 次の＋でストック超過なら無効化（端数在庫でもガード判定と一致・2026-08-05）
             return `
                 <div class="variant-row">
                     <button class="variant-select-btn" onclick="selectVariantImage('${pid}', '${esc(v.image_variant)}', '${esc(p.image_main)}', this)">
@@ -174,7 +176,8 @@ function buildCard(p) {
                     <div class="variant-qty-wrap">
                         <button class="qty-btn" onclick="changeCartQty('${vid}', -1)">−</button>
                         <span class="variant-qty">${qty}</span>
-                        <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${isOut ? 'disabled' : ''}>＋</button>
+                        <button class="qty-btn" onclick="changeCartQty('${vid}', 1)" ${(isOut || atMax) ? 'disabled' : ''}>＋</button>
+                        ${stockNum > 0 ? `<span class="variant-stock">${t.stockLeft}${stockNum}</span>` : ''}
                     </div>
                 </div>`;
         }).join('');
@@ -200,6 +203,14 @@ function buildCard(p) {
 }
 
 // 6. CART LOGIC
+function getVariantStock(vid) {
+    for (const p of allProducts) {
+        const v = (p.variants || []).find(x => x.variant_id === vid);
+        if (v) return toNumber(v.stock, 0);
+    }
+    return Infinity; // 商品リストに見つからない場合は従来挙動（ガードなし）
+}
+
 function changeCartQty(vid, delta) {
     let targetVariant = null, targetProduct = null;
     for (const p of allProducts) {
@@ -207,6 +218,8 @@ function changeCartQty(vid, delta) {
         if (v) { targetVariant = v; targetProduct = p; break; }
     }
     if (!targetVariant) return;
+    // ストック数以上には増やせない（商品カード・カート画面共通のガード・2026-08-05）
+    if (delta > 0 && (cart[vid]?.qty || 0) + delta > toNumber(targetVariant.stock, 0)) return;
     if (!cart[vid]) {
         if (delta <= 0) return;
         cart[vid] = { variant_id: vid, qty: 0, price_usd: toNumber(targetVariant.price_usd), product_name_jp: targetProduct.name_jp, product_name_en: targetProduct.name_en, variant_name_jp: targetVariant.variant_name_jp || "", variant_name_en: targetVariant.variant_name_en || "", code: targetVariant.variant_code || targetProduct.code };
@@ -235,7 +248,7 @@ function renderCart() {
             </div>
             <div style="display:flex; gap:5px;">
                 <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', -1)">−</button>
-                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)">＋</button>
+                <button class="qty-btn" onclick="changeCartQty('${item.variant_id}', 1)" ${item.qty + 1 > getVariantStock(item.variant_id) ? 'disabled' : ''}>＋</button>
             </div>
         </div>`).join('');
 
@@ -500,14 +513,14 @@ function csvCell(v) {
     return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
 
-// Excel数式解釈ガード（テキスト列のみに適用・2026-08-01 光信さん裁定）
+// Excel数式解釈ガード（テキスト列のみに適用・2026-08-01）
 // 先頭が = + - @ TAB CR だとExcelが数式扱いし #NAME? 化け・数式実行の恐れ → ' を前置して文字列固定
 function csvGuard(v) {
     const s = String(v == null ? '' : v);
     return /^[=+\-@\t\r]/.test(s) ? "'" + s : s;
 }
 
-// 商品配列 → CSVの行配列（見出し＋規格ごとに1行）。表示中の言語で出力（設計裁定）
+// 商品配列 → CSVの行配列（見出し＋規格ごとに1行）。表示中の言語で出力
 function buildCatalogRows(products, includeOutOfStock) {
     const jp = currentLang === 'jp';
     const header = jp
