@@ -224,7 +224,13 @@ function changeCartQty(vid, delta) {
     if (delta > 0 && (cart[vid]?.qty || 0) + delta > toNumber(targetVariant.stock, 0)) return;
     if (!cart[vid]) {
         if (delta <= 0) return;
-        cart[vid] = { variant_id: vid, qty: 0, price_usd: toNumber(targetVariant.price_usd), product_name_jp: targetProduct.name_jp, product_name_en: targetProduct.name_en, variant_name_jp: targetVariant.variant_name_jp || "", variant_name_en: targetVariant.variant_name_en || "", code: targetVariant.variant_code || targetProduct.code };
+        // コード基準（2026-08-01 光信さん裁定・2026-08-10 凍結解除）：variant_id の V_右側＝魚ポチ/FISHCODEと
+        // 同粒度のバリアントコード（例 V_BC210LL → BC210LL）を最優先。無い/形式外は variant_code → 商品コードへ
+        // フォールバック（従来挙動）。形式検証：GAS側パーサが確実に抽出できる英数字3文字以上のみ採用
+        // （V_P_BC825 等の不正形式は従来どおり商品コードで発行＝IN行落ち退行の防止・レビュー5巡目）
+        const vRaw = (typeof vid === 'string' && vid.indexOf('V_') === 0) ? vid.slice(2) : '';
+        const vCodeFromId = /^[A-Z0-9]{3,}$/.test(vRaw) ? vRaw : '';
+        cart[vid] = { variant_id: vid, qty: 0, price_usd: toNumber(targetVariant.price_usd), product_name_jp: targetProduct.name_jp, product_name_en: targetProduct.name_en, variant_name_jp: targetVariant.variant_name_jp || "", variant_name_en: targetVariant.variant_name_en || "", code: vCodeFromId || targetVariant.variant_code || targetProduct.code };
     }
     cart[vid].qty += delta;
     if (cart[vid].qty <= 0) delete cart[vid];
